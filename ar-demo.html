@@ -93,6 +93,62 @@
        - Uses default "hiro" marker (print from: https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png)
        - Shows a 3D triangle with colored vertices + rotating animation
        ═══════════════════════════════════ -->
+  <!-- Custom A-Frame components for proper triangle geometry -->
+  <script>
+    // Triangle edges component — draws 3 lines forming a perfect triangle
+    AFRAME.registerComponent('triangle-edges', {
+      init: function () {
+        const B = new THREE.Vector3(-0.5, 0, 0);    // bottom-left
+        const C = new THREE.Vector3(0.5, 0, 0);     // bottom-right
+        const A = new THREE.Vector3(0, 0.866, 0);   // top (equilateral)
+
+        // Create thick lines using TubeGeometry for visibility
+        const edges = [[B, C], [C, A], [A, B]];
+        const colors = [0x60a5fa, 0x10b981, 0xf97316]; // blue, green, orange
+
+        edges.forEach((edge, i) => {
+          const path = new THREE.LineCurve3(edge[0], edge[1]);
+          const tubeGeo = new THREE.TubeGeometry(path, 1, 0.02, 8, false);
+          const tubeMat = new THREE.MeshStandardMaterial({
+            color: colors[i],
+            emissive: colors[i],
+            emissiveIntensity: 0.6,
+            metalness: 0.3,
+            roughness: 0.4
+          });
+          const tubeMesh = new THREE.Mesh(tubeGeo, tubeMat);
+          this.el.object3D.add(tubeMesh);
+        });
+      }
+    });
+
+    // Triangle face component — semi-transparent filled triangle
+    AFRAME.registerComponent('triangle-face', {
+      init: function () {
+        const geometry = new THREE.BufferGeometry();
+        const vertices = new Float32Array([
+          -0.5, 0, 0,      // B
+           0.5, 0, 0,      // C
+           0, 0.866, 0     // A
+        ]);
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        geometry.computeVertexNormals();
+
+        const material = new THREE.MeshStandardMaterial({
+          color: 0x2563EB,
+          transparent: true,
+          opacity: 0.2,
+          side: THREE.DoubleSide,
+          emissive: 0x2563EB,
+          emissiveIntensity: 0.2
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        this.el.object3D.add(mesh);
+      }
+    });
+  </script>
+
   <a-scene
     embedded
     arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
@@ -104,74 +160,63 @@
               emitevents="true"
               smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
 
-      <!-- Base platform (translucent blue disc) -->
+      <!-- Base platform -->
       <a-circle
         position="0 0 0"
         rotation="-90 0 0"
         radius="0.8"
-        color="#2563EB"
-        opacity="0.25"
+        color="#1e3a5f"
+        opacity="0.3"
         side="double"
       ></a-circle>
 
-      <!-- 3D Triangle wireframe -->
-      <a-entity position="0 0.6 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear;">
-        <!-- Triangle edges using thin cylinders -->
-        <!-- Edge AB (bottom-left to bottom-right) -->
-        <a-entity
-          geometry="primitive: cylinder; radius: 0.025; height: 1.0"
-          material="color: #60a5fa; emissive: #2563EB; emissiveIntensity: 0.5"
-          position="0 -0.3 0"
-          rotation="0 0 90"
-        ></a-entity>
+      <!-- Rotating triangle group -->
+      <a-entity position="0 0.05 0" rotation="-90 0 0"
+                animation="property: rotation; from: -90 0 0; to: -90 360 0; loop: true; dur: 10000; easing: linear;">
 
-        <!-- Edge BC (bottom-right to top) -->
-        <a-entity
-          geometry="primitive: cylinder; radius: 0.025; height: 1.0"
-          material="color: #60a5fa; emissive: #2563EB; emissiveIntensity: 0.5"
-          position="0.25 0.05 0"
-          rotation="0 0 -30"
-        ></a-entity>
+        <!-- Triangle filled face (semi-transparent) -->
+        <a-entity triangle-face></a-entity>
 
-        <!-- Edge CA (top to bottom-left) -->
-        <a-entity
-          geometry="primitive: cylinder; radius: 0.025; height: 1.0"
-          material="color: #60a5fa; emissive: #2563EB; emissiveIntensity: 0.5"
-          position="-0.25 0.05 0"
-          rotation="0 0 30"
-        ></a-entity>
+        <!-- Triangle edges (thick glowing tubes) -->
+        <a-entity triangle-edges></a-entity>
 
-        <!-- Vertex spheres -->
-        <a-sphere position="-0.5 -0.3 0" radius="0.06" color="#2563EB" emissive="#1d4ed8"></a-sphere>
-        <a-sphere position="0.5 -0.3 0" radius="0.06" color="#10b981" emissive="#059669"></a-sphere>
-        <a-sphere position="0 0.4 0" radius="0.06" color="#f97316" emissive="#ea580c"></a-sphere>
+        <!-- Vertex B (bottom-left) — Blue -->
+        <a-sphere position="-0.5 0 0" radius="0.06"
+                  color="#2563EB" material="emissive: #1d4ed8; emissiveIntensity: 0.5"></a-sphere>
 
-        <!-- Labels floating above vertices -->
-        <a-text value="B" position="-0.5 -0.5 0" align="center" color="#2563EB" width="2" font="mozillavr"></a-text>
-        <a-text value="C" position="0.5 -0.5 0" align="center" color="#10b981" width="2" font="mozillavr"></a-text>
-        <a-text value="A" position="0 0.6 0" align="center" color="#f97316" width="2" font="mozillavr"></a-text>
+        <!-- Vertex C (bottom-right) — Green -->
+        <a-sphere position="0.5 0 0" radius="0.06"
+                  color="#10b981" material="emissive: #059669; emissiveIntensity: 0.5"></a-sphere>
+
+        <!-- Vertex A (top) — Orange -->
+        <a-sphere position="0 0.866 0" radius="0.06"
+                  color="#f97316" material="emissive: #ea580c; emissiveIntensity: 0.5"></a-sphere>
+
+        <!-- Labels -->
+        <a-text value="B" position="-0.6 -0.12 0" align="center" color="#93c5fd" width="1.8"></a-text>
+        <a-text value="C" position="0.6 -0.12 0" align="center" color="#6ee7b7" width="1.8"></a-text>
+        <a-text value="A" position="0 0.98 0" align="center" color="#fdba74" width="1.8"></a-text>
       </a-entity>
 
-      <!-- Formula text floating above -->
-      <a-text
-        value="A + B + C = 180°"
-        position="0 1.5 0"
-        align="center"
-        color="#ffffff"
-        width="3"
-        font="mozillavr"
-        animation="property: position; from: 0 1.4 0; to: 0 1.6 0; dir: alternate; loop: true; dur: 2000; easing: easeInOutSine;"
-      ></a-text>
+      <!-- Formula floating above (always faces camera) -->
+      <a-entity position="0 1.2 0" billboard>
+        <a-text
+          value="A + B + C = 180"
+          align="center"
+          color="#ffffff"
+          width="3.5"
+          animation="property: position; from: 0 0 0; to: 0 0.1 0; dir: alternate; loop: true; dur: 2000; easing: easeInOutSine;"
+        ></a-text>
+      </a-entity>
 
-      <!-- Small "STEM" badge -->
+      <!-- "STEM" on the ground plane -->
       <a-text
         value="STEM Geometry"
-        position="0 0.05 0"
+        position="0 0.01 0.5"
         rotation="-90 0 0"
         align="center"
-        color="#2563EB"
-        width="1.5"
-        font="mozillavr"
+        color="#60a5fa"
+        width="1.2"
       ></a-text>
 
     </a-marker>
