@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>AR Demo — Hình Học STEM</title>
+  <meta name="robots" content="noindex" />
+
+  <!-- A-Frame + AR.js from CDN (zero install) -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    body { margin: 0; overflow: hidden; font-family: 'Baloo 2', sans-serif; }
+
+    /* Overlay UI */
+    .ar-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .ar-overlay h1 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .ar-overlay p {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin: 0;
+    }
+    .ar-back {
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+      touch-action: manipulation;
+    }
+
+    /* Bottom hint */
+    .ar-hint {
+      position: fixed;
+      bottom: 20px;
+      left: 50%; transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(37,99,235,0.85);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      animation: pulse 2s ease infinite;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+      50% { opacity: 0.7; transform: translateX(-50%) scale(0.96); }
+    }
+
+    /* Hide AR.js debug UI */
+    .a-enter-vr, .a-orientation-modal { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Top overlay -->
+  <div class="ar-overlay">
+    <button class="ar-back" onclick="window.location.href='index.html'">← Quay lại</button>
+    <div>
+      <h1>📐 AR Demo — Hình Học 3D</h1>
+      <p>Hướng camera vào <strong>marker Hiro</strong> trên mảnh ghép</p>
+    </div>
+  </div>
+
+  <!-- Bottom hint -->
+  <div class="ar-hint" id="hint">📷 Đang tìm marker… Hướng camera vào hình vuông đen</div>
+
+  <!-- ═══════════════════════════════════
+       A-Frame AR Scene
+       - Uses default "hiro" marker (print from: https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png)
+       - Shows a 3D triangle with colored vertices + rotating animation
+       ═══════════════════════════════════ -->
+  <a-scene
+    embedded
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+    renderer="logarithmicDepthBuffer: true; colorManagement: true;"
+    vr-mode-ui="enabled: false"
+  >
+    <!-- Marker: default "hiro" pattern -->
+    <a-marker preset="hiro" id="marker1"
+              emitevents="true"
+              smooth="true" smoothCount="5" smoothTolerance="0.01" smoothThreshold="2">
+
+      <!-- Base platform (translucent blue disc) -->
+      <a-circle
+        position="0 0 0"
+        rotation="-90 0 0"
+        radius="0.8"
+        color="#2563EB"
+        opacity="0.25"
+        side="double"
+      ></a-circle>
+
+      <!-- 3D Triangle wireframe -->
+      <a-entity position="0 0.6 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear;">
+        <!-- Triangle edges using thin cylinders -->
+        <!-- Edge AB (bottom-left to bottom-right) -->
+        <a-entity
+          geometry="primitive: cylinder; radius: 0.025; height: 1.0"
+          material="color: #60a5fa; emissive: #2563EB; emissiveIntensity: 0.5"
+          position="0 -0.3 0"
+          rotation="0 0 90"
+        ></a-entity>
+
+        <!-- Edge BC (bottom-right to top) -->
+        <a-entity
+          geometry="primitive: cylinder; radius: 0.025; height: 1.0"
+          material="color: #60a5fa; emissive: #2563EB; emissiveIntensity: 0.5"
+          position="0.25 0.05 0"
+          rotation="0 0 -30"
+        ></a-entity>
+
+        <!-- Edge CA (top to bottom-left) -->
+        <a-entity
+          geometry="primitive: cylinder; radius: 0.025; height: 1.0"
+          material="color: #60a5fa; emissive: #2563EB; emissiveIntensity: 0.5"
+          position="-0.25 0.05 0"
+          rotation="0 0 30"
+        ></a-entity>
+
+        <!-- Vertex spheres -->
+        <a-sphere position="-0.5 -0.3 0" radius="0.06" color="#2563EB" emissive="#1d4ed8"></a-sphere>
+        <a-sphere position="0.5 -0.3 0" radius="0.06" color="#10b981" emissive="#059669"></a-sphere>
+        <a-sphere position="0 0.4 0" radius="0.06" color="#f97316" emissive="#ea580c"></a-sphere>
+
+        <!-- Labels floating above vertices -->
+        <a-text value="B" position="-0.5 -0.5 0" align="center" color="#2563EB" width="2" font="mozillavr"></a-text>
+        <a-text value="C" position="0.5 -0.5 0" align="center" color="#10b981" width="2" font="mozillavr"></a-text>
+        <a-text value="A" position="0 0.6 0" align="center" color="#f97316" width="2" font="mozillavr"></a-text>
+      </a-entity>
+
+      <!-- Formula text floating above -->
+      <a-text
+        value="A + B + C = 180°"
+        position="0 1.5 0"
+        align="center"
+        color="#ffffff"
+        width="3"
+        font="mozillavr"
+        animation="property: position; from: 0 1.4 0; to: 0 1.6 0; dir: alternate; loop: true; dur: 2000; easing: easeInOutSine;"
+      ></a-text>
+
+      <!-- Small "STEM" badge -->
+      <a-text
+        value="STEM Geometry"
+        position="0 0.05 0"
+        rotation="-90 0 0"
+        align="center"
+        color="#2563EB"
+        width="1.5"
+        font="mozillavr"
+      ></a-text>
+
+    </a-marker>
+
+    <!-- Camera -->
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    // Show/hide hint based on marker detection
+    const marker = document.getElementById('marker1');
+    const hint = document.getElementById('hint');
+
+    marker.addEventListener('markerFound', () => {
+      hint.textContent = '✅ Marker phát hiện! Xem hình tam giác 3D xoay';
+      hint.style.background = 'rgba(16,185,129,0.85)';
+    });
+
+    marker.addEventListener('markerLost', () => {
+      hint.textContent = '📷 Đang tìm marker… Hướng camera vào hình vuông đen';
+      hint.style.background = 'rgba(37,99,235,0.85)';
+    });
+  </script>
+</body>
+</html>
