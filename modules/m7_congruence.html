@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M7: Tam Giác Bằng Nhau | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">≅ Module 7</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#d97706,#fbbf24);">≅</div>
+    <div>
+      <h1>Các Trường Hợp Bằng Nhau Của Tam Giác</h1>
+      <p>Toán 7 — Kéo đỉnh C và xem △A'B'C' luôn cho duy nhất 1 tam giác</p>
+    </div>
+
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác tam giác bằng nhau"></div>
+
+  <section class="info-card">
+    <div style="text-align:center;margin-bottom:12px;">
+      <span class="readout-chip chip-sum" id="lbl-rule">Trường hợp: c.c.c</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Các trường hợp bằng nhau cạnh cạnh cạnh (c.c.c)</p>
+      <p class="theorem-text">Nếu <strong>ba cạnh</strong> của tam giác này bằng ba cạnh của tam giác kia, thì hai tam giác <strong>bằng nhau</strong>. Không thể tạo ra hình dạng khác với cùng ba cạnh!</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M2 20h20M12 4L2 20h20L12 4z"/></svg>
+      <span>Dàn giáo và cầu sắt dùng khung tam giác vì tam giác (c.c.c) là hình duy nhất <em>cứng vĩnh viễn</em>. Hình vuông có thể bị méo, tam giác thì không!</span>
+    </div>
+    <div class="controls-row">
+      <button class="btn-clay btn-ghost" id="btn-reset" style="font-size:0.85rem;padding:8px 16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Đặt lại
+      </button>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      // Fix A and B; C is draggable; mirror triangle D drawn on right
+      let A, B, C, drag = false;
+      const R = 16;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        reset();
+      };
+
+      function reset() {
+        A = { x: p.width * 0.15, y: p.height * 0.8 };
+        B = { x: p.width * 0.5, y: p.height * 0.8 };
+        C = { x: p.width * 0.3, y: p.height * 0.2 };
+      }
+
+      p.mousePressed = () => { if (p.dist(p.mouseX, p.mouseY, C.x, C.y) < R+12) drag = true; };
+      p.mouseReleased = () => { drag = false; };
+      p.mouseDragged = () => { if (drag) { C.x = p.constrain(p.mouseX,2,p.width-2); C.y = p.constrain(p.mouseY,2,p.height*0.85); } };
+      p.touchStarted = () => { if(p.touches[0] && p.dist(p.touches[0].x,p.touches[0].y,C.x,C.y)<R+20) drag=true; return false; };
+      p.touchEnded = () => { drag=false; return false; };
+      p.touchMoved = () => { if(drag&&p.touches[0]) { C.x=p.constrain(p.touches[0].x,2,p.width-2); C.y=p.constrain(p.touches[0].y,2,p.height*0.85); } return false; };
+
+      document.getElementById('btn-reset').addEventListener('click', reset);
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        const ab = p.dist(A.x,A.y,B.x,B.y).toFixed(0);
+        const ac = p.dist(A.x,A.y,C.x,C.y).toFixed(0);
+        const bc = p.dist(B.x,B.y,C.x,C.y).toFixed(0);
+
+        // Mirror triangle on the right (flip C horizontally around center)
+        const cx2 = p.width - (C.x - A.x) - A.x + p.width * 0.55;
+        const A2 = { x: p.width * 0.55, y: A.y };
+        const B2 = { x: p.width * 0.9,  y: B.y };
+        const cMirrorX = A2.x + (B.x - A.x)*0.3 + (C.x - A.x)*(B2.x - A2.x)/(B.x - A.x);
+        const C2 = { x: A2.x + (C.x - A.x) * (B2.x - A2.x) / (B.x - A.x), y: C.y };
+
+        // Original triangle
+        p.fill(37, 99, 235, 30); p.stroke('#2563EB'); p.strokeWeight(3.5);
+        p.triangle(A.x, A.y, B.x, B.y, C.x, C.y);
+        // Mirror triangle
+        p.fill(249, 115, 22, 30); p.stroke('#f97316'); p.strokeWeight(3.5);
+        p.triangle(A2.x, A2.y, B2.x, B2.y, C2.x, C2.y);
+
+        // Tick marks for equal sides
+        [[A,B,A2,B2,'#2563EB'], [A,C,A2,C2,'#10b981'], [B,C,B2,C2,'#d97706']].forEach(([p1,p2,q1,q2,col]) => {
+          drawTick(p, p1, p2, col, 1);
+          drawTick(p, q1, q2, col, 1);
+        });
+
+        // Vertices
+        [A, B, C].forEach((pt, i) => {
+          p.fill('#2563EB'); p.stroke('white'); p.strokeWeight(3);
+          p.circle(pt.x, pt.y, R*2);
+          p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(11);
+          p.textAlign(p.CENTER, p.CENTER);
+          p.text(['A','B','C'][i], pt.x, pt.y);
+        });
+        [A2, B2, C2].forEach((pt, i) => {
+          p.fill('#f97316'); p.stroke('white'); p.strokeWeight(3);
+          p.circle(pt.x, pt.y, R*2);
+          p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(11);
+          p.textAlign(p.CENTER, p.CENTER);
+          p.text(["A'","B'","C'"][i], pt.x, pt.y);
+        });
+
+        // Labels
+        p.noStroke(); p.fill('#1e293b'); p.textSize(10); p.textAlign(p.CENTER);
+        p.text(`AB = ${ab}`, (A.x+B.x)/2, A.y + 16);
+        p.text(`AC = ${ac}`, (A.x+C.x)/2 - 18, (A.y+C.y)/2);
+        p.text(`BC = ${bc}`, (B.x+C.x)/2 + 18, (B.y+C.y)/2);
+
+        // Equal sign divider
+        p.fill('#1e293b'); p.textSize(24); p.textAlign(p.CENTER, p.CENTER);
+        p.text('≅', p.width/2, p.height*0.5);
+
+        document.getElementById('lbl-rule').textContent = `△ABC ≅ △A'B'C'  (c.c.c)`;
+      };
+
+      function drawTick(p, p1, p2, col, n) {
+        const mx = (p1.x + p2.x)/2, my = (p1.y + p2.y)/2;
+        const dx = p2.x - p1.x, dy = p2.y - p1.y;
+        const len = Math.sqrt(dx*dx+dy*dy);
+        const nx = -dy/len*8, ny = dx/len*8;
+        p.stroke(col); p.strokeWeight(2.5);
+        p.line(mx+nx, my+ny, mx-nx, my-ny);
+      }
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+        reset();
+      };
+    });
+  </script>
+</body>
+</html>

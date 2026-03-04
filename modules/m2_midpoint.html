@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M2: Điểm Nằm Giữa | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">📏 Module 2</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#06b6d4,#22d3ee);">📏</div>
+    <div>
+      <h1>Điểm Nằm Giữa & Cộng Đoạn Thẳng</h1>
+      <p>Toán 6 — Kéo điểm M trên đoạn AC và xem tổng luôn bằng nhau</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác điểm nằm giữa"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+      <span class="readout-chip" id="lbl-am">AM = ?</span>
+      <span class="readout-chip" style="background:#f97316;border-color:#ea6c06;box-shadow:3px 3px 0 #ea6c06;">+</span>
+      <span class="readout-chip" id="lbl-mc">MC = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
+      <span class="readout-chip chip-sum" id="lbl-ac">AC = ?</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Tính chất</p>
+      <p class="theorem-text">Nếu điểm M nằm giữa A và C thì <strong>AM + MC = AC</strong>. Đây là đẳng thức luôn đúng, bất kể M ở đâu trên AC!</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6l9-3 9 3M3 18l9 3 9-3"/></svg>
+      <span>Trong xây dựng, thợ dùng nguyên tắc này để tìm điểm giữa khi chia đôi mái nhà hoặc sàn nhà.</span>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      let mX;
+      const PAD = 60, R = 16;
+      let ax, cx, posY;
+      let dragging = false;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        posY = p.height / 2;
+        ax = PAD; cx = p.width - PAD;
+        mX = p.lerp(ax, cx, 0.4);
+      };
+
+      function getTouch() { return p.touches.length > 0 ? p.touches[0] : null; }
+
+      p.mousePressed = () => { if (Math.abs(p.mouseX - mX) < R + 10) dragging = true; };
+      p.mouseReleased = () => dragging = false;
+      p.mouseDragged = () => { if (dragging) mX = p.constrain(p.mouseX, ax + 1, cx - 1); };
+      p.touchStarted = () => {
+        const t = getTouch();
+        if (t && Math.abs(t.x - mX) < R + 18) dragging = true;
+        return false;
+      };
+      p.touchEnded = () => { dragging = false; return false; };
+      p.touchMoved = () => {
+        const t = getTouch();
+        if (dragging && t) mX = p.constrain(t.x, ax + 1, cx - 1);
+        return false;
+      };
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        const am = ((mX - ax) / (cx - ax) * 100).toFixed(1);
+        const mc = (100 - parseFloat(am)).toFixed(1);
+        const ac = 100;
+        // Update labels
+        document.getElementById('lbl-am').textContent = `AM = ${am}%`;
+        document.getElementById('lbl-mc').textContent = `MC = ${mc}%`;
+        document.getElementById('lbl-ac').textContent = `AC = ${ac}%`;
+        // Segment
+        p.strokeWeight(6); p.stroke('#bfdbfe'); p.line(ax, posY, cx, posY);
+        p.strokeWeight(6); p.stroke('#2563EB'); p.line(ax, posY, mX, posY);
+        p.strokeWeight(6); p.stroke('#f97316'); p.line(mX, posY, cx, posY);
+        // AM label
+        p.textFont('Baloo 2'); p.noStroke(); p.textAlign(p.CENTER); p.textSize(13);
+        p.fill('#2563EB'); p.text(`AM = ${am}%`, (ax + mX)/2, posY - 28);
+        p.fill('#f97316'); p.text(`MC = ${mc}%`, (mX + cx)/2, posY - 28);
+        // Points
+        [{ x: ax, label:'A', c:'#2563EB' }, { x: mX, label:'M', c:'#7c3aed' }, { x: cx, label:'C', c:'#f97316' }].forEach(pt => {
+          p.fill(pt.c); p.noStroke(); p.circle(pt.x, posY, R * 2);
+          p.fill('white'); p.textSize(12);
+          p.text(pt.label, pt.x, posY + 4);
+          p.fill(pt.c); p.textSize(13); p.text(pt.label, pt.x, posY + 28);
+        });
+        // Hint
+        if (dragging) { p.fill('#8b5cf6'); p.textSize(11); p.text('↔ kéo tiếp đi!', mX, posY + 48); }
+      };
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+        posY = p.height / 2; ax = PAD; cx = p.width - PAD;
+        mX = p.constrain(mX, ax + 1, cx - 1);
+      };
+    });
+  </script>
+</body>
+</html>

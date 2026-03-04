@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M5: Đường Thẳng Song Song | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">〓 Module 5</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#10b981,#34d399);">〓</div>
+    <div>
+      <h1>Đường Thẳng Song Song — Góc So le & Đồng vị</h1>
+      <p>Toán 7 — Xoay cát tuyến và quan sát góc so le trong, đồng vị</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác đường song song"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+      <span class="readout-chip" id="lbl-z" style="background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">Chữ Z: ? °</span>
+      <span class="readout-chip" id="lbl-f" style="background:#10b981;border-color:#059669;box-shadow:3px 3px 0 #059669;">Chữ F: ? °</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Tính chất</p>
+      <p class="theorem-text"><strong>Góc so le trong (Z)</strong> và <strong>Góc đồng vị (F)</strong> với hai đường thẳng song song đều có số đo bằng nhau khi bị cắt bởi một cát tuyến.</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M8 8h8M8 16h8"/></svg>
+      <span>Các thanh ray xe lửa song song bị cắt bởi tà vẹt (cát tuyến). Kỹ sư dùng góc so le để kiểm tra độ thẳng của đường ray!</span>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      let transAngle = 50;
+      let dragging = false;
+      let w, h, gap;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        w = p.width; h = p.height; gap = h * 0.35;
+      };
+
+      const tryDrag = (mx, my) => {
+        const dx = mx - w/2, dy = my - h/2;
+        if (Math.sqrt(dx*dx+dy*dy) < w/2 + 40) {
+          let a = p.degrees(Math.atan2(dy, dx));
+          if (a < -170 || a > 10) return; // keep in visible range
+          transAngle = p.constrain(a, -170, 10);
+        }
+      };
+      p.mousePressed = () => { dragging = true; };
+      p.mouseReleased = () => { dragging = false; };
+      p.mouseDragged = () => { if (dragging) tryDrag(p.mouseX, p.mouseY); };
+      p.touchStarted = () => { dragging = true; return false; };
+      p.touchEnded = () => { dragging = false; return false; };
+      p.touchMoved = () => { if (p.touches[0]) tryDrag(p.touches[0].x, p.touches[0].y); return false; };
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        const y1 = h/2 - gap/2, y2 = h/2 + gap/2;
+
+        // Parallel lines
+        p.stroke('#1e293b'); p.strokeWeight(4);
+        p.line(0, y1, w, y1);
+        p.line(0, y2, w, y2);
+        // Labels a, b
+        p.noStroke(); p.fill('#1e293b'); p.textFont('Baloo 2'); p.textSize(15);
+        p.textAlign(p.LEFT, p.CENTER);
+        p.text('a', 6, y1 - 14); p.text('b', 6, y2 - 14);
+
+        // Transversal
+        const ta = p.radians(transAngle);
+        const DX = w * 0.7;
+        p.stroke('#7c3aed'); p.strokeWeight(4);
+        p.line(w/2 - DX, h/2 - DX * Math.tan(ta), w/2 + DX, h/2 + DX * Math.tan(ta));
+
+        // Find intersections
+        // Line: y - h/2 = tan(ta) * (x - w/2)
+        // At y = y1: x1 = w/2 + (y1 - h/2)/tan(ta)
+        const tanA = Math.tan(ta);
+        const x1 = tanA !== 0 ? w/2 + (y1 - h/2)/tanA : w/2;
+        const x2 = tanA !== 0 ? w/2 + (y2 - h/2)/tanA : w/2;
+
+        const alpha = Math.abs(transAngle); // acute angle at intersection
+        const deg = Math.round(alpha > 90 ? 180 - alpha : alpha);
+
+        // Z shape highlight (alternate interior angles)
+        p.stroke('#2563EB'); p.strokeWeight(3);
+        p.line(x1 - 35, y1, x1, y1);
+        p.line(x1, y1, x2, y2);
+        p.line(x2, y2, x2 + 35, y2);
+        // F shape highlight
+        p.stroke('#10b981'); p.strokeWeight(3);
+        p.line(x1 + 35, y1, x1, y1);
+        p.line(x1 + 35, y1, x1 + 35, y1 - 25);
+        p.line(x2 + 35, y2, x2 + 35, y2 - 25);
+
+        // Arc at each intersection
+        p.noFill(); p.stroke('#2563EB'); p.strokeWeight(2.5);
+        p.arc(x1, y1, 50, 50, ta + p.PI, p.radians(0));
+        p.arc(x2, y2, 50, 50, p.radians(0), ta);
+        // Labels
+        p.noStroke(); p.fill('#2563EB'); p.textSize(13); p.textAlign(p.LEFT, p.CENTER);
+        p.text(`${deg}°`, x1 - 60, y1 + 8);
+        p.text(`${deg}°`, x2 + 10, y2 - 14);
+
+        // Update chips
+        document.getElementById('lbl-z').textContent = `Chữ Z (so le): ${deg}°`;
+        document.getElementById('lbl-f').textContent = `Chữ F (đồng vị): ${deg}°`;
+      };
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+        w = p.width; h = p.height; gap = h * 0.35;
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M8: Định Lý Thales | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">⊿ Module 8</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);">⊿</div>
+    <div>
+      <h1>Định Lý Thales (Ta-lét)</h1>
+      <p>Toán 8 — Kéo đường song song và kiểm tra tỉ lệ đoạn thẳng</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác định lý Thales"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+      <span class="readout-chip" id="lbl-ratio1" style="background:#7c3aed;border-color:#6d28d9;box-shadow:3px 3px 0 #6d28d9;">AB/BC = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
+      <span class="readout-chip chip-sum" id="lbl-ratio2">AD/DE = ?</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Định lý Thales</p>
+      <p class="theorem-text">Nếu một đường thẳng <strong>song song với cạnh đáy</strong> của tam giác và cắt hai cạnh còn lại, thì nó chia tỉ hai cạnh đó theo <strong>cùng tỉ số</strong>.</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 19h20L12 2z"/><line x1="7" y1="13" x2="17" y2="13"/></svg>
+      <span>Nhà bác học Thales đo chiều cao Kim Tự Tháp bằng bóng nắng — sử dụng chính định lý này! (600 trước CN)</span>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      let tPos = 0.45; // position of the parallel line from 0 (apex) to 1 (base)
+      let drag = false;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+      };
+
+      p.mousePressed = () => { drag = true; };
+      p.mouseReleased = () => { drag = false; };
+      p.mouseDragged = () => {
+        if (drag) {
+          const apex = { x: p.width/2, y: p.height*0.06 };
+          const baseY = p.height * 0.85;
+          const t = p.constrain((p.mouseY - apex.y) / (baseY - apex.y), 0.1, 0.92);
+          tPos = t;
+        }
+      };
+      p.touchStarted = () => { drag = true; return false; };
+      p.touchEnded = () => { drag = false; return false; };
+      p.touchMoved = () => {
+        if (drag && p.touches[0]) {
+          const apex = { x: p.width/2, y: p.height*0.06 };
+          const baseY = p.height * 0.85;
+          tPos = p.constrain((p.touches[0].y - apex.y) / (baseY - apex.y), 0.1, 0.92);
+        }
+        return false;
+      };
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        const w = p.width, h = p.height;
+        const apex = { x: w/2, y: h*0.06 };
+        const BL = { x: w*0.12, y: h*0.85 };
+        const BR = { x: w*0.88, y: h*0.85 };
+
+        // Lerp to get cut points D and E on the two sides
+        const D = { x: p.lerp(apex.x, BL.x, tPos), y: p.lerp(apex.y, BL.y, tPos) };
+        const E = { x: p.lerp(apex.x, BR.x, tPos), y: p.lerp(apex.y, BR.y, tPos) };
+
+        // Triangle sides
+        p.fill(124, 58, 237, 20); p.stroke('#7c3aed'); p.strokeWeight(3);
+        p.triangle(apex.x, apex.y, BL.x, BL.y, BR.x, BR.y);
+
+        // Parallel line (red)
+        p.stroke('#f97316'); p.strokeWeight(4);
+        p.line(D.x, D.y, E.x, E.y);
+
+        // Points
+        const pts = [
+          { pt: apex, label:'A', col:'#7c3aed' },
+          { pt: D,    label:'D', col:'#f97316' },
+          { pt: BL,   label:'B', col:'#2563EB' },
+          { pt: E,    label:'E', col:'#f97316' },
+          { pt: BR,   label:'C', col:'#2563EB' },
+        ];
+        pts.forEach(({ pt, label, col }) => {
+          p.fill(col); p.stroke('white'); p.strokeWeight(2.5);
+          p.circle(pt.x, pt.y, 20);
+          p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(11);
+          p.textAlign(p.CENTER, p.CENTER); p.text(label, pt.x, pt.y);
+        });
+
+        // Compute ratios
+        const AD = p.dist(apex.x, apex.y, D.x, D.y);
+        const DB = p.dist(D.x, D.y, BL.x, BL.y);
+        const AE = p.dist(apex.x, apex.y, E.x, E.y);
+        const EC = p.dist(E.x, E.y, BR.x, BR.y);
+        const r1 = (AD/DB).toFixed(2);
+        const r2 = (AE/EC).toFixed(2);
+
+        // Segment labels
+        p.noStroke(); p.fill('#7c3aed'); p.textSize(11); p.textAlign(p.CENTER);
+        const midAD = { x: (apex.x + D.x)/2, y: (apex.y + D.y)/2 };
+        const midDB = { x: (D.x + BL.x)/2, y: (D.y + BL.y)/2 };
+        p.text('AD', midAD.x - 14, midAD.y);
+        p.fill('#2563EB'); p.text('DB', midDB.x - 14, midDB.y);
+        const midAE = { x: (apex.x + E.x)/2, y: (apex.y + E.y)/2 };
+        const midEC = { x: (E.x + BR.x)/2, y: (E.y + BR.y)/2 };
+        p.fill('#7c3aed'); p.text('AE', midAE.x + 14, midAE.y);
+        p.fill('#2563EB'); p.text('EC', midEC.x + 14, midEC.y);
+
+        document.getElementById('lbl-ratio1').textContent = `AD/DB = ${r1}`;
+        document.getElementById('lbl-ratio2').textContent = `AE/EC = ${r2}`;
+      };
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+      };
+    });
+  </script>
+</body>
+</html>

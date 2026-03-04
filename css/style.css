@@ -1,0 +1,432 @@
+/* =============================================
+   STEM Geometry App — Claymorphism Theme
+   Fonts: Baloo 2 (headings), Comic Neue (body)
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+/* ---------- CSS Variables ---------- */
+:root {
+  --primary:      #2563EB;
+  --primary-dark: #1d4ed8;
+  --secondary:    #3B82F6;
+  --cta:          #F97316;
+  --cta-dark:     #ea6c06;
+  --bg:           #F0F7FF;
+  --surface:      #FFFFFF;
+  --text:         #1E293B;
+  --text-muted:   #64748B;
+  --border:       #BFDBFE;
+  --success:      #22c55e;
+  --warning:      #f59e0b;
+  --radius-sm:    12px;
+  --radius-md:    20px;
+  --radius-lg:    28px;
+  --radius-xl:    36px;
+  --shadow-clay:  4px 4px 0px #1d4ed8, 0 8px 20px rgba(37,99,235,0.20);
+  --shadow-cta:   4px 4px 0px #ea6c06, 0 8px 20px rgba(249,115,22,0.25);
+  --shadow-card:  0 8px 24px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
+  --shadow-hover: 0 16px 36px rgba(37,99,235,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
+  --transition:   all 0.2s ease-out;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Comic Neue', 'Segoe UI', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  line-height: 1.6;
+  font-size: 16px;
+  /* Subtle dot pattern background */
+  background-image: radial-gradient(circle, #bfdbfe 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Baloo 2', sans-serif;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ---------- Clay Button ---------- */
+.btn-clay {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--primary);
+  color: white;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  border: 3px solid var(--primary-dark);
+  box-shadow: var(--shadow-clay);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.btn-clay:hover, .btn-clay:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--primary-dark), 0 12px 28px rgba(37,99,235,0.28);
+  outline: none;
+}
+.btn-clay:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--primary-dark), 0 4px 10px rgba(37,99,235,0.15);
+}
+
+.btn-cta {
+  background-color: var(--cta);
+  border-color: var(--cta-dark);
+  box-shadow: var(--shadow-cta);
+}
+.btn-cta:hover {
+  box-shadow: 6px 6px 0px var(--cta-dark), 0 12px 28px rgba(249,115,22,0.3);
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,0.7);
+  color: var(--primary);
+  border-color: var(--border);
+  box-shadow: 3px 3px 0px var(--border), 0 4px 12px rgba(37,99,235,0.1);
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 6px 6px 0px var(--border), 0 8px 20px rgba(37,99,235,0.15);
+}
+
+/* ---------- Clay Card ---------- */
+.card-clay {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+  overflow: hidden;
+}
+.card-clay:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ---------- Top Navigation ---------- */
+.app-nav {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 3px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.app-nav .nav-brand {
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-badge {
+  background: var(--cta);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: 'Baloo 2', sans-serif;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 2px solid var(--cta-dark);
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Hero Banner ---------- */
+.hero {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563EB 50%, #0ea5e9 100%);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 40%),
+                    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 35%);
+}
+.hero-title {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8px;
+  position: relative;
+}
+.hero-sub {
+  font-size: 1rem;
+  opacity: 0.85;
+  max-width: 480px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+/* ---------- Module Grid (Index) ---------- */
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 24px 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (min-width: 640px) {
+  .modules-grid { grid-template-columns: repeat(3, 1fr); padding: 28px 24px; gap: 20px; }
+}
+@media (min-width: 1024px) {
+  .modules-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* ---------- Module Card (Index) ---------- */
+.module-card {
+  background: var(--surface);
+  border: 3px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 20px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.module-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--card-color, var(--primary)), var(--card-color2, var(--secondary)));
+}
+.module-card:hover, .module-card:focus-visible {
+  transform: translate(-4px, -4px);
+  box-shadow: 6px 6px 0px var(--border), 0 16px 36px rgba(37,99,235,0.18);
+  outline: none;
+}
+.module-card:active { transform: translate(1px, 1px); }
+
+.module-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--card-color, var(--primary)), var(--card-color2, var(--secondary)));
+  border: 3px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  flex-shrink: 0;
+}
+.module-grade {
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: 'Baloo 2', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+.module-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+/* ---------- Module Page Layout ---------- */
+.module-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+.module-header {
+  padding: 16px 20px;
+  border-bottom: 3px solid var(--border);
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.module-header-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  border: 2px solid rgba(0,0,0,0.1);
+}
+.module-header h1 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.module-header p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+.canvas-wrapper {
+  flex: 1;
+  position: relative;
+  background: white;
+  overflow: hidden;
+  min-height: 300px;
+}
+.canvas-wrapper canvas { display: block; }
+
+/* ---------- Info Card ---------- */
+.info-card {
+  background: white;
+  border-top: 3px solid var(--border);
+  padding: 16px 20px;
+}
+.theorem-box {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.theorem-box::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--primary), var(--secondary));
+  border-radius: 4px 0 0 4px;
+}
+.theorem-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.theorem-text {
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+.theorem-text strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+.realworld-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #fef3c7;
+  border: 2px solid #fde68a;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: #92400e;
+  line-height: 1.4;
+}
+.realworld-row svg { flex-shrink: 0; }
+
+/* ---------- Live Readout Chip ---------- */
+.readout-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary);
+  color: white;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 6px 18px;
+  border-radius: 30px;
+  border: 3px solid var(--primary-dark);
+  box-shadow: 3px 3px 0px var(--primary-dark);
+  letter-spacing: 0.5px;
+}
+.readout-chip.chip-sum {
+  background: var(--success);
+  border-color: #16a34a;
+  box-shadow: 3px 3px 0px #16a34a;
+}
+.readout-chip.chip-warn {
+  background: var(--warning);
+  border-color: #d97706;
+  box-shadow: 3px 3px 0px #d97706;
+  color: white;
+}
+
+/* ---------- Controls Row ---------- */
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border-top: 2px dashed var(--border);
+  margin-top: 8px;
+}
+
+/* ---------- Canvas Hints ---------- */
+.canvas-hint {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  background: rgba(37,99,235,0.85);
+  color: white;
+  font-size: 0.72rem;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  pointer-events: none;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- Accessibility ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+:focus-visible { outline: 3px solid var(--cta); outline-offset: 3px; }
+
+/* ---------- Utility ---------- */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}

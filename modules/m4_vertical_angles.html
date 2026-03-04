@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M4: Góc Đối Đỉnh | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">✕ Module 4</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#ec4899,#f472b6);">✕</div>
+    <div>
+      <h1>Hai Góc Đối Đỉnh</h1>
+      <p>Toán 7 — Xoay đường thẳng và xem cặp góc đối đỉnh luôn bằng nhau</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác góc đối đỉnh"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+      <span class="readout-chip" id="lbl-a1" style="background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">α = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
+      <span class="readout-chip" id="lbl-a3" style="background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">α' = ?</span>
+      <span class="readout-chip chip-sum" id="lbl-sum">α + β = 180°</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Định lý</p>
+      <p class="theorem-text">Hai góc đối đỉnh thì <strong>bằng nhau</strong>. Hai góc kề bù thì có <strong>tổng bằng 180°</strong>.</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 19h20L12 2zM12 9v5M12 16h.01"/></svg>
+      <span>Ngã tư đường phố: 4 góc tạo thành, 2 cặp đối đỉnh bằng nhau. Kỹ sư dùng điều này để căn chỉnh đường!</span>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      let lineAngle = 40;
+      let dragging = false;
+      let cx, cy, R;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        cx = p.width / 2; cy = p.height / 2; R = Math.min(p.width, p.height) * 0.42;
+      };
+
+      const tryDrag = (mx, my) => {
+        const dx = mx - cx, dy = my - cy;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d > 20 && d < R + 40) {
+          lineAngle = p.degrees(Math.atan2(dy, dx));
+        }
+      };
+      p.mousePressed = () => { dragging = true; };
+      p.mouseReleased = () => { dragging = false; };
+      p.mouseDragged = () => { if (dragging) tryDrag(p.mouseX, p.mouseY); };
+      p.touchStarted = () => { dragging = true; return false; };
+      p.touchEnded = () => { dragging = false; return false; };
+      p.touchMoved = () => { if (p.touches[0]) tryDrag(p.touches[0].x, p.touches[0].y); return false; };
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        const a = lineAngle;
+        const alpha = ((a % 360) + 360) % 360;
+        let ang = alpha <= 180 ? alpha : 360 - alpha;
+        const beta = 180 - ang;
+
+        // The four rays
+        const angles = [a, a + 90, a + 180, a + 270].map(x => p.radians(x));
+        // Two crossing lines
+        p.stroke('#1e293b'); p.strokeWeight(4);
+        p.line(cx + R * Math.cos(p.radians(a)), cy + R * Math.sin(p.radians(a)),
+               cx + R * Math.cos(p.radians(a + 180)), cy + R * Math.sin(p.radians(a + 180)));
+        p.line(cx + R * Math.cos(p.radians(a + 90 - 90)), cy + R * Math.sin(p.radians(a + 90 - 90)),
+               cx + R * Math.cos(p.radians(a + 90 - 90 + 180)), cy + R * Math.sin(p.radians(a + 90 - 90 + 180)));
+
+        // Two given lines: line 1 = horizontal, line 2 = at angle
+        const la = p.radians(a);
+        p.stroke('#1e293b'); p.strokeWeight(4);
+        p.line(cx - R, cy, cx + R, cy); // horizontal
+        p.line(cx + R * Math.cos(la), cy + R * Math.sin(la),
+               cx - R * Math.cos(la), cy - R * Math.sin(la)); // angled
+
+        // Arc fills for the 4 sectors
+        const ra = p.radians(a);
+        const ang1 = ((a % 360) + 360) % 360;
+        const deg1 = ang1 > 180 ? 360 - ang1 : ang1;
+        const deg2 = 180 - deg1;
+
+        // Sector α (top)
+        p.fill(37, 99, 235, 50); p.noStroke();
+        p.arc(cx, cy, R*1.0, R*1.0, p.radians(-deg1), 0, p.PIE);
+        // Sector α' (bottom, opposite)
+        p.fill(37, 99, 235, 50);
+        p.arc(cx, cy, R*1.0, R*1.0, p.PI, p.PI + p.radians(deg1), p.PIE);
+        // Sector β
+        p.fill(249, 115, 22, 50);
+        p.arc(cx, cy, R*1.0, R*1.0, 0, p.radians(deg1 > 0 ? 180 - deg1 : 0) + p.HALF_PI, p.PIE);
+
+        // Arc labels
+        p.textFont('Baloo 2'); p.textSize(15); p.noStroke();
+        p.fill('#2563EB');
+        p.textAlign(p.CENTER, p.CENTER);
+        const midR = R * 0.35;
+        const midA1 = p.radians(-deg1 / 2);
+        p.text(`α=${deg1}°`, cx + midR * Math.cos(midA1), cy + midR * Math.sin(midA1));
+        p.text(`α'=${deg1}°`, cx - midR * Math.cos(midA1), cy - midR * Math.sin(midA1));
+        p.fill('#f97316');
+        p.text(`β=${deg2}°`, cx + midR * Math.cos(midA1 + p.HALF_PI), cy + midR * Math.sin(midA1 + p.HALF_PI));
+        p.text(`β'=${deg2}°`, cx - midR * Math.cos(midA1 + p.HALF_PI), cy - midR * Math.sin(midA1 + p.HALF_PI));
+
+        // Center dot
+        p.fill('#1e293b'); p.circle(cx, cy, 14);
+
+        document.getElementById('lbl-a1').textContent = `α = ${deg1}°`;
+        document.getElementById('lbl-a3').textContent = `α' = ${deg1}°`;
+        document.getElementById('lbl-sum').textContent = `α + β = ${deg1}° + ${deg2}° = 180°`;
+      };
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+        cx = p.width / 2; cy = p.height / 2; R = Math.min(p.width, p.height) * 0.42;
+      };
+    });
+  </script>
+</body>
+</html>

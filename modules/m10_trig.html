@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M10: Tỉ Số Lượng Giác | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">sin Module 10</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#be185d,#f472b6);">sin</div>
+    <div>
+      <h1>Tỉ Số Lượng Giác Của Góc Nhọn</h1>
+      <p>Toán 9 — Xoay cạnh huyền và xem sin, cos, tan thay đổi</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác tỉ số lượng giác"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+      <span class="readout-chip" id="lbl-sin" style="background:#be185d;border-color:#9d174d;box-shadow:3px 3px 0 #9d174d;">sin α = ?</span>
+      <span class="readout-chip" id="lbl-cos" style="background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">cos α = ?</span>
+      <span class="readout-chip" id="lbl-tan" style="background:#d97706;border-color:#b45309;box-shadow:3px 3px 0 #b45309;">tan α = ?</span>
+    </div>
+    <div id="slope-warning" style="text-align:center;margin-bottom:10px;display:none;">
+      <span class="readout-chip chip-warn" id="lbl-slope">⚠️ Độ dốc nguy hiểm!</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Định nghĩa (đối / huyền / kề)</p>
+      <p class="theorem-text">
+        <strong>sin α = Cạnh đối / Cạnh huyền</strong> &nbsp;|&nbsp;
+        <strong>cos α = Cạnh kề / Cạnh huyền</strong> &nbsp;|&nbsp;
+        <strong>tan α = Cạnh đối / Cạnh kề</strong>
+      </p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M3 20L21 4M3 20h6M3 20v-6"/></svg>
+      <span>Kỹ sư dùng <strong>tan α &lt; 0.12</strong> là tiêu chuẩn dốc an toàn cho đường đèo tại Việt Nam. Độ dốc quá cao → nguy hiểm khi trời mưa!</span>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      let angle = 35; // degrees from horizontal
+      let drag = false;
+      let ox, oy, R;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        ox = p.width * 0.15; oy = p.height * 0.82; R = Math.min(p.width, p.height) * 0.5;
+      };
+
+      const tryDrag = (mx, my) => {
+        const dx = mx - ox, dy = -(my - oy); // flip y
+        const a = p.degrees(Math.atan2(dy, dx));
+        if (a >= 5 && a <= 85) angle = Math.round(a);
+      };
+      p.mousePressed = () => { drag = true; };
+      p.mouseReleased = () => { drag = false; };
+      p.mouseDragged = () => { if (drag) tryDrag(p.mouseX, p.mouseY); };
+      p.touchStarted = () => { drag = true; return false; };
+      p.touchEnded = () => { drag = false; return false; };
+      p.touchMoved = () => { if (p.touches[0]) tryDrag(p.touches[0].x, p.touches[0].y); return false; };
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        const rad = p.radians(angle);
+        const hyp = R;
+        const adj = hyp * Math.cos(rad); // adjacent
+        const opp = hyp * Math.sin(rad); // oppoiste
+        // C = far corner of hyp
+        const Cx = ox + adj, Cy = oy - opp;
+        // B = base corner
+        const Bx = ox + adj, By = oy;
+
+        // Triangle
+        p.fill(190, 24, 93, 20); p.stroke('#be185d'); p.strokeWeight(3);
+        p.triangle(ox, oy, Bx, By, Cx, Cy);
+
+        // Label the sides
+        p.noStroke(); p.textFont('Baloo 2'); p.textSize(12);
+
+        // Hypotenuse
+        p.fill('#be185d');
+        p.textAlign(p.CENTER, p.CENTER);
+        const midHx = (ox + Cx)/2 - 14, midHy = (oy + Cy)/2 - 5;
+        p.text('Cạnh huyền (c)', midHx - 18, midHy);
+
+        // Adjacent (base)
+        p.fill('#2563EB');
+        p.textAlign(p.CENTER, p.TOP);
+        p.text(`Cạnh kề (a)`, (ox + Bx)/2, oy + 6);
+
+        // Opposite (vertical)
+        p.fill('#d97706');
+        p.textAlign(p.LEFT, p.CENTER);
+        p.text(`Cạnh đối (b)`, Bx + 6, (By + Cy)/2);
+
+        // Right angle square at B
+        const sq = 14;
+        p.noFill(); p.stroke('#22c55e'); p.strokeWeight(2);
+        p.rect(Bx - sq, By - sq, sq, sq);
+
+        // Hypotenuse line
+        p.stroke('#be185d'); p.strokeWeight(4.5);
+        p.line(ox, oy, Cx, Cy);
+        // Adjacent
+        p.stroke('#2563EB'); p.strokeWeight(4.5);
+        p.line(ox, oy, Bx, By);
+        // Opposite
+        p.stroke('#d97706'); p.strokeWeight(4.5);
+        p.line(Bx, By, Cx, Cy);
+
+        // Arc at origin
+        p.noFill(); p.stroke('#be185d'); p.strokeWeight(2.5);
+        p.arc(ox, oy, 60, 60, -rad, 0);
+        p.noStroke(); p.fill('#be185d'); p.textSize(14);
+        p.textAlign(p.LEFT, p.CENTER);
+        p.text(`α = ${angle}°`, ox + 34, oy - opp * 0.18);
+
+        // Points
+        [{ x:ox,y:oy,l:'O',c:'#1e293b'},{x:Bx,y:By,l:'B',c:'#2563EB'},{x:Cx,y:Cy,l:'C',c:'#be185d'}].forEach(({ x, y, l, c }) => {
+          p.fill(c); p.stroke('white'); p.strokeWeight(2.5);
+          p.circle(x, y, 20);
+          p.noStroke(); p.fill('white'); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
+          p.text(l, x, y);
+        });
+
+        const sinV = Math.sin(rad).toFixed(3);
+        const cosV = Math.cos(rad).toFixed(3);
+        const tanV = Math.tan(rad).toFixed(3);
+        document.getElementById('lbl-sin').textContent = `sin ${angle}° = ${sinV}`;
+        document.getElementById('lbl-cos').textContent = `cos ${angle}° = ${cosV}`;
+        document.getElementById('lbl-tan').textContent = `tan ${angle}° = ${tanV}`;
+
+        const warning = document.getElementById('slope-warning');
+        const slopeLabel = document.getElementById('lbl-slope');
+        if (Math.tan(rad) > 0.35) {
+          warning.style.display = 'block';
+          slopeLabel.textContent = `⚠️ Độ dốc nguy hiểm! (tan ${angle}° = ${tanV} > 0.35)`;
+        } else {
+          warning.style.display = 'none';
+        }
+      };
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+        ox = p.width * 0.15; oy = p.height * 0.82; R = Math.min(p.width, p.height) * 0.5;
+      };
+    });
+  </script>
+</body>
+</html>

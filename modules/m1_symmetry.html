@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M1: Trục Đối Xứng | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">🦋 Module 1</div>
+  </nav>
+
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);">🦋</div>
+    <div>
+      <h1>Trục Đối Xứng</h1>
+      <p>Toán 6 — Kết nối tri thức | Vẽ và khám phá hình đối xứng</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác đối xứng">
+    <span class="canvas-hint">✏️ Vẽ tự do bên trái</span>
+  </div>
+
+  <section class="info-card" aria-label="Giải thích định lý">
+    <div id="live-display" style="text-align:center;margin-bottom:10px;">
+      <span class="readout-chip" id="sym-label">🪞 Đối xứng qua trục</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Định nghĩa</p>
+      <p class="theorem-text">Hai điểm <strong>A</strong> và <strong>A'</strong> gọi là <strong>đối xứng nhau qua đường thẳng d</strong> nếu d là đường trung trực của đoạn AA'.</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>Trong kiến trúc (đền Taj Mahal, cánh bướm, mặt người…), đối xứng tạo ra vẻ đẹp hài hòa và cân bằng.</span>
+    </div>
+    <div class="controls-row">
+      <button class="btn-clay btn-ghost" id="btn-clear" aria-label="Xóa bảng vẽ" style="font-size:0.85rem;padding:8px 16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        Xóa
+      </button>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    const sketch = (p) => {
+      let drawPoints = [];
+      let drawing = false;
+      const AXIS_COLOR = '#2563EB';
+      const LEFT_COLOR = '#8b5cf6';
+      const RIGHT_COLOR = '#f97316';
+      const POINT_SIZE = 5;
+
+      p.setup = () => {
+        const container = document.getElementById('canvas-container');
+        const cnv = p.createCanvas(container.offsetWidth, container.offsetHeight);
+        cnv.parent('canvas-container');
+        cnv.style('display', 'block');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        cnv.touchStarted(() => { drawing = true; return false; });
+        cnv.touchMoved(() => {
+          if (drawing) addPoint(p.mouseX, p.mouseY);
+          return false;
+        });
+        cnv.touchEnded(() => { drawing = false; drawPoints.push(null); return false; });
+        cnv.mousePressed(() => { drawing = true; });
+        cnv.mouseMoved(() => { if (drawing) addPoint(p.mouseX, p.mouseY); });
+        cnv.mouseReleased(() => { drawing = false; drawPoints.push(null); });
+      };
+
+      function addPoint(x, y) {
+        if (x > 0 && x < p.width / 2 - 10) drawPoints.push({ x, y });
+      }
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        // Draw axis
+        p.strokeWeight(3);
+        p.stroke(AXIS_COLOR);
+        p.drawingContext.setLineDash([8, 6]);
+        p.line(p.width / 2, 0, p.width / 2, p.height);
+        p.drawingContext.setLineDash([]);
+        // Label axis
+        p.noStroke();
+        p.fill(AXIS_COLOR);
+        p.textFont('Baloo 2');
+        p.textSize(13);
+        p.textAlign(p.CENTER);
+        p.text('Trục d', p.width / 2, 18);
+        // Draw user strokes on left and mirror on right
+        p.noFill();
+        p.strokeWeight(POINT_SIZE - 1);
+        p.stroke(LEFT_COLOR);
+        p.beginShape();
+        for (let pt of drawPoints) {
+          if (pt === null) { p.endShape(); p.beginShape(); }
+          else p.vertex(pt.x, pt.y);
+        }
+        p.endShape();
+        // Mirror
+        p.stroke(RIGHT_COLOR);
+        p.beginShape();
+        for (let pt of drawPoints) {
+          if (pt === null) { p.endShape(); p.beginShape(); }
+          else p.vertex(p.width - pt.x, pt.y);
+        }
+        p.endShape();
+        // Guide labels
+        p.noStroke();
+        p.textSize(11);
+        p.fill(LEFT_COLOR);
+        p.textAlign(p.LEFT);
+        p.text('✏️ Vẽ ở đây', 10, p.height - 10);
+        p.fill(RIGHT_COLOR);
+        p.textAlign(p.RIGHT);
+        p.text('🪞 Hình đối xứng', p.width - 10, p.height - 10);
+      };
+
+      p.windowResized = () => {
+        const container = document.getElementById('canvas-container');
+        p.resizeCanvas(container.offsetWidth, container.offsetHeight);
+      };
+
+      document.getElementById('btn-clear').addEventListener('click', () => { drawPoints = []; });
+    };
+    new p5(sketch);
+  </script>
+</body>
+</html>

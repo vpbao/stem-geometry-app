@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M3: Phân Loại Góc | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">📐 Module 3</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#f97316,#fb923c);">📐</div>
+    <div>
+      <h1>Phân Loại Góc</h1>
+      <p>Toán 6 — Xoay tia để phân loại: nhọn, vuông, tù, bẹt</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác phân loại góc"></div>
+
+  <section class="info-card">
+    <div style="text-align:center;margin-bottom:12px;">
+      <span class="readout-chip chip-warn" id="lbl-angle" style="font-size:1.3rem;padding:8px 24px;">0°</span>
+      <span class="readout-chip" id="lbl-type" style="margin-left:8px;background:#8b5cf6;border-color:#7c3aed;box-shadow:3px 3px 0 #7c3aed;">Không xác định</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Phân loại góc</p>
+      <p class="theorem-text"><strong>Nhọn:</strong> 0° &lt; α &lt; 90° &nbsp;·&nbsp; <strong>Vuông:</strong> α = 90° &nbsp;·&nbsp; <strong>Tù:</strong> 90° &lt; α &lt; 180° &nbsp;·&nbsp; <strong>Bẹt:</strong> α = 180°</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <span>3 giờ đúng = góc vuông 90°. 6 giờ đúng = góc bẹt 180°. Mái nhà tam giác thường có góc tù!</span>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      let angle = 45;
+      let dragging = false;
+      let cx, cy, R;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        cx = p.width / 2; cy = p.height * 0.55; R = Math.min(p.width, p.height) * 0.38;
+      };
+
+      function getColor(a) {
+        if (a < 90) return '#2563EB';
+        if (a === 90) return '#22c55e';
+        if (a < 180) return '#f97316';
+        return '#ef4444';
+      }
+      function getLabel(a) {
+        if (a < 90) return '📐 Góc nhọn';
+        if (a === 90) return '✅ Góc vuông';
+        if (a < 180) return '🔶 Góc tù';
+        return '➖ Góc bẹt';
+      }
+
+      const tryDrag = (mx, my) => {
+        const dx = mx - cx, dy = my - cy;
+        if (Math.sqrt(dx*dx + dy*dy) < R + 32) {
+          let a = p.degrees(Math.atan2(-(my - cy), mx - cx));
+          if (a < 0) a += 360;
+          if (a <= 180) angle = Math.round(a);
+        }
+      };
+      p.mousePressed = () => { dragging = true; };
+      p.mouseReleased = () => { dragging = false; };
+      p.mouseDragged = () => { if (dragging) tryDrag(p.mouseX, p.mouseY); };
+      p.touchStarted = () => { dragging = true; return false; };
+      p.touchEnded = () => { dragging = false; return false; };
+      p.touchMoved = () => { if (p.touches[0]) tryDrag(p.touches[0].x, p.touches[0].y); return false; };
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        const c = p.color(getColor(angle));
+        // Arc fill
+        p.fill(p.red(c), p.green(c), p.blue(c), 40);
+        p.noStroke();
+        p.arc(cx, cy, R * 1.6, R * 1.6, p.radians(-angle), 0, p.PIE);
+        // Rays
+        const x2 = cx + R * Math.cos(p.radians(-angle));
+        const y2 = cy + R * Math.sin(p.radians(-angle));
+        p.stroke(getColor(angle)); p.strokeWeight(4);
+        p.line(cx, cy, cx + R, cy);
+        p.line(cx, cy, x2, y2);
+        // Arc line
+        p.noFill(); p.stroke(getColor(angle)); p.strokeWeight(2.5);
+        p.arc(cx, cy, R * 0.6, R * 0.6, p.radians(-angle), 0);
+        // Degree label on arc
+        const midA = p.radians(-angle / 2);
+        p.noStroke(); p.fill(getColor(angle));
+        p.textFont('Baloo 2'); p.textSize(18); p.textAlign(p.CENTER, p.CENTER);
+        p.text(`${angle}°`, cx + R * 0.38 * Math.cos(midA), cy + R * 0.38 * Math.sin(midA));
+        // Right-angle square indicator
+        if (angle === 90) {
+          p.noFill(); p.stroke('#22c55e'); p.strokeWeight(2.5);
+          const s = 22;
+          p.rect(cx, cy - s, s, s);
+        }
+        // Update chips
+        document.getElementById('lbl-angle').textContent = `${angle}°`;
+        document.getElementById('lbl-type').textContent = getLabel(angle);
+        document.getElementById('lbl-type').style.background = getColor(angle);
+        document.getElementById('lbl-type').style.boxShadow = `3px 3px 0 ${getColor(angle)}cc`;
+      };
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+        cx = p.width / 2; cy = p.height * 0.55; R = Math.min(p.width, p.height) * 0.38;
+      };
+    });
+  </script>
+</body>
+</html>

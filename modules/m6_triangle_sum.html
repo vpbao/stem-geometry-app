@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M6: Tổng 3 Góc Tam Giác | STEM Geometry</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <a href="../index.html" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </a>
+    <div class="nav-brand">△ Module 6</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#2563eb,#60a5fa);">△</div>
+    <div>
+      <h1>Tổng 3 Góc Của Tam Giác</h1>
+      <p>Toán 7 — Kéo các đỉnh và xem tổng luôn bằng 180°</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác tổng ba góc tam giác"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+      <span class="readout-chip" id="lbl-a" style="background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">A = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">+</span>
+      <span class="readout-chip" id="lbl-b" style="background:#f97316;border-color:#ea6c06;box-shadow:3px 3px 0 #ea6c06;">B = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">+</span>
+      <span class="readout-chip" id="lbl-c" style="background:#10b981;border-color:#059669;box-shadow:3px 3px 0 #059669;">C = ?</span>
+      <span class="readout-chip chip-sum" id="lbl-sum">= 180°</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Định lý quan trọng</p>
+      <p class="theorem-text">Tổng ba góc trong của một tam giác luôn <strong>bằng 180°</strong>, bất kể tam giác có hình dạng như thế nào — nhọn, tù hay vuông!</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 10h18M12 3L3 10M21 10l-9-7"/></svg>
+      <span>Kiến trúc sư dựa vào định lý này khi thiết kế mái tam giác, cột điện, và giàn giáo cầu treo.</span>
+    </div>
+  </section>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      let pts, drag = -1;
+      const R = 18, COLORS = ['#2563EB', '#f97316', '#10b981'];
+      const ARC_R = 30;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        resetPts();
+      };
+
+      function resetPts() {
+        const w = p.width, h = p.height;
+        pts = [
+          { x: w/2, y: h*0.12 },
+          { x: w*0.15, y: h*0.85 },
+          { x: w*0.85, y: h*0.85 }
+        ];
+      }
+
+      function angleBetween(A, B, C) {
+        const ab = p.createVector(B.x-A.x, B.y-A.y);
+        const ac = p.createVector(C.x-A.x, C.y-A.y);
+        return p.degrees(p.abs(ab.angleBetween(ac)));
+      }
+
+      function getNearestPt(x, y) {
+        for (let i = 0; i < 3; i++) {
+          if (p.dist(x, y, pts[i].x, pts[i].y) < R + 14) return i;
+        }
+        return -1;
+      }
+
+      p.mousePressed = () => { drag = getNearestPt(p.mouseX, p.mouseY); };
+      p.mouseReleased = () => { drag = -1; };
+      p.mouseDragged = () => {
+        if (drag >= 0) {
+          pts[drag].x = p.constrain(p.mouseX, R+2, p.width-R-2);
+          pts[drag].y = p.constrain(p.mouseY, R+2, p.height-R-2);
+        }
+      };
+      p.touchStarted = () => {
+        if (p.touches[0]) drag = getNearestPt(p.touches[0].x, p.touches[0].y);
+        return false;
+      };
+      p.touchEnded = () => { drag = -1; return false; };
+      p.touchMoved = () => {
+        if (drag >= 0 && p.touches[0]) {
+          pts[drag].x = p.constrain(p.touches[0].x, R+2, p.width-R-2);
+          pts[drag].y = p.constrain(p.touches[0].y, R+2, p.height-R-2);
+        }
+        return false;
+      };
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+        const [A, B, C] = pts;
+        const angA = angleBetween(A, B, C);
+        const angB = angleBetween(B, A, C);
+        const angC = Math.round(180 - angA - angB);
+        const angAr = Math.round(angA), angBr = Math.round(angB);
+
+        // Filled triangle
+        p.fill(37, 99, 235, 20); p.stroke('#2563EB'); p.strokeWeight(3);
+        p.triangle(A.x, A.y, B.x, B.y, C.x, C.y);
+
+        // Arcs at each vertex
+        [[A,B,C,'#2563EB'], [B,A,C,'#f97316'], [C,A,B,'#10b981']].forEach(([v,p1,p2,col]) => {
+          const a1 = Math.atan2(p1.y-v.y, p1.x-v.x);
+          const a2 = Math.atan2(p2.y-v.y, p2.x-v.x);
+          p.fill(p.color(col)); p.noStroke();
+          p.arc(v.x, v.y, ARC_R*2, ARC_R*2, Math.min(a1,a2), Math.max(a1,a2), p.PIE);
+        });
+
+        // Vertex dots
+        const labels = ['A','B','C'];
+        const angles = [angAr, angBr, angC];
+        pts.forEach((pt, i) => {
+          p.fill(COLORS[i]); p.stroke('white'); p.strokeWeight(3);
+          p.circle(pt.x, pt.y, R*2);
+          p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(12);
+          p.textAlign(p.CENTER, p.CENTER); p.text(labels[i], pt.x, pt.y);
+        });
+
+        // Angle labels near arcs
+        pts.forEach((pt, i) => {
+          p.noStroke(); p.fill(COLORS[i]); p.textSize(13);
+          p.textAlign(p.CENTER, p.CENTER);
+          const ox = i===0 ? 0 : (i===1 ? 22 : -22);
+          const oy = i===0 ? -30 : 22;
+          p.text(`${angles[i]}°`, pt.x + ox, pt.y + oy);
+        });
+
+        // Update chips
+        document.getElementById('lbl-a').textContent = `A = ${angAr}°`;
+        document.getElementById('lbl-b').textContent = `B = ${angBr}°`;
+        document.getElementById('lbl-c').textContent = `C = ${angC}°`;
+        const sum = angAr + angBr + angC;
+        const sumChip = document.getElementById('lbl-sum');
+        sumChip.textContent = `= ${sum}°`;
+        sumChip.className = 'readout-chip ' + (sum === 180 ? 'chip-sum' : 'chip-warn');
+      };
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+        resetPts();
+      };
+    });
+  </script>
+</body>
+</html>
