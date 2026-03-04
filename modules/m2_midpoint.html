@@ -3,7 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>M2: Điểm Nằm Giữa | STEM Geometry</title>
+  <title>M2: Điểm Nằm Giữa – Hình Học STEM</title>
+  <!-- Primary Meta -->
+  <meta name="description" content="Kéo điểm M trên đoạn AC và xem AM + MC = AC luôn đúng. Khám phá tính chất điểm nằm giữa – Toán lớp 6 Kết nối tri thức." />
+  <meta name="theme-color" content="#2563EB" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://vpbao.github.io/stem-geometry-app/modules/m2_midpoint.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vpbao.github.io/stem-geometry-app/modules/m2_midpoint.html" />
+  <meta property="og:title" content="M2: Điểm Nằm Giữa – Hình Học STEM" />
+  <meta property="og:description" content="Kéo điểm M trên đoạn AC và xem AM + MC = AC luôn đúng. Khám phá tính chất điểm nằm giữa – Toán lớp 6 Kết nối tri thức." />
+  <meta property="og:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:site_name" content="STEM Hình Học Tương Tác" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="M2: Điểm Nằm Giữa – Hình Học STEM" />
+  <meta name="twitter:description" content="Kéo điểm M trên đoạn AC và xem AM + MC = AC luôn đúng. Khám phá tính chất điểm nằm giữa – Toán lớp 6 Kết nối tri thức." />
+  <meta name="twitter:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <!-- Favicon & PWA -->
+  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="GeoSTEM" />
+  <link rel="manifest" href="../assets/site.webmanifest" />
   <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body class="module-page">
@@ -26,11 +52,11 @@
 
   <section class="info-card">
     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
-      <span class="readout-chip" id="lbl-am">AM = ?</span>
+      <span class="readout-chip" id="lbl-am" aria-live="polite" aria-atomic="true">AM = ?</span>
       <span class="readout-chip" style="background:#f97316;border-color:#ea6c06;box-shadow:3px 3px 0 #ea6c06;">+</span>
-      <span class="readout-chip" id="lbl-mc">MC = ?</span>
+      <span class="readout-chip" id="lbl-mc" aria-live="polite" aria-atomic="true">MC = ?</span>
       <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
-      <span class="readout-chip chip-sum" id="lbl-ac">AC = ?</span>
+      <span class="readout-chip chip-sum" id="lbl-ac" aria-live="polite" aria-atomic="true">AC = ?</span>
     </div>
     <div class="theorem-box">
       <p class="theorem-title">📖 Tính chất</p>

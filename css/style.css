@@ -442,7 +442,14 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
-:focus-visible { outline: 3px solid var(--cta); outline-offset: 3px; }
+/* WCAG AA focus ring — visible even on colored buttons */
+:focus-visible {
+  outline: 3px solid var(--cta);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+/* Improve text-muted contrast: #64748B on white = 4.6:1 ✓ */
+/* (was fine, keeping it) */
 
 /* ---------- Utility ---------- */
 .sr-only {
