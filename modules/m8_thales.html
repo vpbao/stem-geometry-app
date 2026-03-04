@@ -62,15 +62,15 @@
           tPos = t;
         }
       };
-      p.touchStarted = () => { drag = true; return false; };
-      p.touchEnded = () => { drag = false; return false; };
+      p.touchStarted = () => { drag = true;  };
+      p.touchEnded = () => { drag = false;  };
       p.touchMoved = () => {
         if (drag && p.touches[0]) {
           const apex = { x: p.width/2, y: p.height*0.06 };
           const baseY = p.height * 0.85;
           tPos = p.constrain((p.touches[0].y - apex.y) / (baseY - apex.y), 0.1, 0.92);
         }
-        return false;
+        
       };
 
       p.draw = () => {

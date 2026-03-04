@@ -68,9 +68,9 @@
       p.mousePressed = () => { if (p.dist(p.mouseX, p.mouseY, C.x, C.y) < R+12) drag = true; };
       p.mouseReleased = () => { drag = false; };
       p.mouseDragged = () => { if (drag) { C.x = p.constrain(p.mouseX,2,p.width-2); C.y = p.constrain(p.mouseY,2,p.height*0.85); } };
-      p.touchStarted = () => { if(p.touches[0] && p.dist(p.touches[0].x,p.touches[0].y,C.x,C.y)<R+20) drag=true; return false; };
-      p.touchEnded = () => { drag=false; return false; };
-      p.touchMoved = () => { if(drag&&p.touches[0]) { C.x=p.constrain(p.touches[0].x,2,p.width-2); C.y=p.constrain(p.touches[0].y,2,p.height*0.85); } return false; };
+      p.touchStarted = () => { if(p.touches[0] && p.dist(p.touches[0].x,p.touches[0].y,C.x,C.y)<R+20) drag=true;  };
+      p.touchEnded = () => { drag=false;  };
+      p.touchMoved = () => { if(drag&&p.touches[0]) { C.x=p.constrain(p.touches[0].x,2,p.width-2); C.y=p.constrain(p.touches[0].y,2,p.height*0.85); }  };
 
       document.getElementById('btn-reset').addEventListener('click', reset);
 

@@ -65,9 +65,9 @@
       p.mousePressed = () => { dragging = true; };
       p.mouseReleased = () => { dragging = false; };
       p.mouseDragged = () => { if (dragging) tryDrag(p.mouseX, p.mouseY); };
-      p.touchStarted = () => { dragging = true; return false; };
-      p.touchEnded = () => { dragging = false; return false; };
-      p.touchMoved = () => { if (p.touches[0]) tryDrag(p.touches[0].x, p.touches[0].y); return false; };
+      p.touchStarted = () => { dragging = true;  };
+      p.touchEnded = () => { dragging = false;  };
+      p.touchMoved = () => { if (p.touches[0]) tryDrag(p.touches[0].x, p.touches[0].y);  };
 
       p.draw = () => {
         p.background(252, 252, 255);

@@ -89,15 +89,15 @@
       };
       p.touchStarted = () => {
         if (p.touches[0]) drag = getNearestPt(p.touches[0].x, p.touches[0].y);
-        return false;
+        
       };
-      p.touchEnded = () => { drag = -1; return false; };
+      p.touchEnded = () => { drag = -1;  };
       p.touchMoved = () => {
         if (drag >= 0 && p.touches[0]) {
           pts[drag].x = p.constrain(p.touches[0].x, R+2, p.width-R-2);
           pts[drag].y = p.constrain(p.touches[0].y, R+2, p.height-R-2);
         }
-        return false;
+        
       };
 
       p.draw = () => {

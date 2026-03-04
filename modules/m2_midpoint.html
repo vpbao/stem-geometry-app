@@ -67,13 +67,13 @@
       p.touchStarted = () => {
         const t = getTouch();
         if (t && Math.abs(t.x - mX) < R + 18) dragging = true;
-        return false;
+        
       };
-      p.touchEnded = () => { dragging = false; return false; };
+      p.touchEnded = () => { dragging = false;  };
       p.touchMoved = () => {
         const t = getTouch();
         if (dragging && t) mX = p.constrain(t.x, ax + 1, cx - 1);
-        return false;
+        
       };
 
       p.draw = () => {
