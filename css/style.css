@@ -76,6 +76,10 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   box-shadow: var(--shadow-clay);
   transition: var(--transition);
   white-space: nowrap;
+  /* Accessibility: min touch target 44px */
+  min-height: 44px;
+  -webkit-tap-highlight-color: rgba(37,99,235,0.2);
+  cursor: pointer;
 }
 .btn-clay:hover, .btn-clay:focus-visible {
   transform: translate(-2px, -2px);
@@ -123,17 +127,19 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 
 /* ---------- Top Navigation ---------- */
 .app-nav {
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 3px solid var(--border);
   position: sticky;
   top: 0;
-  z-index: 50;
-  padding: 12px 20px;
+  z-index: 100;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  /* Ensure nav is never covered by canvas */
+  isolation: isolate;
 }
 .app-nav .nav-brand {
   font-family: 'Baloo 2', sans-serif;
@@ -280,6 +286,9 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   display: flex;
   align-items: center;
   gap: 12px;
+  /* Ensure header is always above canvas layer */
+  position: relative;
+  z-index: 10;
 }
 .module-header-icon {
   width: 44px; height: 44px;
@@ -304,8 +313,16 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   background: white;
   overflow: hidden;
   min-height: 300px;
+  /* Prevent page scroll while user is drawing on canvas */
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.canvas-wrapper canvas { display: block; }
+.canvas-wrapper canvas {
+  display: block;
+  touch-action: none;
+}
 
 /* ---------- Info Card ---------- */
 .info-card {

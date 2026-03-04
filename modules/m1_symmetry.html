@@ -63,12 +63,32 @@
         cnv.parent('canvas-container');
         cnv.style('display', 'block');
         p.pixelDensity(Math.min(window.devicePixelRatio, 2));
-        cnv.touchStarted(() => { drawing = true; return false; });
-        cnv.touchMoved(() => {
-          if (drawing) addPoint(p.mouseX, p.mouseY);
-          return false;
-        });
-        cnv.touchEnded(() => { drawing = false; drawPoints.push(null); return false; });
+
+        // Use native DOM listeners with {passive:false} so we can call preventDefault()
+        // This is the ONLY reliable way to block page scroll while drawing on iOS/Android
+        const el = cnv.elt;
+        el.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          drawing = true;
+        }, { passive: false });
+
+        el.addEventListener('touchmove', (e) => {
+          e.preventDefault(); // <-- THIS stops the page from scrolling
+          if (drawing && e.touches.length > 0) {
+            const rect = el.getBoundingClientRect();
+            const touch = e.touches[0];
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            addPoint(x, y);
+          }
+        }, { passive: false });
+
+        el.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          drawing = false;
+          drawPoints.push(null);
+        }, { passive: false });
+
         cnv.mousePressed(() => { drawing = true; });
         cnv.mouseMoved(() => { if (drawing) addPoint(p.mouseX, p.mouseY); });
         cnv.mouseReleased(() => { drawing = false; drawPoints.push(null); });
