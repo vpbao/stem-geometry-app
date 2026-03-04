@@ -80,6 +80,9 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   min-height: 44px;
   -webkit-tap-highlight-color: rgba(37,99,235,0.2);
   cursor: pointer;
+  /* iOS: remove 300ms tap delay and prevent propagation issues with p5.js */
+  touch-action: manipulation;
+  pointer-events: all;
 }
 .btn-clay:hover, .btn-clay:focus-visible {
   transform: translate(-2px, -2px);
