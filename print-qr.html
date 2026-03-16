@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Bản in Mã QR Trang Chủ (3x3 cm)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    .print-sheet {
+      background: white;
+      width: 210mm;
+      min-height: 297mm;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      padding: 20mm;
+      box-sizing: border-box;
+    }
+    .qr-container {
+      display: flex;
+      gap: 20mm;
+      flex-wrap: wrap;
+    }
+    .qr-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      /* Guide border for cutting */
+      border: 1px dashed #cbd5e1;
+      padding: 5mm;
+      margin-bottom: 20mm;
+    }
+    .qr-img {
+      /* Exact physical size for printing */
+      width: 3cm;
+      height: 3cm;
+      display: block;
+      image-rendering: pixelated;
+    }
+    .qr-label {
+      font-size: 10pt;
+      margin-top: 5mm;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+    .instruction {
+      background: #e0f2fe;
+      border-left: 4px solid #0284c7;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      max-width: 600px;
+    }
+    @media print {
+      body { background: white; padding: 0; }
+      .print-sheet { box-shadow: none; width: auto; height: auto; padding: 0; }
+      .instruction { display: none; }
+      @page { margin: 15mm; size: A4; }
+    }
+  </style>
+</head>
+<body>
+  <div class="instruction">
+    <strong>💡 Hướng dẫn in:</strong>
+    <p>Nhấn <strong>Ctrl + P</strong> (Windows) hoặc <strong>Cmd + P</strong> (Mac) để in ranh file này. Đảm bảo chọn <strong>Scale: 100%</strong> hoặc <strong>Default</strong> trong cài đặt máy in để mã QR giữ đúng kích thước vật lý 3x3 cm. Giấy nên là decal để lột dán dễ dàng.</p>
+  </div>
+  
+  <div class="print-sheet">
+    <h1 style="font-size: 16pt; margin-bottom: 10mm;">Mã QR Bản In: Trang Chủ STEM Hình Học (Kích thước: 3x3 cm)</h1>
+    <div class="qr-container">
+      <!-- In multiple copies just in case some are ruined during cutting -->
+      <div class="qr-item">
+        <img class="qr-img" src="assets/qr/homepage.png" alt="Trang chủ">
+        <span class="qr-label">Trang Chủ GeoSTEM</span>
+      </div>
+      <div class="qr-item">
+        <img class="qr-img" src="assets/qr/homepage.png" alt="Trang chủ">
+        <span class="qr-label">Trang Chủ GeoSTEM</span>
+      </div>
+      <div class="qr-item">
+        <img class="qr-img" src="assets/qr/homepage.png" alt="Trang chủ">
+        <span class="qr-label">Trang Chủ GeoSTEM</span>
+      </div>
+      <div class="qr-item">
+        <img class="qr-img" src="assets/qr/homepage.png" alt="Trang chủ">
+        <span class="qr-label">Trang Chủ GeoSTEM</span>
+      </div>
+      <div class="qr-item">
+        <img class="qr-img" src="assets/qr/homepage.png" alt="Trang chủ">
+        <span class="qr-label">Trang Chủ GeoSTEM</span>
+      </div>
+      <div class="qr-item">
+        <img class="qr-img" src="assets/qr/homepage.png" alt="Trang chủ">
+        <span class="qr-label">Trang Chủ GeoSTEM</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
