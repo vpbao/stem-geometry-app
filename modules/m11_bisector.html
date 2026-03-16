@@ -88,9 +88,9 @@
       };
       function resetPts() {
         const w = p.width, h = p.height;
-        O = { x: w * 0.15, y: h * 0.8 };
-        rayEnd1 = { x: w * 0.85, y: h * 0.8 };
-        rayEnd2 = { x: w * 0.55, y: h * 0.1 };
+        O = { x: w * 0.15, y: h * 0.75 };
+        rayEnd1 = { x: w * 0.8, y: h * 0.75 };
+        rayEnd2 = { x: w * 0.5, y: h * 0.1 };
       }
       function angleBetween(v1, v2) {
         let a = p.atan2(v1.y, v1.x) - p.atan2(v2.y, v2.x);
@@ -123,54 +123,105 @@
         const v2 = { x: rayEnd2.x - O.x, y: rayEnd2.y - O.y };
         const a1 = p.atan2(v1.y, v1.x);
         const a2 = p.atan2(v2.y, v2.x);
-        let fullAngle = angleBetween(v1, v2);
-        const fullDeg = Math.round(p.degrees(fullAngle));
-        const halfDeg = Math.round(fullDeg / 2);
-        // Bisector direction
+        const fullAngle = angleBetween(v1, v2);
+        const fullDeg = p.degrees(fullAngle);
+        const halfDeg = fullDeg / 2;
+        // Display values — round to 1 decimal if not integer
+        const fullShow = fullDeg % 1 === 0 ? Math.round(fullDeg) + '°' : fullDeg.toFixed(1) + '°';
+        const halfShow = halfDeg % 1 === 0 ? Math.round(halfDeg) + '°' : halfDeg.toFixed(1) + '°';
+
+        // Normalize unit vectors
         const len1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
         const len2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
         const n1 = { x: v1.x / len1, y: v1.y / len1 };
         const n2 = { x: v2.x / len2, y: v2.y / len2 };
+
+        // Bisector direction — extends FURTHER than the side rays
         const bisX = n1.x + n2.x, bisY = n1.y + n2.y;
         const bisLen = Math.sqrt(bisX * bisX + bisY * bisY) || 1;
-        const bisEnd = { x: O.x + (bisX / bisLen) * 300, y: O.y + (bisY / bisLen) * 300 };
-        // Draw rays
+        const rayMaxLen = Math.max(len1, len2);
+        const bisExtend = rayMaxLen * 1.3; // 30% longer than longest side ray
+        const bisEnd = { x: O.x + (bisX / bisLen) * bisExtend, y: O.y + (bisY / bisLen) * bisExtend };
+
+        // Draw side rays (shorter)
         p.stroke('#8b5cf6'); p.strokeWeight(3);
         p.line(O.x, O.y, rayEnd1.x, rayEnd1.y);
         p.line(O.x, O.y, rayEnd2.x, rayEnd2.y);
-        // Bisector (dashed)
-        p.stroke('#f97316'); p.strokeWeight(2.5);
-        p.drawingContext.setLineDash([8, 6]);
+
+        // Bisector ray (dashed, longer and bolder)
+        p.stroke('#f97316'); p.strokeWeight(3);
+        p.drawingContext.setLineDash([10, 6]);
         p.line(O.x, O.y, bisEnd.x, bisEnd.y);
         p.drawingContext.setLineDash([]);
-        // Arc for full angle
-        const ARC_R = 50;
+
+        // === Angle arc notation ===
         let startA = a1, endA = a2;
         if (startA > endA) { let t = startA; startA = endA; endA = t; }
         if (endA - startA > p.PI) { let t = startA; startA = endA; endA = t + p.TWO_PI; }
-        p.noFill(); p.stroke('#8b5cf6'); p.strokeWeight(2);
-        p.arc(O.x, O.y, ARC_R * 2, ARC_R * 2, startA, endA);
-        // Arc for half angles
         const bisA = p.atan2(bisEnd.y - O.y, bisEnd.x - O.x);
-        // Half-angle arcs with equal-angle tick marks
-        GeoMarks.drawAngleArcMark(p, O.x, O.y, Math.min(startA, bisA), Math.max(startA, bisA), ARC_R * 0.7, 1, '#f97316');
-        GeoMarks.drawAngleArcMark(p, O.x, O.y, Math.min(bisA, endA), Math.max(bisA, endA), ARC_R * 0.7, 1, '#10b981');
-        // Dots
+
+        // Full angle arc (outer, subtle)
+        p.noFill(); p.stroke('rgba(139,92,246,0.3)'); p.strokeWeight(1.5);
+        p.arc(O.x, O.y, 110, 110, startA, endA);
+
+        // Half-angle arcs with EQUAL MARKS (1 tick each)
+        const ARC_R1 = 38, ARC_R2 = 44;
+        // Arc 1: startA → bisA
+        GeoMarks.drawAngleArcMark(p, O.x, O.y, Math.min(startA, bisA), Math.max(startA, bisA), ARC_R1, 1, '#f97316');
+        // Arc 2: bisA → endA
+        GeoMarks.drawAngleArcMark(p, O.x, O.y, Math.min(bisA, endA), Math.max(bisA, endA), ARC_R2, 1, '#10b981');
+
+        // === Angle DEGREE LABELS near the arcs ===
+        const labelR = 60;
+        // Label for angle 1 (xÔt)
+        const midA1 = (Math.min(startA, bisA) + Math.max(startA, bisA)) / 2;
+        const lx1 = O.x + Math.cos(midA1) * labelR;
+        const ly1 = O.y + Math.sin(midA1) * labelR;
+        p.noStroke(); p.fill('#f97316'); p.textFont('Baloo 2'); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
+        p.text(halfShow, lx1, ly1);
+        // Label for angle 2 (tÔy)
+        const midA2 = (Math.min(bisA, endA) + Math.max(bisA, endA)) / 2;
+        const lx2 = O.x + Math.cos(midA2) * labelR;
+        const ly2 = O.y + Math.sin(midA2) * labelR;
+        p.fill('#10b981');
+        p.text(halfShow, lx2, ly2);
+
+        // === Arrowhead on bisector tip ===
+        const arrowSize = 10;
+        const bDirX = bisX / bisLen, bDirY = bisY / bisLen;
+        p.fill('#f97316'); p.noStroke();
+        p.push();
+        p.translate(bisEnd.x, bisEnd.y);
+        p.rotate(p.atan2(bDirY, bDirX));
+        p.triangle(0, 0, -arrowSize, -arrowSize/2.5, -arrowSize, arrowSize/2.5);
+        p.pop();
+
+        // Vertex + endpoint dots
         p.fill('#8b5cf6'); p.stroke('white'); p.strokeWeight(3); p.circle(O.x, O.y, R * 2);
-        p.fill('#f97316'); p.circle(rayEnd1.x, rayEnd1.y, R * 2);
-        p.fill('#10b981'); p.circle(rayEnd2.x, rayEnd2.y, R * 2);
-        p.fill('#f97316'); p.circle(bisEnd.x, bisEnd.y, 10);
+        p.fill('#8b5cf6'); p.circle(rayEnd1.x, rayEnd1.y, R * 2);
+        p.fill('#8b5cf6'); p.circle(rayEnd2.x, rayEnd2.y, R * 2);
+
         // Labels
         p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(11); p.textAlign(p.CENTER, p.CENTER);
-        p.text('O', O.x, O.y); p.text('x', rayEnd1.x, rayEnd1.y); p.text('y', rayEnd2.x, rayEnd2.y);
+        p.text('O', O.x, O.y);
+        p.text('x', rayEnd1.x, rayEnd1.y);
+        p.text('y', rayEnd2.x, rayEnd2.y);
+
+        // Bisector label 't'
+        const tLabelDist = 30;
+        p.fill('#f97316'); p.textSize(13); p.textStyle(p.BOLD);
+        p.text('t', bisEnd.x + bDirY * tLabelDist * 0.5, bisEnd.y - bDirX * tLabelDist * 0.5);
+        p.textStyle(p.NORMAL);
+
         // Update chips
-        document.getElementById('lbl-full').textContent = `xÔy = ${fullDeg}°`;
-        document.getElementById('lbl-half1').textContent = `xÔt = ${halfDeg}°`;
-        document.getElementById('lbl-half2').textContent = `tÔy = ${fullDeg - halfDeg}°`;
+        document.getElementById('lbl-full').textContent = `xÔy = ${fullShow}`;
+        document.getElementById('lbl-half1').textContent = `xÔt = ${halfShow}`;
+        document.getElementById('lbl-half2').textContent = `tÔy = ${halfShow}`;
       };
       p.windowResized = () => { const el = document.getElementById('canvas-container'); p.resizeCanvas(el.offsetWidth, el.offsetHeight); resetPts(); };
     });
 
   </script>
+  <script src="../js/fullscreen.js"></script>
 </body>
 </html>
