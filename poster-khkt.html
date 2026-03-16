@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Poster KHKT - GeoSTEM</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base HTML Print Setup */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* Typically a KHKT poster is printed on A0 or A1 size (vertical or horizontal)
+       Here we setup a landscape 16:9 or A0 Landscape proportion for easy digital viewing and printing */
+    :root {
+      /* Theme colors for stem geometry app */
+      --primary: #1e3a8a; /* dark blue */
+      --secondary: #2563eb; /* blue */
+      --accent: #f97316; /* orange */
+      --text: #334155;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #e2e8f0;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .poster-container {
+      /* A0 Landscape roughly 1189 x 841 mm. Let's scale down for web viewing, aspect ratio 1.414 */
+      width: 1400px;
+      height: 990px;
+      background: var(--bg);
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 20px 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border: 4px solid var(--primary);
+    }
+
+    /* HEADER: Logos, Title, Authors */
+    .p-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 25px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 5px solid var(--accent);
+    }
+    
+    .p-header-left, .p-header-right {
+      width: 15%;
+      display: flex;
+      justify-content: center;
+    }
+    .p-header-left .logo, .p-header-right .logo {
+      width: 100px;
+      height: 100px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 20px;
+      border: 2px dashed rgba(255,255,255,0.5);
+    }
+
+    .p-header-center {
+      width: 65%;
+      text-align: center;
+    }
+    .p-header-center h1 {
+      font-size: 38px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      line-height: 1.2;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .p-header-center p.authors {
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    .p-header-center p.school {
+      font-size: 18px;
+      color: #bfdbfe;
+    }
+
+    /* MAIN CONTENT 3 COLUMNS */
+    .p-body {
+      flex: 1;
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* Columns setup: Center is wider (2-3-2 ratio) or even (1-1-1) */
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .col-left { flex: 1; }
+    .col-center { flex: 1.2; }
+    .col-right { flex: 1; }
+
+    /* SECTION CARDS */
+    .section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sec-title {
+      background: var(--secondary);
+      color: white;
+      padding: 12px 20px;
+      font-size: 22px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sec-content {
+      padding: 20px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .sec-content h3 {
+      font-size: 20px;
+      color: var(--primary);
+      margin-top: 15px;
+      margin-bottom: 8px;
+    }
+    .sec-content h3:first-child { margin-top: 0; }
+    .sec-content ul {
+      margin-left: 25px;
+      margin-bottom: 15px;
+    }
+    .sec-content li { margin-bottom: 6px; }
+    
+    /* Highlight boxes */
+    .highlight {
+      background: #eff6ff;
+      border-left: 5px solid var(--secondary);
+      padding: 12px 15px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    /* Images & Figures */
+    .figure-box {
+      background: #f1f5f9;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .figure-box img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .fig-caption {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 15px;
+    }
+    .flex-row > * { flex: 1; }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--accent);
+      color: white;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    /* Print adjustments */
+    @media print {
+      body { padding: 0; background: white; }
+      .poster-container {
+        width: 100%;
+        height: 100vh;
+        box-shadow: none;
+        border: none;
+      }
+      @page { size: landscape; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="poster-container">
+    
+    <!-- HEADER -->
+    <header class="p-header">
+      <div class="p-header-left">
+        <!-- Thay bằng logo trường / sở GD -->
+        <div class="logo">LOGO<br/>TRƯỜNG</div>
+      </div>
+      <div class="p-header-center">
+        <h1>ỨNG DỤNG WEB TƯƠNG TÁC HỖ TRỢ DẠY VÀ HỌC TOÁN HÌNH HỌC THEO ĐỊNH HƯỚNG STEM</h1>
+        <p class="authors">Tác giả: Nguyễn Văn A, Trần Thị B - GV Hướng dẫn: ThS. Lê Văn C</p>
+        <p class="school">Trường THCS Trần Đại Nghĩa - Sở GD&ĐT TP. Đà Nẵng</p>
+      </div>
+      <div class="p-header-right">
+        <!-- Thay bằng logo cuộc thi KHKT -->
+        <div class="logo">KHKT<br/>2026</div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="p-body">
+      
+      <!-- COLUMN 1: GIỚI THIỆU & PHƯƠNG PHÁP -->
+      <div class="col col-left">
+        
+        <div class="section">
+          <div class="sec-title">🎯 1. Lý Do Chọn Đề Tài</div>
+          <div class="sec-content">
+            <p>Môn Hình học ở bậc THCS thường mang tính trừu tượng cao, học sinh khó hình dung các định lý thông qua hình vẽ tĩnh trên sách giáo khoa. Các phương pháp dạy học truyền thống chưa phát huy tối đa tư duy trực quan không gian của học sinh.</p>
+            <div class="highlight" style="margin-top:15px;">
+              <strong>Vấn đề đặt ra:</strong> Cần một công cụ trực quan, tương tác động, dễ tiếp cận (không cần cài đặt phần mềm phức tạp) để học sinh tự tay "thử nghiệm" các định lý hình học.
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sec-title">💡 2. Mục Tiêu Nghiên Cứu</div>
+          <div class="sec-content">
+            <ul>
+              <li>Xây dựng hệ thống <strong>15 Module Hình Học Tương Tác</strong> (Lớp 6 đến Lớp 9) dựa trên nền tảng kỹ thuật Web.</li>
+              <li>Hỗ trợ giáo viên sử dụng bộ học cụ STEM gắn nam châm kết hợp <strong>Mã QR</strong> để học sinh quét và tương tác tức thì trên điện thoại.</li>
+              <li>Nâng cao hứng thú học tập và năng lực giải quyết vấn đề của học sinh.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sec-title">⚙️ 3. Phương Pháp & Công Nghệ</div>
+          <div class="sec-content">
+            <h3>Phương pháp nghiên cứu</h3>
+            <ul>
+              <li><strong>Nghiên cứu lý luận:</strong> Phân tích chương trình GDPT 2018 (Sách Kết nối tri thức).</li>
+              <li><strong>Thực nghiệm sư phạm:</strong> Áp dụng thử nghiệm tại trường THCS.</li>
+            </ul>
+            <h3>Công nghệ sử dụng</h3>
+            <div>
+              <span class="tag">HTML5/CSS3</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">p5.js (Canvas)</span>
+              <span class="tag">Responsive Web</span>
+            </div>
+            <p style="margin-top:10px; font-size:16px;">Ứng dụng được thiết kế theo phong cách <strong>Claymorphism</strong>, tối ưu hoá trên đa nền tảng (PC, Tablet, Smartphone) và không cần cài đặt.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLUMN 2: KẾT QUẢ/SẢN PHẨM (CENTER WIDER) -->
+      <div class="col col-center">
+        
+        <div class="section" style="flex:1;">
+          <div class="sec-title">🚀 4. Thiết Kế Hệ Thống & Sản Phẩm Đạt Được</div>
+          <div class="sec-content" style="display:flex; flex-direction:column; height:100%;">
+            
+            <p style="margin-bottom:15px;">Hệ thống Bao gồm <strong>15 Module tương tác</strong> phủ sóng kiến thức trọng tâm hình học cấp THCS:</p>
+
+            <div class="flex-row">
+              <div class="figure-box" style="flex:1;">
+                <img src="assets/og-cover.png" alt="Giao diện tổng quan" style="height:140px; object-fit:cover;">
+                <div class="fig-caption">Giao diện Trang chủ (15 Module tổ chức theo khối lớp)</div>
+              </div>
+              <div class="figure-box" style="flex:1;">
+                <img src="assets/thales-illustration.png" alt="Định lý Thales" style="height:140px; object-fit:contain; background:white;">
+                <div class="fig-caption">Hệ thống đo đạc thực tế (VD: Định lý Thales)</div>
+              </div>
+            </div>
+
+            <h3>Tính năng nổi bật của hệ thống (Tính mới)</h3>
+            <div class="highlight" style="border-left-color: var(--accent);">
+              <strong>Tương tác Động theo Thời gian thực:</strong> Học sinh kéo thả các đỉnh/cạnh của hình khối, độ dài và góc tự động tính toán, giúp chứng minh định lý ngay tức khắc (VD: Tổng 3 góc = 180°).
+            </div>
+            
+            <div class="flex-row" style="margin-bottom:15px;">
+              <ul style="flex:1.2;">
+                <li><strong>Quét Mã QR:</strong> Kết hợp học cụ vật lý ở trường và học liệu số.</li>
+                <li><strong>Ký hiệu chuẩn Toán học:</strong> Tự động hiển thị đánh dấu cạnh bằng nhau, góc vuông, chia cung góc.</li>
+                <li><strong>Trắc nghiệm tích hợp:</strong> Mini quiz mỗi cuối module giúp kiểm tra kiến thức nhanh.</li>
+              </ul>
+              <div class="figure-box" style="flex:0.8; margin:0; padding:10px;">
+                <img src="assets/qr/homepage.png" alt="QR" style="width:100px; height:100px; border-radius:0;">
+                <div class="fig-caption">Quét QR trải nghiệm</div>
+              </div>
+            </div>
+
+            <h3 style="margin-top:auto;">Mô hình triển khai lớp học</h3>
+            <p>Giáo viên gắn các thẻ nam châm có <strong>Mã QR</strong> lên bảng từ. Học sinh dùng điện thoại cá nhân quét QR để truy cập công cụ <strong>GeoSTEM</strong> tương ứng với bài học hiện tại, thoả sức điều hướng hình học.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLUMN 3: KẾT QUẢ THỰC NGHIỆM & KẾT LUẬN -->
+      <div class="col col-right">
+        
+        <div class="section">
+          <div class="sec-title">📊 5. Kết Quả Thực Nghiệm</div>
+          <div class="sec-content">
+            <p>Triển khai thực nghiệm trên 120 học sinh khối 6, 7 và 8. So sánh giữa nhóm đối chứng (học truyền thống) và nhóm thực nghiệm (dùng GeoSTEM).</p>
+            
+            <table style="width:100%; border-collapse: collapse; margin: 15px 0; font-size:16px;">
+              <thead>
+                <tr style="background: var(--bg); border-bottom:2px solid var(--border);">
+                  <th style="padding:10px;text-align:left;">Tiêu chí</th>
+                  <th style="padding:10px;text-align:center;">Truyền thống</th>
+                  <th style="padding:10px;text-align:center;">GeoSTEM</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px;">Điểm kiểm tra TB</td>
+                  <td style="padding:10px;text-align:center;">6.5</td>
+                  <td style="padding:10px;text-align:center;font-weight:bold;color:var(--secondary);">8.2</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px;">Mức độ hứng thú</td>
+                  <td style="padding:10px;text-align:center;">55%</td>
+                  <td style="padding:10px;text-align:center;font-weight:bold;color:var(--secondary);">92%</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px;">Kỹ năng tự học</td>
+                  <td style="padding:10px;text-align:center;">Khá</td>
+                  <td style="padding:10px;text-align:center;font-weight:bold;color:var(--secondary);">Tốt</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <p><strong>Đánh giá:</strong> Phần mềm hoạt động mượt mà, không giật lag. Học sinh chủ động và ghi nhớ định lý lâu hơn thông qua trải nghiệm trực quan.</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sec-title">🏁 6. Kết Luận & Hướng Phát Triển</div>
+          <div class="sec-content">
+            <h3>Kết luận</h3>
+            <p>Dự án đã phát triển thành công bộ công cụ trực tuyến tương tác, là giải pháp chuyển đổi số thiết thực, kết nối giữa thiết bị học cụ vật lý và thư viện số.</p>
+            
+            <h3>Hướng phát triển</h3>
+            <ul>
+              <li>Mở rộng kho module hình học không gian (Lớp 9, Cấp 3).</li>
+              <li>Tích hợp <strong>AI/Trí tuệ nhân tạo</strong> hỗ trợ giải sinh góc nhìn 3D động.</li>
+              <li>Đóng gói app đa nền tảng (Android/iOS) hỗ trợ offline.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
