@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M15: Đồng Quy 3 Đường Cao – Hình Học STEM</title>
+  <meta name="description" content="Kéo đỉnh tam giác và xem 3 đường cao luôn đồng quy tại trực tâm H. Toán lớp 7." />
+  <meta name="theme-color" content="#2563EB" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://vpbao.github.io/stem-geometry-app/modules/m15_orthocenter.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vpbao.github.io/stem-geometry-app/modules/m15_orthocenter.html" />
+  <meta property="og:title" content="M15: Đồng Quy 3 Đường Cao – Hình Học STEM" />
+  <meta property="og:description" content="Kéo đỉnh tam giác và xem 3 đường cao luôn đồng quy tại trực tâm H. Toán lớp 7." />
+  <meta property="og:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:site_name" content="STEM Hình Học Tương Tác" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="M15: Đồng Quy 3 Đường Cao – Hình Học STEM" />
+  <meta name="twitter:description" content="Kéo đỉnh tam giác và xem 3 đường cao luôn đồng quy tại trực tâm H. Toán lớp 7." />
+  <meta name="twitter:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="GeoSTEM" />
+  <link rel="manifest" href="../assets/site.webmanifest" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <button onclick="window.location.href='../index.html'" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </button>
+    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><circle cx="14" cy="20" r="2" fill="currentColor" stroke="none"/></svg> Module 15</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#b45309,#f59e0b);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><line x1="2" y1="25" x2="22" y2="11" stroke-dasharray="3 2"/><circle cx="14" cy="20" r="2.5" fill="white" stroke="none"/></svg></div>
+    <div>
+      <h1>Đồng Quy 3 Đường Cao</h1>
+      <p>Toán 7 — Kéo đỉnh — xem 3 đường cao đồng quy tại trực tâm H</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác 3 Đường cao"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+
+      <span class="readout-chip" id="lbl-type" aria-live="polite" aria-atomic="true" style="background:#b45309;border-color:#92400e;box-shadow:3px 3px 0 #92400e;">Tam giác: ?</span>
+      <span class="readout-chip" id="lbl-pos" aria-live="polite" aria-atomic="true" style="background:#10b981;border-color:#059669;box-shadow:3px 3px 0 #059669;">H: ?</span>
+
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Trực tâm tam giác</p>
+      <p class="theorem-text">Ba đường cao của tam giác <strong>đồng quy</strong> tại một điểm gọi là <strong>trực tâm H</strong>. Với tam giác nhọn, H nằm trong; tam giác tù, H nằm ngoài.</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 10h18M12 3L3 10M21 10l-9-7"/></svg>
+      <span>Khi dựng cột chống mái nhà, 3 đường cao giúp xác định điểm giao — vị trí cột trung tâm.</span>
+    </div>
+  </section>
+
+  <section class="quiz-section">
+    <div class="quiz-section-title">🧠 Kiểm tra nhanh</div>
+    <div id="quiz-section"></div>
+  </section>
+
+  <script>
+    var QUIZ_DATA = [{"q": "Trực tâm là giao điểm của 3 đường nào?", "opts": ["3 trung tuyến", "3 trung trực", "3 đường cao"], "ans": 2}, {"q": "Với tam giác tù, trực tâm H nằm ở đâu?", "opts": ["Bên trong tam giác", "Bên ngoài tam giác", "Trên cạnh tam giác"], "ans": 1}];
+  </script>
+  <script src="../js/quiz.js"></script>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+
+    new p5((p) => {
+      let pts, drag = -1;
+      const R = 16, COLORS = ['#b45309', '#f97316', '#10b981'];
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        resetPts();
+      };
+      function resetPts() {
+        const w = p.width, h = p.height;
+        pts = [{ x: w/2, y: h*0.08 }, { x: w*0.12, y: h*0.85 }, { x: w*0.82, y: h*0.85 }];
+      }
+      function footOfAlt(v, p1, p2) {
+        const dx=p2.x-p1.x, dy=p2.y-p1.y;
+        const t=((v.x-p1.x)*dx+(v.y-p1.y)*dy)/(dx*dx+dy*dy);
+        return {x:p1.x+t*dx, y:p1.y+t*dy};
+      }
+      function lineIntersect(x1,y1,x2,y2,x3,y3,x4,y4) {
+        const d=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4);
+        if(Math.abs(d)<0.001) return null;
+        const t=((x1-x3)*(y3-y4)-(y1-y3)*(x3-x4))/d;
+        return {x:x1+t*(x2-x1), y:y1+t*(y2-y1)};
+      }
+      function angleBtw(A,B,C){const ab=p.createVector(B.x-A.x,B.y-A.y);const ac=p.createVector(C.x-A.x,C.y-A.y);return p.degrees(Math.abs(ab.angleBetween(ac)));}
+      function getNearestPt(x,y){for(let i=0;i<3;i++) if(p.dist(x,y,pts[i].x,pts[i].y)<R+14) return i; return -1;}
+      p.mousePressed=()=>{drag=getNearestPt(p.mouseX,p.mouseY);};
+      p.mouseReleased=()=>{drag=-1;};
+      p.mouseDragged=()=>{if(drag>=0){pts[drag].x=p.constrain(p.mouseX,R,p.width-R);pts[drag].y=p.constrain(p.mouseY,R,p.height-R);}};
+      p.touchStarted=()=>{if(p.touches[0])drag=getNearestPt(p.touches[0].x,p.touches[0].y);};
+      p.touchEnded=()=>{drag=-1;};
+      p.touchMoved=()=>{if(drag>=0&&p.touches[0]){pts[drag].x=p.constrain(p.touches[0].x,R,p.width-R);pts[drag].y=p.constrain(p.touches[0].y,R,p.height-R);}};
+      p.draw = () => {
+        p.background(252,252,255);
+        const [A,B,C] = pts;
+        // Feet of altitudes
+        const fA = footOfAlt(A,B,C);
+        const fB = footOfAlt(B,A,C);
+        const fC = footOfAlt(C,A,B);
+        // Orthocenter
+        const H = lineIntersect(A.x,A.y,fA.x,fA.y,B.x,B.y,fB.x,fB.y);
+        // Triangle
+        p.fill(180,83,9,20); p.stroke('#b45309'); p.strokeWeight(2.5);
+        p.triangle(A.x,A.y,B.x,B.y,C.x,C.y);
+        // Altitudes
+        const altColors = ['#b45309','#f97316','#10b981'];
+        [[A,fA],[B,fB],[C,fC]].forEach(([v,f],i)=>{
+          p.stroke(altColors[i]); p.strokeWeight(2);
+          // Extend the line beyond
+          const dx=f.x-v.x, dy=f.y-v.y;
+          const len=Math.sqrt(dx*dx+dy*dy)||1;
+          p.line(v.x-dx/len*20, v.y-dy/len*20, f.x+dx/len*40, f.y+dy/len*40);
+          // Right angle marker at foot
+          const sz=10;
+          const ux=dx/len*sz, uy=dy/len*sz;
+          const nx=-uy, ny=ux;
+          p.noFill(); p.stroke(altColors[i]); p.strokeWeight(1.5);
+          p.line(f.x+nx,f.y+ny, f.x+nx-ux,f.y+ny-uy);
+          p.line(f.x+nx-ux,f.y+ny-uy, f.x-ux,f.y-uy);
+          // Foot dot
+          p.noStroke(); p.fill(altColors[i]); p.circle(f.x,f.y,8);
+        });
+        // H point
+        if(H){
+          p.fill('#b45309'); p.stroke('white'); p.strokeWeight(3); p.circle(H.x,H.y,20);
+          p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(11); p.textAlign(p.CENTER,p.CENTER); p.text('H',H.x,H.y);
+        }
+        // Vertices
+        const labels = ['A','B','C'];
+        pts.forEach((pt,i)=>{
+          p.fill(COLORS[i]); p.stroke('white'); p.strokeWeight(3); p.circle(pt.x,pt.y,R*2);
+          p.noStroke(); p.fill('white'); p.textSize(12); p.text(labels[i],pt.x,pt.y);
+        });
+        // Type check
+        const angA=angleBtw(A,B,C), angB=angleBtw(B,A,C), angC=Math.round(180-angA-angB);
+        const maxAng = Math.max(angA,angB,angC);
+        let triType = 'Nhọn', hPos = 'Trong △';
+        if (maxAng > 90) { triType = 'Tù'; hPos = 'Ngoài △'; }
+        else if (Math.abs(maxAng - 90) < 2) { triType = 'Vuông'; hPos = 'Tại đỉnh vuông'; }
+        document.getElementById('lbl-type').textContent = `△ ${triType}`;
+        document.getElementById('lbl-pos').textContent = `H: ${hPos}`;
+      };
+      p.windowResized=()=>{const el=document.getElementById('canvas-container');p.resizeCanvas(el.offsetWidth,el.offsetHeight);resetPts();};
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M12: Đồng Quy 3 Đường Trung Tuyến – Hình Học STEM</title>
+  <meta name="description" content="Kéo đỉnh tam giác và xem 3 đường trung tuyến luôn đồng quy tại trọng tâm G. Toán lớp 7." />
+  <meta name="theme-color" content="#2563EB" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://vpbao.github.io/stem-geometry-app/modules/m12_centroid.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vpbao.github.io/stem-geometry-app/modules/m12_centroid.html" />
+  <meta property="og:title" content="M12: Đồng Quy 3 Đường Trung Tuyến – Hình Học STEM" />
+  <meta property="og:description" content="Kéo đỉnh tam giác và xem 3 đường trung tuyến luôn đồng quy tại trọng tâm G. Toán lớp 7." />
+  <meta property="og:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:site_name" content="STEM Hình Học Tương Tác" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="M12: Đồng Quy 3 Đường Trung Tuyến – Hình Học STEM" />
+  <meta name="twitter:description" content="Kéo đỉnh tam giác và xem 3 đường trung tuyến luôn đồng quy tại trọng tâm G. Toán lớp 7." />
+  <meta name="twitter:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="GeoSTEM" />
+  <link rel="manifest" href="../assets/site.webmanifest" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <button onclick="window.location.href='../index.html'" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </button>
+    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><circle cx="14" cy="17.6" r="2" fill="currentColor" stroke="none"/></svg> Module 12</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#dc2626,#f87171);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><line x1="2" y1="25" x2="20" y2="14"/><line x1="26" y1="25" x2="8" y2="14"/><circle cx="14" cy="17.6" r="2.5" fill="white" stroke="none"/></svg></div>
+    <div>
+      <h1>Đồng Quy 3 Đường Trung Tuyến</h1>
+      <p>Toán 7 — Kéo đỉnh và xem 3 trung tuyến đồng quy tại G</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác 3 Trung tuyến"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+
+      <span class="readout-chip" id="lbl-ga" aria-live="polite" aria-atomic="true" style="background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">GA/GM = ?</span>
+      <span class="readout-chip" id="lbl-gb" aria-live="polite" aria-atomic="true" style="background:#f97316;border-color:#ea6c06;box-shadow:3px 3px 0 #ea6c06;">GB/GN = ?</span>
+      <span class="readout-chip" id="lbl-gc" aria-live="polite" aria-atomic="true" style="background:#10b981;border-color:#059669;box-shadow:3px 3px 0 #059669;">GC/GP = ?</span>
+
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Trọng tâm tam giác</p>
+      <p class="theorem-text">Ba đường trung tuyến của một tam giác <strong>đồng quy</strong> tại một điểm gọi là <strong>trọng tâm G</strong>. Trọng tâm chia mỗi trung tuyến theo tỉ lệ 2:1 tính từ đỉnh.</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 10h18M12 3L3 10M21 10l-9-7"/></svg>
+      <span>Trọng tâm là điểm cân bằng — đặt ngón tay tại G, tấm bìa tam giác sẽ nằm thăng bằng!</span>
+    </div>
+  </section>
+
+  <section class="quiz-section">
+    <div class="quiz-section-title">🧠 Kiểm tra nhanh</div>
+    <div id="quiz-section"></div>
+  </section>
+
+  <script>
+    var QUIZ_DATA = [{"q": "Trọng tâm G chia trung tuyến theo tỉ lệ nào (tính từ đỉnh)?", "opts": ["1:1", "2:1", "3:1"], "ans": 1}, {"q": "Trọng tâm tam giác là giao điểm của?", "opts": ["3 đường cao", "3 đường trung tuyến", "3 đường phân giác"], "ans": 1}];
+  </script>
+  <script src="../js/quiz.js"></script>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+
+    new p5((p) => {
+      let pts, drag = -1;
+      const R = 16, COLORS = ['#2563EB', '#f97316', '#10b981'];
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        resetPts();
+      };
+      function resetPts() {
+        const w = p.width, h = p.height;
+        pts = [{ x: w/2, y: h*0.1 }, { x: w*0.12, y: h*0.88 }, { x: w*0.88, y: h*0.88 }];
+      }
+      function mid(a, b) { return { x: (a.x+b.x)/2, y: (a.y+b.y)/2 }; }
+      function getNearestPt(x, y) { for (let i=0;i<3;i++) if (p.dist(x,y,pts[i].x,pts[i].y)<R+14) return i; return -1; }
+      p.mousePressed = () => { drag = getNearestPt(p.mouseX, p.mouseY); };
+      p.mouseReleased = () => { drag = -1; };
+      p.mouseDragged = () => { if(drag>=0){pts[drag].x=p.constrain(p.mouseX,R,p.width-R);pts[drag].y=p.constrain(p.mouseY,R,p.height-R);} };
+      p.touchStarted = () => { if(p.touches[0]) drag=getNearestPt(p.touches[0].x,p.touches[0].y); };
+      p.touchEnded = () => { drag=-1; };
+      p.touchMoved = () => { if(drag>=0&&p.touches[0]){pts[drag].x=p.constrain(p.touches[0].x,R,p.width-R);pts[drag].y=p.constrain(p.touches[0].y,R,p.height-R);} };
+      p.draw = () => {
+        p.background(252,252,255);
+        const [A,B,C] = pts;
+        const mBC = mid(B,C), mAC = mid(A,C), mAB = mid(A,B);
+        const G = { x: (A.x+B.x+C.x)/3, y: (A.y+B.y+C.y)/3 };
+        // Triangle
+        p.fill(37,99,235,20); p.stroke('#2563EB'); p.strokeWeight(2.5);
+        p.triangle(A.x,A.y,B.x,B.y,C.x,C.y);
+        // Medians
+        p.stroke('#dc2626'); p.strokeWeight(2);
+        p.line(A.x,A.y,mBC.x,mBC.y);
+        p.stroke('#e67700');
+        p.line(B.x,B.y,mAC.x,mAC.y);
+        p.stroke('#059669');
+        p.line(C.x,C.y,mAB.x,mAB.y);
+        // Midpoints
+        p.noStroke();
+        [[mBC,'#dc2626'],[mAC,'#e67700'],[mAB,'#059669']].forEach(([m,c])=>{p.fill(c);p.circle(m.x,m.y,10);});
+        // G point
+        p.fill('#dc2626'); p.stroke('white'); p.strokeWeight(3); p.circle(G.x,G.y,20);
+        p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(11); p.textAlign(p.CENTER,p.CENTER);
+        p.text('G',G.x,G.y);
+        // Vertices
+        const labels = ['A','B','C'];
+        pts.forEach((pt,i)=>{
+          p.fill(COLORS[i]); p.stroke('white'); p.strokeWeight(3); p.circle(pt.x,pt.y,R*2);
+          p.noStroke(); p.fill('white'); p.textSize(12); p.text(labels[i],pt.x,pt.y);
+        });
+        // Ratios
+        const ga=p.dist(G.x,G.y,A.x,A.y), gm=p.dist(G.x,G.y,mBC.x,mBC.y);
+        const gb=p.dist(G.x,G.y,B.x,B.y), gn=p.dist(G.x,G.y,mAC.x,mAC.y);
+        const gc=p.dist(G.x,G.y,C.x,C.y), gp=p.dist(G.x,G.y,mAB.x,mAB.y);
+        document.getElementById('lbl-ga').textContent = `GA/GM = ${(ga/gm).toFixed(1)}`;
+        document.getElementById('lbl-gb').textContent = `GB/GN = ${(gb/gn).toFixed(1)}`;
+        document.getElementById('lbl-gc').textContent = `GC/GP = ${(gc/gp).toFixed(1)}`;
+      };
+      p.windowResized = () => { const el=document.getElementById('canvas-container'); p.resizeCanvas(el.offsetWidth,el.offsetHeight); resetPts(); };
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M13: Đồng Quy 3 Đường Trung Trực – Hình Học STEM</title>
+  <meta name="description" content="Kéo đỉnh tam giác và xem 3 đường trung trực đồng quy tại tâm đường tròn ngoại tiếp. Toán lớp 7." />
+  <meta name="theme-color" content="#2563EB" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://vpbao.github.io/stem-geometry-app/modules/m13_circumcenter.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vpbao.github.io/stem-geometry-app/modules/m13_circumcenter.html" />
+  <meta property="og:title" content="M13: Đồng Quy 3 Đường Trung Trực – Hình Học STEM" />
+  <meta property="og:description" content="Kéo đỉnh tam giác và xem 3 đường trung trực đồng quy tại tâm đường tròn ngoại tiếp. Toán lớp 7." />
+  <meta property="og:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:site_name" content="STEM Hình Học Tương Tác" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="M13: Đồng Quy 3 Đường Trung Trực – Hình Học STEM" />
+  <meta name="twitter:description" content="Kéo đỉnh tam giác và xem 3 đường trung trực đồng quy tại tâm đường tròn ngoại tiếp. Toán lớp 7." />
+  <meta name="twitter:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="GeoSTEM" />
+  <link rel="manifest" href="../assets/site.webmanifest" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <button onclick="window.location.href='../index.html'" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </button>
+    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,4 3,23 25,23"/><circle cx="14" cy="15" r="10" stroke-dasharray="3 2"/></svg> Module 13</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#0284c7,#38bdf8);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="14,4 3,23 25,23"/><circle cx="14" cy="15" r="11" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="2.5" fill="white" stroke="none"/></svg></div>
+    <div>
+      <h1>Đồng Quy 3 Đường Trung Trực</h1>
+      <p>Toán 7 — Kéo đỉnh — xem trung trực đồng quy tại tâm đường tròn ngoại tiếp</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác 3 Trung trực"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+
+      <span class="readout-chip" id="lbl-oa" aria-live="polite" aria-atomic="true" style="background:#0284c7;border-color:#0369a1;box-shadow:3px 3px 0 #0369a1;">OA = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
+      <span class="readout-chip" id="lbl-ob" aria-live="polite" aria-atomic="true" style="background:#f97316;border-color:#ea6c06;box-shadow:3px 3px 0 #ea6c06;">OB = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
+      <span class="readout-chip" id="lbl-oc" aria-live="polite" aria-atomic="true" style="background:#10b981;border-color:#059669;box-shadow:3px 3px 0 #059669;">OC = ?</span>
+
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Tâm đường tròn ngoại tiếp</p>
+      <p class="theorem-text">Ba đường trung trực của tam giác <strong>đồng quy</strong> tại điểm O — tâm đường tròn đi qua cả 3 đỉnh (<strong>đường tròn ngoại tiếp</strong>).</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 10h18M12 3L3 10M21 10l-9-7"/></svg>
+      <span>Xây 3 ngôi nhà rồi tìm điểm đặt trạm phát sóng cách đều cả 3 — chính là tâm ngoại tiếp!</span>
+    </div>
+  </section>
+
+  <section class="quiz-section">
+    <div class="quiz-section-title">🧠 Kiểm tra nhanh</div>
+    <div id="quiz-section"></div>
+  </section>
+
+  <script>
+    var QUIZ_DATA = [{"q": "3 đường trung trực đồng quy tại điểm nào?", "opts": ["Trọng tâm", "Tâm đường tròn ngoại tiếp", "Tâm đường tròn nội tiếp"], "ans": 1}, {"q": "Tâm ngoại tiếp có tính chất gì?", "opts": ["Cách đều 3 cạnh", "Cách đều 3 đỉnh", "Chia trung tuyến tỉ lệ 2:1"], "ans": 1}];
+  </script>
+  <script src="../js/quiz.js"></script>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+
+    new p5((p) => {
+      let pts, drag = -1;
+      const R = 16, COLORS = ['#0284c7', '#f97316', '#10b981'];
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        resetPts();
+      };
+      function resetPts() {
+        const w = p.width, h = p.height;
+        pts = [{ x: w/2, y: h*0.1 }, { x: w*0.12, y: h*0.85 }, { x: w*0.85, y: h*0.78 }];
+      }
+      function circumcenter(A,B,C) {
+        const D = 2*(A.x*(B.y-C.y)+B.x*(C.y-A.y)+C.x*(A.y-B.y));
+        if (Math.abs(D) < 0.001) return null;
+        const ux = ((A.x*A.x+A.y*A.y)*(B.y-C.y)+(B.x*B.x+B.y*B.y)*(C.y-A.y)+(C.x*C.x+C.y*C.y)*(A.y-B.y))/D;
+        const uy = ((A.x*A.x+A.y*A.y)*(C.x-B.x)+(B.x*B.x+B.y*B.y)*(A.x-C.x)+(C.x*C.x+C.y*C.y)*(B.x-A.x))/D;
+        return {x:ux, y:uy};
+      }
+      function mid(a,b) { return {x:(a.x+b.x)/2,y:(a.y+b.y)/2}; }
+      function getNearestPt(x,y) { for(let i=0;i<3;i++) if(p.dist(x,y,pts[i].x,pts[i].y)<R+14) return i; return -1; }
+      p.mousePressed=()=>{drag=getNearestPt(p.mouseX,p.mouseY);};
+      p.mouseReleased=()=>{drag=-1;};
+      p.mouseDragged=()=>{if(drag>=0){pts[drag].x=p.constrain(p.mouseX,R,p.width-R);pts[drag].y=p.constrain(p.mouseY,R,p.height-R);}};
+      p.touchStarted=()=>{if(p.touches[0])drag=getNearestPt(p.touches[0].x,p.touches[0].y);};
+      p.touchEnded=()=>{drag=-1;};
+      p.touchMoved=()=>{if(drag>=0&&p.touches[0]){pts[drag].x=p.constrain(p.touches[0].x,R,p.width-R);pts[drag].y=p.constrain(p.touches[0].y,R,p.height-R);}};
+      p.draw = () => {
+        p.background(252,252,255);
+        const [A,B,C] = pts;
+        const O = circumcenter(A,B,C);
+        // Triangle
+        p.fill(2,132,199,20); p.stroke('#0284c7'); p.strokeWeight(2.5);
+        p.triangle(A.x,A.y,B.x,B.y,C.x,C.y);
+        if (O) {
+          const radius = p.dist(O.x,O.y,A.x,A.y);
+          // Circumscribed circle
+          p.noFill(); p.stroke('#38bdf8'); p.strokeWeight(2);
+          p.drawingContext.setLineDash([6,4]); p.circle(O.x,O.y,radius*2); p.drawingContext.setLineDash([]);
+          // Perpendicular bisectors
+          const mids = [mid(B,C),mid(A,C),mid(A,B)];
+          const perpColors = ['#0284c7','#f97316','#10b981'];
+          mids.forEach((m,i) => {
+            p.stroke(perpColors[i]); p.strokeWeight(1.5);
+            const dx = O.x - m.x, dy = O.y - m.y;
+            const len = Math.sqrt(dx*dx+dy*dy) || 1;
+            const ex = 500/len;
+            p.line(O.x - dx*ex, O.y - dy*ex, O.x + dx*ex, O.y + dy*ex);
+            // Midpoint dot
+            p.noStroke(); p.fill(perpColors[i]); p.circle(m.x,m.y,8);
+          });
+          // O point
+          p.fill('#0284c7'); p.stroke('white'); p.strokeWeight(3); p.circle(O.x,O.y,18);
+          p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(10); p.textAlign(p.CENTER,p.CENTER); p.text('O',O.x,O.y);
+          // Update chips
+          document.getElementById('lbl-oa').textContent = `OA = ${Math.round(p.dist(O.x,O.y,A.x,A.y))}`;
+          document.getElementById('lbl-ob').textContent = `OB = ${Math.round(p.dist(O.x,O.y,B.x,B.y))}`;
+          document.getElementById('lbl-oc').textContent = `OC = ${Math.round(p.dist(O.x,O.y,C.x,C.y))}`;
+        }
+        // Vertices
+        const labels = ['A','B','C'];
+        pts.forEach((pt,i) => {
+          p.fill(COLORS[i]); p.stroke('white'); p.strokeWeight(3); p.circle(pt.x,pt.y,R*2);
+          p.noStroke(); p.fill('white'); p.textSize(12); p.text(labels[i],pt.x,pt.y);
+        });
+      };
+      p.windowResized=()=>{const el=document.getElementById('canvas-container');p.resizeCanvas(el.offsetWidth,el.offsetHeight);resetPts();};
+    });
+
+  </script>
+</body>
+</html>

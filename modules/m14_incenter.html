@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M14: Đồng Quy 3 Đường Phân Giác – Hình Học STEM</title>
+  <meta name="description" content="Kéo đỉnh tam giác và xem 3 đường phân giác đồng quy tại tâm đường tròn nội tiếp I. Toán lớp 7." />
+  <meta name="theme-color" content="#2563EB" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://vpbao.github.io/stem-geometry-app/modules/m14_incenter.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vpbao.github.io/stem-geometry-app/modules/m14_incenter.html" />
+  <meta property="og:title" content="M14: Đồng Quy 3 Đường Phân Giác – Hình Học STEM" />
+  <meta property="og:description" content="Kéo đỉnh tam giác và xem 3 đường phân giác đồng quy tại tâm đường tròn nội tiếp I. Toán lớp 7." />
+  <meta property="og:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:site_name" content="STEM Hình Học Tương Tác" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="M14: Đồng Quy 3 Đường Phân Giác – Hình Học STEM" />
+  <meta name="twitter:description" content="Kéo đỉnh tam giác và xem 3 đường phân giác đồng quy tại tâm đường tròn nội tiếp I. Toán lớp 7." />
+  <meta name="twitter:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="GeoSTEM" />
+  <link rel="manifest" href="../assets/site.webmanifest" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <button onclick="window.location.href='../index.html'" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </button>
+    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><circle cx="14" cy="19" r="6" stroke-dasharray="3 2"/></svg> Module 14</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#c026d3,#e879f9);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="14,3 2,25 26,25"/><circle cx="14" cy="19" r="6" stroke-dasharray="3 2"/><circle cx="14" cy="19" r="2" fill="white" stroke="none"/></svg></div>
+    <div>
+      <h1>Đồng Quy 3 Đường Phân Giác</h1>
+      <p>Toán 7 — Kéo đỉnh — xem phân giác đồng quy tại tâm đường tròn nội tiếp I</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác 3 Phân giác"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+
+      <span class="readout-chip" id="lbl-da" aria-live="polite" aria-atomic="true" style="background:#c026d3;border-color:#a21caf;box-shadow:3px 3px 0 #a21caf;">d(I,AB) = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
+      <span class="readout-chip" id="lbl-db" aria-live="polite" aria-atomic="true" style="background:#f97316;border-color:#ea6c06;box-shadow:3px 3px 0 #ea6c06;">d(I,BC) = ?</span>
+      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
+      <span class="readout-chip" id="lbl-dc" aria-live="polite" aria-atomic="true" style="background:#10b981;border-color:#059669;box-shadow:3px 3px 0 #059669;">d(I,CA) = ?</span>
+
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Tâm đường tròn nội tiếp</p>
+      <p class="theorem-text">Ba đường phân giác trong của tam giác <strong>đồng quy</strong> tại điểm I — tâm đường tròn tiếp xúc cả 3 cạnh (<strong>đường tròn nội tiếp</strong>).</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 10h18M12 3L3 10M21 10l-9-7"/></svg>
+      <span>Đặt vòi phun nước tại tâm nội tiếp → nước phun đều ra 3 cạnh sân tam giác!</span>
+    </div>
+  </section>
+
+  <section class="quiz-section">
+    <div class="quiz-section-title">🧠 Kiểm tra nhanh</div>
+    <div id="quiz-section"></div>
+  </section>
+
+  <script>
+    var QUIZ_DATA = [{"q": "Giao điểm 3 đường phân giác trong là tâm của?", "opts": ["Đường tròn ngoại tiếp", "Đường tròn nội tiếp", "Đường tròn bàng tiếp"], "ans": 1}, {"q": "Tâm nội tiếp I có tính chất gì?", "opts": ["Cách đều 3 đỉnh", "Cách đều 3 cạnh", "Chia trung tuyến 2:1"], "ans": 1}];
+  </script>
+  <script src="../js/quiz.js"></script>
+
+  <script src="../js/p5.min.js"></script>
+  <script>
+
+    new p5((p) => {
+      let pts, drag = -1;
+      const R = 16, COLORS = ['#c026d3', '#f97316', '#10b981'];
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        resetPts();
+      };
+      function resetPts() {
+        const w = p.width, h = p.height;
+        pts = [{ x: w/2, y: h*0.08 }, { x: w*0.1, y: h*0.88 }, { x: w*0.9, y: h*0.88 }];
+      }
+      function sideLen(a,b) { return p.dist(a.x,a.y,b.x,b.y); }
+      function distPtLine(px,py,x1,y1,x2,y2) {
+        const A=y2-y1, B=x1-x2, C=x2*y1-x1*y2;
+        return Math.abs(A*px+B*py+C)/Math.sqrt(A*A+B*B);
+      }
+      function getNearestPt(x,y){for(let i=0;i<3;i++) if(p.dist(x,y,pts[i].x,pts[i].y)<R+14) return i; return -1;}
+      p.mousePressed=()=>{drag=getNearestPt(p.mouseX,p.mouseY);};
+      p.mouseReleased=()=>{drag=-1;};
+      p.mouseDragged=()=>{if(drag>=0){pts[drag].x=p.constrain(p.mouseX,R,p.width-R);pts[drag].y=p.constrain(p.mouseY,R,p.height-R);}};
+      p.touchStarted=()=>{if(p.touches[0])drag=getNearestPt(p.touches[0].x,p.touches[0].y);};
+      p.touchEnded=()=>{drag=-1;};
+      p.touchMoved=()=>{if(drag>=0&&p.touches[0]){pts[drag].x=p.constrain(p.touches[0].x,R,p.width-R);pts[drag].y=p.constrain(p.touches[0].y,R,p.height-R);}};
+      p.draw = () => {
+        p.background(252,252,255);
+        const [A,B,C] = pts;
+        const a=sideLen(B,C), b=sideLen(A,C), c=sideLen(A,B);
+        const I = { x: (a*A.x+b*B.x+c*C.x)/(a+b+c), y: (a*A.y+b*B.y+c*C.y)/(a+b+c) };
+        const inR = distPtLine(I.x,I.y,A.x,A.y,B.x,B.y);
+        // Triangle
+        p.fill(192,38,211,20); p.stroke('#c026d3'); p.strokeWeight(2.5);
+        p.triangle(A.x,A.y,B.x,B.y,C.x,C.y);
+        // Angle bisectors
+        const bisColors = ['#c026d3','#f97316','#10b981'];
+        [[A,B,C],[B,A,C],[C,A,B]].forEach(([v,p1,p2],i)=>{
+          const d1=sideLen(v,p1), d2=sideLen(v,p2);
+          const n1={x:(p1.x-v.x)/d1, y:(p1.y-v.y)/d1};
+          const n2={x:(p2.x-v.x)/d2, y:(p2.y-v.y)/d2};
+          const bx=n1.x+n2.x, by=n1.y+n2.y;
+          const bl=Math.sqrt(bx*bx+by*by)||1;
+          p.stroke(bisColors[i]); p.strokeWeight(1.5);
+          p.line(v.x,v.y, v.x+(bx/bl)*400, v.y+(by/bl)*400);
+        });
+        // Inscribed circle
+        p.noFill(); p.stroke('#e879f9'); p.strokeWeight(2);
+        p.drawingContext.setLineDash([5,3]); p.circle(I.x,I.y,inR*2); p.drawingContext.setLineDash([]);
+        // I point
+        p.fill('#c026d3'); p.stroke('white'); p.strokeWeight(3); p.circle(I.x,I.y,18);
+        p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(10); p.textAlign(p.CENTER,p.CENTER); p.text('I',I.x,I.y);
+        // Vertices
+        const labels = ['A','B','C'];
+        pts.forEach((pt,i)=>{
+          p.fill(COLORS[i]); p.stroke('white'); p.strokeWeight(3); p.circle(pt.x,pt.y,R*2);
+          p.noStroke(); p.fill('white'); p.textSize(12); p.text(labels[i],pt.x,pt.y);
+        });
+        // Chips
+        const dAB = Math.round(distPtLine(I.x,I.y,A.x,A.y,B.x,B.y));
+        const dBC = Math.round(distPtLine(I.x,I.y,B.x,B.y,C.x,C.y));
+        const dCA = Math.round(distPtLine(I.x,I.y,C.x,C.y,A.x,A.y));
+        document.getElementById('lbl-da').textContent = `d(I,AB) = ${dAB}`;
+        document.getElementById('lbl-db').textContent = `d(I,BC) = ${dBC}`;
+        document.getElementById('lbl-dc').textContent = `d(I,CA) = ${dCA}`;
+      };
+      p.windowResized=()=>{const el=document.getElementById('canvas-container');p.resizeCanvas(el.offsetWidth,el.offsetHeight);resetPts();};
+    });
+
+  </script>
+</body>
+</html>
