@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M11: Lục Giác Đều Từ 6 Tam Giác Đều – Hình Học STEM</title>
+  <meta name="description" content="Khám phá lục giác đều được ghép từ 6 tam giác đều. Kéo thả để xem cấu trúc và tính đối xứng. Toán lớp 6 – Kết nối tri thức." />
+  <meta name="theme-color" content="#2563EB" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://vpbao.github.io/stem-geometry-app/modules/m11_hexagon.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vpbao.github.io/stem-geometry-app/modules/m11_hexagon.html" />
+  <meta property="og:title" content="M11: Lục Giác Đều Từ 6 Tam Giác Đều – Hình Học STEM" />
+  <meta property="og:description" content="Khám phá lục giác đều được ghép từ 6 tam giác đều. Kéo thả để xem cấu trúc và tính đối xứng." />
+  <meta property="og:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <meta property="og:locale" content="vi_VN" />
+  <meta property="og:site_name" content="STEM Hình Học Tương Tác" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="M11: Lục Giác Đều Từ 6 Tam Giác Đều – Hình Học STEM" />
+  <meta name="twitter:description" content="Khám phá lục giác đều được ghép từ 6 tam giác đều." />
+  <meta name="twitter:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
+  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="GeoSTEM" />
+  <link rel="manifest" href="../assets/site.webmanifest" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="module-page">
+  <nav class="app-nav">
+    <button onclick="window.location.href='../index.html'" class="btn-clay btn-ghost" style="padding:8px 14px;font-size:0.85rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Quay lại
+    </button>
+    <div class="nav-brand">⬡ Module 11</div>
+  </nav>
+  <header class="module-header">
+    <div class="module-header-icon" style="background:linear-gradient(135deg,#0d9488,#2dd4bf);">⬡</div>
+    <div>
+      <h1>Lục Giác Đều Từ 6 Tam Giác Đều</h1>
+      <p>Toán 6 — Xoay, tách, ghép 6 tam giác đều thành lục giác đều</p>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper" id="canvas-container" aria-label="Bảng tương tác lục giác đều"></div>
+
+  <section class="info-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
+      <span class="readout-chip" id="lbl-side" aria-live="polite" aria-atomic="true" style="background:#0d9488;border-color:#0f766e;box-shadow:3px 3px 0 #0f766e;">Cạnh = ?</span>
+      <span class="readout-chip" id="lbl-angle" aria-live="polite" aria-atomic="true" style="background:#f97316;border-color:#ea6c06;box-shadow:3px 3px 0 #ea6c06;">Góc tâm = 60°</span>
+      <span class="readout-chip" id="lbl-tri" aria-live="polite" aria-atomic="true" style="background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">6 △ đều</span>
+    </div>
+    <div class="theorem-box">
+      <p class="theorem-title">📖 Lục giác đều</p>
+      <p class="theorem-text">Lục giác đều có thể được chia thành <strong>6 tam giác đều</strong> bằng cách nối tâm với 6 đỉnh. Mỗi tam giác có 3 góc <strong>60°</strong> và 3 cạnh bằng nhau.</p>
+    </div>
+    <div class="realworld-row">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M3 10h18M12 3L3 10M21 10l-9-7"/></svg>
+      <span>Tổ ong có dạng lục giác đều — hình dạng tiết kiệm vật liệu nhất để lấp đầy mặt phẳng!</span>
+    </div>
+  </section>
+
+  <section class="quiz-section">
+    <div class="quiz-section-title">🧠 Kiểm tra nhanh</div>
+    <div id="quiz-section"></div>
+  </section>
+
+  <script>
+    var QUIZ_DATA = [
+      {"q": "Lục giác đều được ghép từ bao nhiêu tam giác đều?", "opts": ["4", "6", "8"], "ans": 1},
+      {"q": "Mỗi góc ở tâm của lục giác đều bằng bao nhiêu?", "opts": ["45°", "60°", "90°"], "ans": 1}
+    ];
+  </script>
+  <script src="../js/quiz.js"></script>
+
+  <script src="../js/geo-marks.js"></script>
+  <script src="../js/p5.min.js"></script>
+  <script>
+    new p5((p) => {
+      let center, hexR, explode = 0, hoveredTri = -1;
+      const COLORS = ['#0d9488','#2563EB','#f97316','#ec4899','#8b5cf6','#10b981'];
+      const LIGHT  = ['#ccfbf1','#dbeafe','#ffedd5','#fce7f3','#ede9fe','#d1fae5'];
+      let animating = false, targetExplode = 0;
+      let dragCenter = false;
+
+      p.setup = () => {
+        const el = document.getElementById('canvas-container');
+        p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
+        p.pixelDensity(Math.min(window.devicePixelRatio, 2));
+        reset();
+      };
+
+      function reset() {
+        center = { x: p.width / 2, y: p.height / 2 };
+        hexR = Math.min(p.width, p.height) * 0.35;
+      }
+
+      function getHexVertex(i) {
+        const angle = p.PI / 6 + (i * p.TWO_PI / 6); // start from top-right
+        return {
+          x: center.x + hexR * Math.cos(angle),
+          y: center.y + hexR * Math.sin(angle)
+        };
+      }
+
+      function getTriCenter(i) {
+        const v1 = getHexVertex(i);
+        const v2 = getHexVertex((i + 1) % 6);
+        return {
+          x: (center.x + v1.x + v2.x) / 3,
+          y: (center.y + v1.y + v2.y) / 3
+        };
+      }
+
+      function pointInTriangle(px, py, ax, ay, bx, by, cx, cy) {
+        const d1 = (px-bx)*(ay-by)-(ax-bx)*(py-by);
+        const d2 = (px-cx)*(by-cy)-(bx-cx)*(py-cy);
+        const d3 = (px-ax)*(cy-ay)-(cx-ax)*(py-ay);
+        const hasNeg = (d1<0)||(d2<0)||(d3<0);
+        const hasPos = (d1>0)||(d2>0)||(d3>0);
+        return !(hasNeg && hasPos);
+      }
+
+      function getHoveredTri(mx, my) {
+        for (let i = 0; i < 6; i++) {
+          const v1 = getHexVertex(i);
+          const v2 = getHexVertex((i + 1) % 6);
+          // Apply explode offset
+          const tc = getTriCenter(i);
+          const ox = (tc.x - center.x) * explode * 0.3;
+          const oy = (tc.y - center.y) * explode * 0.3;
+          if (pointInTriangle(mx, my,
+            center.x + ox, center.y + oy,
+            v1.x + ox, v1.y + oy,
+            v2.x + ox, v2.y + oy)) return i;
+        }
+        return -1;
+      }
+
+      p.mousePressed = () => {
+        if (p.dist(p.mouseX, p.mouseY, center.x, center.y) < 20) {
+          dragCenter = true;
+        } else {
+          // Toggle explode
+          targetExplode = targetExplode > 0.5 ? 0 : 1;
+          animating = true;
+        }
+      };
+      p.mouseReleased = () => { dragCenter = false; };
+      p.mouseDragged = () => {
+        if (dragCenter) {
+          center.x = p.constrain(p.mouseX, hexR + 10, p.width - hexR - 10);
+          center.y = p.constrain(p.mouseY, hexR + 10, p.height - hexR - 10);
+        }
+      };
+      p.touchStarted = () => {
+        if (p.touches[0]) {
+          if (p.dist(p.touches[0].x, p.touches[0].y, center.x, center.y) < 30) {
+            dragCenter = true;
+          } else {
+            targetExplode = targetExplode > 0.5 ? 0 : 1;
+            animating = true;
+          }
+        }
+      };
+      p.touchEnded = () => { dragCenter = false; };
+      p.touchMoved = () => {
+        if (dragCenter && p.touches[0]) {
+          center.x = p.constrain(p.touches[0].x, hexR + 10, p.width - hexR - 10);
+          center.y = p.constrain(p.touches[0].y, hexR + 10, p.height - hexR - 10);
+        }
+      };
+
+      p.draw = () => {
+        p.background(252, 252, 255);
+
+        // Animate explode
+        if (animating) {
+          explode += (targetExplode - explode) * 0.12;
+          if (Math.abs(explode - targetExplode) < 0.01) {
+            explode = targetExplode;
+            animating = false;
+          }
+        }
+
+        // Check hover
+        hoveredTri = getHoveredTri(p.mouseX, p.mouseY);
+
+        // Draw 6 triangles
+        for (let i = 0; i < 6; i++) {
+          const v1 = getHexVertex(i);
+          const v2 = getHexVertex((i + 1) % 6);
+          const tc = getTriCenter(i);
+
+          // Explode offset
+          const ox = (tc.x - center.x) * explode * 0.3;
+          const oy = (tc.y - center.y) * explode * 0.3;
+
+          const cx = center.x + ox, cy = center.y + oy;
+          const x1 = v1.x + ox, y1 = v1.y + oy;
+          const x2 = v2.x + ox, y2 = v2.y + oy;
+
+          // Fill
+          p.fill(i === hoveredTri ? LIGHT[i] : 'white');
+          p.stroke(COLORS[i]);
+          p.strokeWeight(i === hoveredTri ? 3.5 : 2.5);
+          p.triangle(cx, cy, x1, y1, x2, y2);
+
+          // Equal side tick marks
+          GeoMarks.drawTickMark(p, cx, cy, x1, y1, 1, COLORS[i], 5);
+          GeoMarks.drawTickMark(p, x1, y1, x2, y2, 1, COLORS[i], 5);
+          GeoMarks.drawTickMark(p, x2, y2, cx, cy, 1, COLORS[i], 5);
+
+          // Triangle number label
+          const labelX = (cx + x1 + x2) / 3;
+          const labelY = (cy + y1 + y2) / 3;
+          p.noStroke(); p.fill(COLORS[i]);
+          p.textFont('Baloo 2'); p.textSize(explode > 0.3 ? 16 : 13);
+          p.textAlign(p.CENTER, p.CENTER);
+          p.text(i + 1, labelX, labelY);
+
+          // 60° angle label at center vertex when exploded
+          if (explode > 0.3) {
+            const angLabelR = 22;
+            const midA = (p.atan2(y1 - cy, x1 - cx) + p.atan2(y2 - cy, x2 - cx)) / 2;
+            p.fill(COLORS[i]); p.textSize(10);
+            p.text('60°', cx + Math.cos(midA) * angLabelR, cy + Math.sin(midA) * angLabelR);
+          }
+        }
+
+        // Center dot
+        p.fill('#0d9488'); p.stroke('white'); p.strokeWeight(3);
+        p.circle(center.x, center.y, 18);
+        p.noStroke(); p.fill('white');
+        p.textFont('Baloo 2'); p.textSize(10);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.text('O', center.x, center.y);
+
+        // Vertex labels
+        for (let i = 0; i < 6; i++) {
+          const v = getHexVertex(i);
+          const ox = (v.x - center.x) * explode * 0.3;
+          const oy = (v.y - center.y) * explode * 0.3;
+          const vx = v.x + ox, vy = v.y + oy;
+          // Label offset outward
+          const dx = (vx - center.x) * 0.12;
+          const dy = (vy - center.y) * 0.12;
+          p.noStroke(); p.fill('#334155'); p.textSize(12);
+          p.text(String.fromCharCode(65 + i), vx + dx, vy + dy);
+        }
+
+        // Instruction hint
+        p.fill('rgba(37,99,235,0.6)'); p.textSize(11);
+        p.textAlign(p.CENTER); p.text(explode < 0.5 ? '👆 Nhấn để tách' : '👆 Nhấn để ghép', p.width / 2, p.height - 14);
+
+        // Update chips
+        const side = Math.round(hexR);
+        document.getElementById('lbl-side').textContent = `Cạnh = ${side}px`;
+        document.getElementById('lbl-angle').textContent = 'Góc tâm = 60°';
+        document.getElementById('lbl-tri').textContent = '6 △ đều';
+      };
+
+      p.windowResized = () => {
+        const el = document.getElementById('canvas-container');
+        p.resizeCanvas(el.offsetWidth, el.offsetHeight);
+        reset();
+      };
+    });
+  </script>
+  <script src="../js/fullscreen.js"></script>
+</body>
+</html>
