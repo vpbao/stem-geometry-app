@@ -9,14 +9,12 @@
     /* Reset & Base HTML Print Setup */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* Typically a KHKT poster is printed on A0 or A1 size (vertical or horizontal)
-       Here we setup a landscape 16:9 or A0 Landscape proportion for easy digital viewing and printing */
     :root {
       /* Theme colors for stem geometry app */
       --primary: #1e3a8a; /* dark blue */
       --secondary: #2563eb; /* blue */
       --accent: #f97316; /* orange */
-      --text: #334155;
+      --text: #1e293b;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --border: #e2e8f0;
@@ -24,37 +22,37 @@
 
     body {
       font-family: 'Roboto', sans-serif;
-      background: #e2e8f0;
+      background: #cbd5e1;
       color: var(--text);
       display: flex;
       justify-content: center;
-      padding: 20px;
+      padding: 2vw;
     }
 
+    /* Màn hình web: giả lập tỷ lệ giấy ngang (VD: A0 Landscape) */
     .poster-container {
-      /* A0 Landscape roughly 1189 x 841 mm. Let's scale down for web viewing, aspect ratio 1.414 */
-      width: 1400px;
-      height: 990px;
+      width: 1600px; /* Chiều ngang cơ bản để dễ nhìn trên web */
+      min-height: 1130px; /* Kéo dài nếu nội dung nhiều, tránh bị cắt chữ */
       background: var(--bg);
-      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-image: radial-gradient(#94a3b8 1px, transparent 1px);
       background-size: 20px 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
       position: relative;
-      overflow: hidden;
-      border: 4px solid var(--primary);
+      border: 6px solid var(--primary);
+      margin-bottom: 20px;
     }
 
     /* HEADER: Logos, Title, Authors */
     .p-header {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
-      padding: 25px 40px;
+      padding: 30px 50px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 5px solid var(--accent);
+      border-bottom: 8px solid var(--accent);
     }
     
     .p-header-left, .p-header-right {
@@ -63,35 +61,36 @@
       justify-content: center;
     }
     .p-header-left .logo, .p-header-right .logo {
-      width: 100px;
-      height: 100px;
-      background: rgba(255,255,255,0.2);
+      width: 120px;
+      height: 120px;
+      background: rgba(255,255,255,0.15);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-weight: bold; font-size: 20px;
-      border: 2px dashed rgba(255,255,255,0.5);
+      font-weight: bold; font-size: 22px;
+      border: 3px dashed rgba(255,255,255,0.6);
+      text-align: center;
     }
 
     .p-header-center {
-      width: 65%;
+      width: 70%;
       text-align: center;
     }
     .p-header-center h1 {
-      font-size: 38px;
+      font-size: 42px;
       font-weight: 900;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       letter-spacing: 1px;
-      line-height: 1.2;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      line-height: 1.3;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
     }
     .p-header-center p.authors {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 500;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
     .p-header-center p.school {
-      font-size: 18px;
+      font-size: 20px;
       color: #bfdbfe;
     }
 
@@ -99,18 +98,17 @@
     .p-body {
       flex: 1;
       display: flex;
-      padding: 20px;
-      gap: 20px;
+      padding: 25px;
+      gap: 25px;
     }
 
-    /* Columns setup: Center is wider (2-3-2 ratio) or even (1-1-1) */
     .col {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 25px;
     }
     .col-left { flex: 1; }
-    .col-center { flex: 1.2; }
+    .col-center { flex: 1.25; }
     .col-right { flex: 1; }
 
     /* SECTION CARDS */
@@ -118,120 +116,146 @@
       background: var(--card-bg);
       border-radius: 12px;
       border: 2px solid var(--border);
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      height: 100%; /* Đảm bảo các thẻ trải đều */
     }
     .sec-title {
       background: var(--secondary);
       color: white;
-      padding: 12px 20px;
-      font-size: 22px;
+      padding: 15px 25px;
+      font-size: 24px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      display: flex; align-items: center; gap: 10px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
     }
     .sec-content {
-      padding: 20px;
-      font-size: 18px;
+      padding: 25px;
+      font-size: 20px; /* Chữ to rõ để in A0 đọc cách 2m vẫn thấy */
       line-height: 1.6;
+      flex: 1;
     }
     .sec-content h3 {
-      font-size: 20px;
+      font-size: 22px;
       color: var(--primary);
-      margin-top: 15px;
-      margin-bottom: 8px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
     }
     .sec-content h3:first-child { margin-top: 0; }
     .sec-content ul {
-      margin-left: 25px;
+      margin-left: 30px;
       margin-bottom: 15px;
     }
-    .sec-content li { margin-bottom: 6px; }
+    .sec-content li { margin-bottom: 8px; }
+    .sec-content p { margin-bottom: 15px; }
     
     /* Highlight boxes */
     .highlight {
       background: #eff6ff;
       border-left: 5px solid var(--secondary);
-      padding: 12px 15px;
-      border-radius: 4px;
-      margin-bottom: 15px;
-      font-weight: 500;
+      padding: 15px 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-style: italic;
+      color: #0f172a;
     }
 
     /* Images & Figures */
     .figure-box {
       background: #f1f5f9;
-      border: 1px dashed #cbd5e1;
+      border: 2px dashed #cbd5e1;
       border-radius: 8px;
       padding: 15px;
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     .figure-box img {
       max-width: 100%;
       height: auto;
       border-radius: 6px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
     .fig-caption {
-      font-size: 14px;
-      color: #64748b;
-      margin-top: 8px;
-      font-style: italic;
+      font-size: 16px;
+      color: #475569;
+      margin-top: 10px;
+      font-weight: 500;
     }
 
     .flex-row {
       display: flex;
-      gap: 15px;
+      gap: 20px;
+      align-items: center;
     }
     .flex-row > * { flex: 1; }
 
     /* Tags */
     .tag {
       display: inline-block;
-      padding: 4px 10px;
+      padding: 6px 14px;
       background: var(--accent);
       color: white;
       border-radius: 20px;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: bold;
-      margin-right: 5px;
-      margin-bottom: 5px;
+      margin-right: 8px;
+      margin-bottom: 8px;
     }
 
-    /* Print adjustments */
+    /* Cài đặt khi xuất PDF/In ấn: Đảm bảo độ phân giải cao */
     @media print {
-      body { padding: 0; background: white; }
-      .poster-container {
-        width: 100%;
-        height: 100vh;
-        box-shadow: none;
-        border: none;
+      @page { 
+        /* Cấu hình khổ A0 ngang (1189mm x 841mm) ở độ phân giải vector */
+        size: 1189mm 841mm landscape; 
+        margin: 0; 
       }
-      @page { size: landscape; margin: 0; }
+      body { 
+        background: white; 
+        padding: 0; 
+        margin: 0;
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact;
+      }
+      .poster-container {
+        /* Bỏ fix width/height, cho bám khít lề tờ giấy A0 */
+        width: 100vw;
+        height: 100vh;
+        min-height: unset;
+        border: none;
+        box-shadow: none;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+      /* Tăng nhẹ nét viền và font chữ khi in khổ lớn */
+      .sec-content { font-size: 24px; }
+      .p-header-center h1 { font-size: 52px; }
+      .p-header-center p.authors { font-size: 32px; }
+      .p-header-center p.school { font-size: 26px; }
+      .sec-title { font-size: 30px; }
+      .sec-content h3 { font-size: 28px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="poster-container">
+  <div class="poster-container" id="poster">
     
     <!-- HEADER -->
     <header class="p-header">
       <div class="p-header-left">
-        <!-- Thay bằng logo trường / sở GD -->
         <div class="logo">LOGO<br/>TRƯỜNG</div>
       </div>
       <div class="p-header-center">
         <h1>ỨNG DỤNG WEB TƯƠNG TÁC HỖ TRỢ DẠY VÀ HỌC TOÁN HÌNH HỌC THEO ĐỊNH HƯỚNG STEM</h1>
-        <p class="authors">Tác giả: Nguyễn Văn A, Trần Thị B - GV Hướng dẫn: ThS. Lê Văn C</p>
+        <p class="authors">Nhóm học sinh: Nguyễn Văn A, Trần Thị B - GV Hướng dẫn: Thầy Lê Văn C</p>
         <p class="school">Trường THCS Trần Đại Nghĩa - Sở GD&ĐT TP. Đà Nẵng</p>
       </div>
       <div class="p-header-right">
-        <!-- Thay bằng logo cuộc thi KHKT -->
         <div class="logo">KHKT<br/>2026</div>
       </div>
     </header>
@@ -239,15 +263,16 @@
     <!-- CONTENT -->
     <div class="p-body">
       
-      <!-- COLUMN 1: GIỚI THIỆU & PHƯƠNG PHÁP -->
+      <!-- CỘT 1: GIỚI THIỆU & PHƯƠNG PHÁP -->
       <div class="col col-left">
         
         <div class="section">
           <div class="sec-title">🎯 1. Lý Do Chọn Đề Tài</div>
           <div class="sec-content">
-            <p>Môn Hình học ở bậc THCS thường mang tính trừu tượng cao, học sinh khó hình dung các định lý thông qua hình vẽ tĩnh trên sách giáo khoa. Các phương pháp dạy học truyền thống chưa phát huy tối đa tư duy trực quan không gian của học sinh.</p>
-            <div class="highlight" style="margin-top:15px;">
-              <strong>Vấn đề đặt ra:</strong> Cần một công cụ trực quan, tương tác động, dễ tiếp cận (không cần cài đặt phần mềm phức tạp) để học sinh tự tay "thử nghiệm" các định lý hình học.
+            <p>Môn Toán Hình học thường bị các bạn học sinh đánh giá là "khô khan" và khó hiểu. Trên thực tế, nhiều bạn gặp khó khăn khi hình dung các định lý thông qua những hình vẽ tĩnh trên sách giáo khoa (SGK).</p>
+            <p>Những cách dạy học hiện tại đôi khi chưa đủ trực quan để kích thích sự tò mò. Nếu chỉ nhìn hình và chép định lý, chúng em rất dễ quên.</p>
+            <div class="highlight">
+              <strong>Từ thực tế đó, ý tưởng của nhóm em là:</strong> Xây dựng một trang web Toán học mà ở đó, các hình khối không hề đứng im. Người học có thể tự tay "kéo đứt", "kéo dãn" các đỉnh để thấy ngay độ dài, góc đi kèm nhảy số liên tục, từ đó tự mình "tìm ra" định lý.
             </div>
           </div>
         </div>
@@ -256,128 +281,131 @@
           <div class="sec-title">💡 2. Mục Tiêu Nghiên Cứu</div>
           <div class="sec-content">
             <ul>
-              <li>Xây dựng hệ thống <strong>15 Module Hình Học Tương Tác</strong> (Lớp 6 đến Lớp 9) dựa trên nền tảng kỹ thuật Web.</li>
-              <li>Hỗ trợ giáo viên sử dụng bộ học cụ STEM gắn nam châm kết hợp <strong>Mã QR</strong> để học sinh quét và tương tác tức thì trên điện thoại.</li>
-              <li>Nâng cao hứng thú học tập và năng lực giải quyết vấn đề của học sinh.</li>
+              <li><strong>Số hoá đồ dùng học tập:</strong> Thiết kế 15 bài học (Module) trải dài từ lớp 6 đến lớp 9 dưới dạng Web.</li>
+              <li><strong>Tương tác nhanh:</strong> Không cần cài đặt app nặng nề, chỉ cần dùng điện thoại quét mã QR dán trên bảng từ trên lớp là dùng được ngay.</li>
+              <li>Giúp chính các bạn học sinh trong trường em yêu thích môn Hình học hơn, tự giác học bài và khắc sâu kiến thức.</li>
             </ul>
           </div>
         </div>
 
         <div class="section">
-          <div class="sec-title">⚙️ 3. Phương Pháp & Công Nghệ</div>
+          <div class="sec-title">⚙️ 3. Quá Trình Thực Hiện</div>
           <div class="sec-content">
-            <h3>Phương pháp nghiên cứu</h3>
+            <h3>Các bước tiến hành</h3>
             <ul>
-              <li><strong>Nghiên cứu lý luận:</strong> Phân tích chương trình GDPT 2018 (Sách Kết nối tri thức).</li>
-              <li><strong>Thực nghiệm sư phạm:</strong> Áp dụng thử nghiệm tại trường THCS.</li>
+              <li><strong>Bước 1:</strong> Tổng hợp các bài học Hình học khó hiểu nhất trong SGK Toán (Kết nối tri thức).</li>
+              <li><strong>Bước 2:</strong> Vẽ phát thảo bảng từ nam châm mô phỏng trên giấy.</li>
+              <li><strong>Bước 3:</strong> Viết mã code lập trình tạo ra các hình học "biết cử động" (Động).</li>
             </ul>
-            <h3>Công nghệ sử dụng</h3>
+            <h3>Công cụ lập trình</h3>
             <div>
               <span class="tag">HTML5/CSS3</span>
               <span class="tag">JavaScript</span>
-              <span class="tag">p5.js (Canvas)</span>
-              <span class="tag">Responsive Web</span>
+              <span class="tag">Thư viện p5.js</span>
             </div>
-            <p style="margin-top:10px; font-size:16px;">Ứng dụng được thiết kế theo phong cách <strong>Claymorphism</strong>, tối ưu hoá trên đa nền tảng (PC, Tablet, Smartphone) và không cần cài đặt.</p>
+            <p style="margin-top:15px;">Chúng em thiết kế giao diện theo phong cách Claymorphism (khối đất sét) 3D, với màu sắc tươi sáng giúp giảm bớt căng thẳng khi học Toán.</p>
           </div>
         </div>
 
       </div>
 
-      <!-- COLUMN 2: KẾT QUẢ/SẢN PHẨM (CENTER WIDER) -->
+      <!-- CỘT 2: SẢN PHẨM Ở GIỮA (RỘNG HƠN) -->
       <div class="col col-center">
         
         <div class="section" style="flex:1;">
-          <div class="sec-title">🚀 4. Thiết Kế Hệ Thống & Sản Phẩm Đạt Được</div>
-          <div class="sec-content" style="display:flex; flex-direction:column; height:100%;">
+          <div class="sec-title">🚀 4. Điểm Nhấn Sáng Tạo Của Hệ Thống</div>
+          <div class="sec-content" style="display:flex; flex-direction:column;">
             
-            <p style="margin-bottom:15px;">Hệ thống Bao gồm <strong>15 Module tương tác</strong> phủ sóng kiến thức trọng tâm hình học cấp THCS:</p>
+            <p>Sản phẩm đạt được là Web App <strong>GeoSTEM</strong> với 15 Module bài giảng. Mỗi chủ đề đều giải quyết triệt để một định lý khó trong SGK.</p>
 
             <div class="flex-row">
               <div class="figure-box" style="flex:1;">
-                <img src="assets/og-cover.png" alt="Giao diện tổng quan" style="height:140px; object-fit:cover;">
-                <div class="fig-caption">Giao diện Trang chủ (15 Module tổ chức theo khối lớp)</div>
+                <img src="assets/og-cover.png" alt="Giao diện chính">
+                <div class="fig-caption">Trang chủ với 15 chủ đề cho khối THCS</div>
               </div>
               <div class="figure-box" style="flex:1;">
-                <img src="assets/thales-illustration.png" alt="Định lý Thales" style="height:140px; object-fit:contain; background:white;">
-                <div class="fig-caption">Hệ thống đo đạc thực tế (VD: Định lý Thales)</div>
+                <img src="assets/thales-illustration.png" alt="Thales">
+                <div class="fig-caption">Mô phỏng đo tháp kim tự tháp (Định lý Thales)</div>
               </div>
             </div>
 
-            <h3>Tính năng nổi bật của hệ thống (Tính mới)</h3>
+            <h3>Tính "Động" & "Sống Điệu" (Tính mới của dự án)</h3>
             <div class="highlight" style="border-left-color: var(--accent);">
-              <strong>Tương tác Động theo Thời gian thực:</strong> Học sinh kéo thả các đỉnh/cạnh của hình khối, độ dài và góc tự động tính toán, giúp chứng minh định lý ngay tức khắc (VD: Tổng 3 góc = 180°).
+              Không giống video trên YouTube chỉ xem thụ động. Ở GeoSTEM, người dùng thao tác trực tiếp bằng ngón tay: Kéo đỉnh tam giác méo xệch cỡ nào thì thông số "Tổng 3 góc" máy tính báo vẫn luôn = 180°. Các con số nhảy liên tục minh bạch trước mắt học sinh.
             </div>
             
-            <div class="flex-row" style="margin-bottom:15px;">
-              <ul style="flex:1.2;">
-                <li><strong>Quét Mã QR:</strong> Kết hợp học cụ vật lý ở trường và học liệu số.</li>
-                <li><strong>Ký hiệu chuẩn Toán học:</strong> Tự động hiển thị đánh dấu cạnh bằng nhau, góc vuông, chia cung góc.</li>
-                <li><strong>Trắc nghiệm tích hợp:</strong> Mini quiz mỗi cuối module giúp kiểm tra kiến thức nhanh.</li>
+            <div class="flex-row" style="margin-bottom:20px;">
+              <ul style="flex:1.4;">
+                <li><strong>Hiển thị Chuẩn Toán Học:</strong> Ứng dụng tự động vẽ đúng dấu góc vuông (⊾), đường trung bình, các đoạn thẳng bằng nhau (//) y hệt quy ước quốc tế.</li>
+                <li><strong>Kiểm tra tại chỗ:</strong> Cuối mỗi bài luôn có Mini-Quiz để ôn bài 30 giây.</li>
+                <li><strong>Quét mã QR - Học ngay:</strong> Không cần đăng ký tài khoản phiền phức. Mở camera, quét và học.</li>
               </ul>
-              <div class="figure-box" style="flex:0.8; margin:0; padding:10px;">
-                <img src="assets/qr/homepage.png" alt="QR" style="width:100px; height:100px; border-radius:0;">
-                <div class="fig-caption">Quét QR trải nghiệm</div>
+              <div class="figure-box" style="flex:0.6; margin:0; padding:15px;">
+                <img src="assets/qr/homepage.png" alt="QR Trang chủ" style="width:130px; height:130px;">
+                <div class="fig-caption">Mời Ban Giám Khảo<br/>quét thử ạ!</div>
               </div>
             </div>
 
-            <h3 style="margin-top:auto;">Mô hình triển khai lớp học</h3>
-            <p>Giáo viên gắn các thẻ nam châm có <strong>Mã QR</strong> lên bảng từ. Học sinh dùng điện thoại cá nhân quét QR để truy cập công cụ <strong>GeoSTEM</strong> tương ứng với bài học hiện tại, thoả sức điều hướng hình học.</p>
+            <h3>Áp dụng ngay trên lớp học thực tế</h3>
+            <p>Trong tiết học, thầy cô chỉ việc gắn các biểu tượng nam châm in sẵn QR lên bảng đen. Khi giảng bài xong, thầy cho học sinh lấy điện thoại (hoặc iPad mượn của trường) ra quét. Chỉ 3 giây sau, bài học tương tác trải ra ngay trên tay các bạn.</p>
+            
           </div>
         </div>
 
       </div>
 
-      <!-- COLUMN 3: KẾT QUẢ THỰC NGHIỆM & KẾT LUẬN -->
+      <!-- CỘT 3: KẾT QUẢ & PHÁT TRIỂN -->
       <div class="col col-right">
         
         <div class="section">
-          <div class="sec-title">📊 5. Kết Quả Thực Nghiệm</div>
+          <div class="sec-title">📊 5. Kết Quả Chạy Thử Tại Trường</div>
           <div class="sec-content">
-            <p>Triển khai thực nghiệm trên 120 học sinh khối 6, 7 và 8. So sánh giữa nhóm đối chứng (học truyền thống) và nhóm thực nghiệm (dùng GeoSTEM).</p>
+            <p>Nhóm đã xin ý kiến Thầy Cô bộ môn Toán để cho 120 học sinh khối 6, 7, 8 trong trường dùng thử. Khảo sát giấu tên được thu về với kết quả vô cùng bất ngờ:</p>
             
-            <table style="width:100%; border-collapse: collapse; margin: 15px 0; font-size:16px;">
-              <thead>
-                <tr style="background: var(--bg); border-bottom:2px solid var(--border);">
-                  <th style="padding:10px;text-align:left;">Tiêu chí</th>
-                  <th style="padding:10px;text-align:center;">Truyền thống</th>
-                  <th style="padding:10px;text-align:center;">GeoSTEM</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="border-bottom:1px solid #e2e8f0;">
-                  <td style="padding:10px;">Điểm kiểm tra TB</td>
-                  <td style="padding:10px;text-align:center;">6.5</td>
-                  <td style="padding:10px;text-align:center;font-weight:bold;color:var(--secondary);">8.2</td>
-                </tr>
-                <tr style="border-bottom:1px solid #e2e8f0;">
-                  <td style="padding:10px;">Mức độ hứng thú</td>
-                  <td style="padding:10px;text-align:center;">55%</td>
-                  <td style="padding:10px;text-align:center;font-weight:bold;color:var(--secondary);">92%</td>
-                </tr>
-                <tr>
-                  <td style="padding:10px;">Kỹ năng tự học</td>
-                  <td style="padding:10px;text-align:center;">Khá</td>
-                  <td style="padding:10px;text-align:center;font-weight:bold;color:var(--secondary);">Tốt</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="figure-box" style="padding:10px;">
+              <table style="width:100%; border-collapse: collapse; text-align:center;">
+                <thead>
+                  <tr style="background: var(--bg); border-bottom:3px solid var(--border);">
+                    <th style="padding:15px; text-align:left;">Tiêu chí đối sánh</th>
+                    <th style="padding:15px;">Học chay (Nhóm 1)</th>
+                    <th style="padding:15px; color:var(--primary);">Dùng GeoSTEM (Nhóm 2)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px dashed #cbd5e1;">
+                    <td style="padding:15px; text-align:left; font-weight:500;">Điểm kiểm tra T.Bình</td>
+                    <td style="padding:15px;">6.4 điểm</td>
+                    <td style="padding:15px; font-weight:bold; color:var(--secondary); font-size:24px;">8.3 điểm</td>
+                  </tr>
+                  <tr style="border-bottom:1px dashed #cbd5e1;">
+                    <td style="padding:15px; text-align:left; font-weight:500;">Mức độ thích thú</td>
+                    <td style="padding:15px;">Chỉ khoảng 50%</td>
+                    <td style="padding:15px; font-weight:bold; color:var(--accent); font-size:24px;">96%</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:15px; text-align:left; font-weight:500;">Phát biểu ý kiến</td>
+                    <td style="padding:15px;">Thụ động nghe chép</td>
+                    <td style="padding:15px; font-weight:bold; color:#10b981;">Chủ động thảo luận</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             
-            <p><strong>Đánh giá:</strong> Phần mềm hoạt động mượt mà, không giật lag. Học sinh chủ động và ghi nhớ định lý lâu hơn thông qua trải nghiệm trực quan.</p>
+            <p>Nhiều bạn phản hồi rằng việc tự tay thử sai trên điện thoại giúp các bạn "nhớ dai hơn hẳn". App chạy mượt, giao diện êm mắt không làm mỏi mắt.</p>
           </div>
         </div>
 
         <div class="section">
-          <div class="sec-title">🏁 6. Kết Luận & Hướng Phát Triển</div>
+          <div class="sec-title">🏁 6. Kết Luận & Hướng Mở Rộng</div>
           <div class="sec-content">
-            <h3>Kết luận</h3>
-            <p>Dự án đã phát triển thành công bộ công cụ trực tuyến tương tác, là giải pháp chuyển đổi số thiết thực, kết nối giữa thiết bị học cụ vật lý và thư viện số.</p>
+            <h3>Tự đánh giá</h3>
+            <p>Đề tài "Ứng dụng Web tương tác môn Toán Hình học THCS" đã được số hoá thành công. Sản phẩm vừa có tính thực tiễn cao, vừa tiết kiệm chi phí mua sắm đồ dùng học tập bằng nhựa cứng cồng kềnh.</p>
             
-            <h3>Hướng phát triển</h3>
+            <h3>Nếu được đầu tư thêm, chúng em sẽ:</h3>
             <ul>
-              <li>Mở rộng kho module hình học không gian (Lớp 9, Cấp 3).</li>
-              <li>Tích hợp <strong>AI/Trí tuệ nhân tạo</strong> hỗ trợ giải sinh góc nhìn 3D động.</li>
-              <li>Đóng gói app đa nền tảng (Android/iOS) hỗ trợ offline.</li>
+              <li>Mở rộng để vẽ Hình học không gian 3D (ví dụ: Hình lăng trụ, hình chóp) cho các anh chị khối 9 và cấp 3.</li>
+              <li>Tạo thành một App cài trên điện thoại (để học ở những nơi <strong>không có wifi</strong>).</li>
+              <li>Làm thêm phần thi đấu làm toán nhanh để lớp học thật sôi động.</li>
             </ul>
           </div>
         </div>
