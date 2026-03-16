@@ -72,6 +72,7 @@
   </script>
   <script src="../js/quiz.js"></script>
 
+  <script src="../js/geo-marks.js"></script>
   <script src="../js/p5.min.js"></script>
   <script>
 
@@ -111,9 +112,20 @@
         p.line(B.x,B.y,mAC.x,mAC.y);
         p.stroke('#059669');
         p.line(C.x,C.y,mAB.x,mAB.y);
+        // Tick marks on equal halves created by midpoints
+        GeoMarks.drawTickMark(p, A.x, A.y, mBC.x, mBC.y, 1, '#dc2626');
+        GeoMarks.drawTickMark(p, B.x, B.y, mAC.x, mAC.y, 1, '#e67700');
+        GeoMarks.drawTickMark(p, C.x, C.y, mAB.x, mAB.y, 1, '#059669');
         // Midpoints
         p.noStroke();
         [[mBC,'#dc2626'],[mAC,'#e67700'],[mAB,'#059669']].forEach(([m,c])=>{p.fill(c);p.circle(m.x,m.y,10);});
+        // Equal segment marks: BM=MC, AM'=M'C, AN=NB
+        GeoMarks.drawTickMark(p, B.x, B.y, mBC.x, mBC.y, 1, '#2563EB');
+        GeoMarks.drawTickMark(p, mBC.x, mBC.y, C.x, C.y, 1, '#2563EB');
+        GeoMarks.drawTickMark(p, A.x, A.y, mAC.x, mAC.y, 2, '#f97316');
+        GeoMarks.drawTickMark(p, mAC.x, mAC.y, C.x, C.y, 2, '#f97316');
+        GeoMarks.drawTickMark(p, A.x, A.y, mAB.x, mAB.y, 3, '#10b981');
+        GeoMarks.drawTickMark(p, mAB.x, mAB.y, B.x, B.y, 3, '#10b981');
         // G point
         p.fill('#dc2626'); p.stroke('white'); p.strokeWeight(3); p.circle(G.x,G.y,20);
         p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(11); p.textAlign(p.CENTER,p.CENTER);

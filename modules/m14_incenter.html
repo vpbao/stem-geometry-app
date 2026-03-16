@@ -74,6 +74,7 @@
   </script>
   <script src="../js/quiz.js"></script>
 
+  <script src="../js/geo-marks.js"></script>
   <script src="../js/p5.min.js"></script>
   <script>
 
@@ -125,6 +126,33 @@
         // Inscribed circle
         p.noFill(); p.stroke('#e879f9'); p.strokeWeight(2);
         p.drawingContext.setLineDash([5,3]); p.circle(I.x,I.y,inR*2); p.drawingContext.setLineDash([]);
+        // Perpendicular feet from I to each side — with equal tick marks
+        function footPt(px,py,ax,ay,bx,by) {
+          const dx=bx-ax, dy=by-ay;
+          const t=((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy);
+          return {x:ax+t*dx, y:ay+t*dy};
+        }
+        const fAB = footPt(I.x,I.y,A.x,A.y,B.x,B.y);
+        const fBC = footPt(I.x,I.y,B.x,B.y,C.x,C.y);
+        const fCA = footPt(I.x,I.y,C.x,C.y,A.x,A.y);
+        // Dashed lines from I to feet
+        p.stroke('#e879f9'); p.strokeWeight(1.5);
+        p.drawingContext.setLineDash([4,3]);
+        p.line(I.x,I.y,fAB.x,fAB.y); p.line(I.x,I.y,fBC.x,fBC.y); p.line(I.x,I.y,fCA.x,fCA.y);
+        p.drawingContext.setLineDash([]);
+        // Equal tick marks on distances I→foot
+        GeoMarks.drawTickMark(p, I.x, I.y, fAB.x, fAB.y, 1, '#c026d3');
+        GeoMarks.drawTickMark(p, I.x, I.y, fBC.x, fBC.y, 1, '#c026d3');
+        GeoMarks.drawTickMark(p, I.x, I.y, fCA.x, fCA.y, 1, '#c026d3');
+        // Right angle marks at feet
+        [[fAB,A,B],[fBC,B,C],[fCA,C,A]].forEach(([f,s1,s2])=>{
+          const sdx=s2.x-s1.x, sdy=s2.y-s1.y;
+          const sl=Math.sqrt(sdx*sdx+sdy*sdy)||1;
+          const sux=sdx/sl, suy=sdy/sl;
+          const adx=I.x-f.x, ady=I.y-f.y;
+          const al=Math.sqrt(adx*adx+ady*ady)||1;
+          GeoMarks.drawRightAngle(p, f.x, f.y, sux, suy, adx/al, ady/al, 8, '#c026d3');
+        });
         // I point
         p.fill('#c026d3'); p.stroke('white'); p.strokeWeight(3); p.circle(I.x,I.y,18);
         p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(10); p.textAlign(p.CENTER,p.CENTER); p.text('I',I.x,I.y);

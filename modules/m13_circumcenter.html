@@ -74,6 +74,7 @@
   </script>
   <script src="../js/quiz.js"></script>
 
+  <script src="../js/geo-marks.js"></script>
   <script src="../js/p5.min.js"></script>
   <script>
 
@@ -129,6 +130,10 @@
             // Midpoint dot
             p.noStroke(); p.fill(perpColors[i]); p.circle(m.x,m.y,8);
           });
+          // Equal radius tick marks: OA = OB = OC
+          GeoMarks.drawTickMark(p, O.x, O.y, A.x, A.y, 1, '#0284c7');
+          GeoMarks.drawTickMark(p, O.x, O.y, B.x, B.y, 1, '#0284c7');
+          GeoMarks.drawTickMark(p, O.x, O.y, C.x, C.y, 1, '#0284c7');
           // O point
           p.fill('#0284c7'); p.stroke('white'); p.strokeWeight(3); p.circle(O.x,O.y,18);
           p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(10); p.textAlign(p.CENTER,p.CENTER); p.text('O',O.x,O.y);

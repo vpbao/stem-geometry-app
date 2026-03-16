@@ -71,6 +71,7 @@
   </script>
   <script src="../js/quiz.js"></script>
 
+  <script src="../js/geo-marks.js"></script>
   <script src="../js/p5.min.js"></script>
   <script>
 
@@ -128,11 +129,9 @@
           p.line(v.x-dx/len*20, v.y-dy/len*20, f.x+dx/len*40, f.y+dy/len*40);
           // Right angle marker at foot
           const sz=10;
-          const ux=dx/len*sz, uy=dy/len*sz;
-          const nx=-uy, ny=ux;
-          p.noFill(); p.stroke(altColors[i]); p.strokeWeight(1.5);
-          p.line(f.x+nx,f.y+ny, f.x+nx-ux,f.y+ny-uy);
-          p.line(f.x+nx-ux,f.y+ny-uy, f.x-ux,f.y-uy);
+          const ux2=dx/len, uy2=dy/len;
+          const nx2=-uy2, ny2=ux2;
+          GeoMarks.drawRightAngle(p, f.x, f.y, nx2, ny2, -ux2, -uy2, sz, altColors[i]);
           // Foot dot
           p.noStroke(); p.fill(altColors[i]); p.circle(f.x,f.y,8);
         });

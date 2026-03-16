@@ -73,6 +73,7 @@
   </script>
   <script src="../js/quiz.js"></script>
 
+  <script src="../js/geo-marks.js"></script>
   <script src="../js/p5.min.js"></script>
   <script>
 
@@ -151,10 +152,9 @@
         p.arc(O.x, O.y, ARC_R * 2, ARC_R * 2, startA, endA);
         // Arc for half angles
         const bisA = p.atan2(bisEnd.y - O.y, bisEnd.x - O.x);
-        p.stroke('#f97316'); p.strokeWeight(1.5);
-        p.arc(O.x, O.y, ARC_R * 1.4, ARC_R * 1.4, Math.min(startA, bisA), Math.max(startA, bisA));
-        p.stroke('#10b981');
-        p.arc(O.x, O.y, ARC_R * 1.4, ARC_R * 1.4, Math.min(bisA, endA), Math.max(bisA, endA));
+        // Half-angle arcs with equal-angle tick marks
+        GeoMarks.drawAngleArcMark(p, O.x, O.y, Math.min(startA, bisA), Math.max(startA, bisA), ARC_R * 0.7, 1, '#f97316');
+        GeoMarks.drawAngleArcMark(p, O.x, O.y, Math.min(bisA, endA), Math.max(bisA, endA), ARC_R * 0.7, 1, '#10b981');
         // Dots
         p.fill('#8b5cf6'); p.stroke('white'); p.strokeWeight(3); p.circle(O.x, O.y, R * 2);
         p.fill('#f97316'); p.circle(rayEnd1.x, rayEnd1.y, R * 2);
