@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>M5: Đường Thẳng Song Song – Hình Học STEM</title>
   <!-- Primary Meta -->
-  <meta name="description" content="Kéo cát tuyến và quan sát góc so le trong (chữ Z) và đồng vị (chữ F) bằng nhau. Toán lớp 7 Kết nối tri thức." />
+  <meta name="description" content="Kéo cát tuyến và quan sát góc so le trong và đồng vị bằng nhau. Toán lớp 7 Kết nối tri thức." />
   <meta name="theme-color" content="#2563EB" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://vpbao.github.io/stem-geometry-app/modules/m5_parallel.html" />
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://vpbao.github.io/stem-geometry-app/modules/m5_parallel.html" />
   <meta property="og:title" content="M5: Đường Thẳng Song Song – Hình Học STEM" />
-  <meta property="og:description" content="Kéo cát tuyến và quan sát góc so le trong (chữ Z) và đồng vị (chữ F) bằng nhau. Toán lớp 7 Kết nối tri thức." />
+  <meta property="og:description" content="Kéo cát tuyến và quan sát góc so le trong và đồng vị bằng nhau. Toán lớp 7 Kết nối tri thức." />
   <meta property="og:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
   <meta property="og:locale" content="vi_VN" />
   <meta property="og:site_name" content="STEM Hình Học Tương Tác" />
@@ -22,7 +22,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="M5: Đường Thẳng Song Song – Hình Học STEM" />
-  <meta name="twitter:description" content="Kéo cát tuyến và quan sát góc so le trong (chữ Z) và đồng vị (chữ F) bằng nhau. Toán lớp 7 Kết nối tri thức." />
+  <meta name="twitter:description" content="Kéo cát tuyến và quan sát góc so le trong và đồng vị bằng nhau. Toán lớp 7 Kết nối tri thức." />
   <meta name="twitter:image" content="https://vpbao.github.io/stem-geometry-app/assets/og-cover.png" />
   <!-- Favicon & PWA -->
   <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
@@ -52,16 +52,23 @@
 
   <section class="info-card">
     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
-      <span class="readout-chip" id="lbl-z" aria-live="polite" aria-atomic="true" style="background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">Chữ Z: ? °</span>
-      <span class="readout-chip" id="lbl-f" aria-live="polite" aria-atomic="true" style="background:#10b981;border-color:#059669;box-shadow:3px 3px 0 #059669;">Chữ F: ? °</span>
+      <span class="readout-chip" id="lbl-z" onclick="showMode='slt';updateChipStyle();" aria-live="polite" aria-atomic="true" style="cursor:pointer;background:#2563EB;border-color:#1d4ed8;box-shadow:3px 3px 0 #1d4ed8;">So le trong: ?°</span>
+      <span class="readout-chip" id="lbl-f" onclick="showMode='dv';updateChipStyle();" aria-live="polite" aria-atomic="true" style="cursor:pointer;background:#10b981;border-color:#059669;box-shadow:3px 3px 0 #059669;opacity:0.45;">Đồng vị: ?°</span>
     </div>
+    <script>
+      var showMode = 'slt';
+      function updateChipStyle() {
+        document.getElementById('lbl-z').style.opacity = showMode === 'slt' ? '1' : '0.45';
+        document.getElementById('lbl-f').style.opacity = showMode === 'dv' ? '1' : '0.45';
+      }
+    </script>
     <div class="theorem-box">
       <p class="theorem-title">📖 Tính chất</p>
-      <p class="theorem-text"><strong>Góc so le trong (Z)</strong> và <strong>Góc đồng vị (F)</strong> với hai đường thẳng song song đều có số đo bằng nhau khi bị cắt bởi một cát tuyến.</p>
+      <p class="theorem-text"><strong>Một đường thẳng cắt hai đường thẳng song song tạo thành các cặp góc so le trong và đồng vị bằng nhau.</p>
     </div>
     <div class="realworld-row">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M8 8h8M8 16h8"/></svg>
-      <span>Các thanh ray xe lửa song song bị cắt bởi tà vẹt (cát tuyến). Kỹ sư dùng góc so le để kiểm tra độ thẳng của đường ray!</span>
+      <span>Các thanh ray xe lửa song song bị cắt bởi tà vẹt. Kỹ sư dùng góc so le để kiểm tra độ thẳng của đường ray!</span>
     </div>
   </section>
 
@@ -72,14 +79,14 @@
   </section>
 
   <script>
-    var QUIZ_DATA = [{"q": "Hai đường thẳng song song cắt bởi cát tuyến tạo ra cặp góc nào bằng nhau?", "opts": ["Góc kề bù", "Góc so le trong", "Góc kề"], "ans": 1}, {"q": "Tính chất chữ \"F\" ứng với cặp góc nào?", "opts": ["Góc so le trong", "Góc đồng vị", "Góc đối đỉnh"], "ans": 1}];
+    var QUIZ_DATA = [{"q": "Một đường thẳng cắt hai đường thẳng song song tạo ra cặp góc nào bằng nhau?", "opts": ["Góc kề bù", "Góc so le trong", "Góc kề"], "ans": 1}, {"q": "Nếu một đường thẳng cắt hai đường thẳng cho trước và trong các cặp góc tạo thành có một cặp so le trong hoặc một cặp đồng vị bằng nhau thì hai đường thẳng đó như thế nào?.", "opts": ["Song song với nhau", "Vuông góc với nhau", "Cắt nhau"], "ans": 0}];
   </script>
   <script src="../js/quiz.js"></script>
 
   <script src="../js/p5.min.js"></script>
   <script>
     new p5((p) => {
-      let transAngle = 50;
+      let transAngle = -40;
       let dragging = false;
       let w, h, gap;
 
@@ -94,8 +101,9 @@
         const dx = mx - w/2, dy = my - h/2;
         if (Math.sqrt(dx*dx+dy*dy) < w/2 + 40) {
           let a = p.degrees(Math.atan2(dy, dx));
-          if (a < -170 || a > 10) return; // keep in visible range
-          transAngle = p.constrain(a, -170, 10);
+          if (a > 0) a -= 180; // allow dragging from below too
+          if (a < -170 || a > -10) return; // keep angle ≥ 10°
+          transAngle = p.constrain(a, -170, -10);
         }
       };
       p.mousePressed = () => { dragging = true; };
@@ -134,29 +142,52 @@
         const alpha = Math.abs(transAngle); // acute angle at intersection
         const deg = Math.round(alpha > 90 ? 180 - alpha : alpha);
 
-        // Z shape highlight (alternate interior angles)
-        p.stroke('#2563EB'); p.strokeWeight(3);
-        p.line(x1 - 35, y1, x1, y1);
-        p.line(x1, y1, x2, y2);
-        p.line(x2, y2, x2 + 35, y2);
-        // F shape highlight
-        p.stroke('#10b981'); p.strokeWeight(3);
-        p.line(x1 + 35, y1, x1, y1);
-        p.line(x1 + 35, y1, x1 + 35, y1 - 25);
-        p.line(x2 + 35, y2, x2 + 35, y2 - 25);
+        // Compute acute interior arc sectors correctly
+        const absA = Math.abs(transAngle);
+        let slt1S, slt1E, slt2S, slt2E; // so le trong arcs
+        if (transAngle >= 0) {
+          // x1 interior acute: from 0 to ta
+          slt1S = 0;          slt1E = ta;
+          // x2 interior acute: from PI to ta+PI
+          slt2S = p.PI;       slt2E = ta + p.PI;
+        } else if (absA <= 90) {
+          // x1 interior acute: from ta+PI to PI
+          slt1S = ta + p.PI;  slt1E = p.PI;
+          // x2 interior acute: from ta to 0
+          slt2S = ta;          slt2E = 0;
+        } else {
+          // x1 interior acute: from 0 to ta+PI
+          slt1S = 0;           slt1E = ta + p.PI;
+          // x2 interior acute: from -PI to ta
+          slt2S = -p.PI;       slt2E = ta;
+        }
 
-        // Arc at each intersection
-        p.noFill(); p.stroke('#2563EB'); p.strokeWeight(2.5);
-        p.arc(x1, y1, 50, 50, ta + p.PI, p.radians(0));
-        p.arc(x2, y2, 50, 50, p.radians(0), ta);
-        // Labels
-        p.noStroke(); p.fill('#2563EB'); p.textSize(13); p.textAlign(p.LEFT, p.CENTER);
-        p.text(`${deg}°`, x1 - 60, y1 + 8);
-        p.text(`${deg}°`, x2 + 10, y2 - 14);
+        const slt1Mid = (slt1S + slt1E) / 2;
+        const slt2Mid = (slt2S + slt2E) / 2;
+
+        if (showMode === 'slt') {
+          // So le trong (blue) — between the two lines
+          p.noFill(); p.stroke('#2563EB'); p.strokeWeight(2.5);
+          p.arc(x1, y1, 50, 50, slt1S, slt1E);
+          p.arc(x2, y2, 50, 50, slt2S, slt2E);
+          const lblR = 40;
+          p.noStroke(); p.fill('#2563EB'); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
+          p.text(`${deg}°`, x1 + lblR * Math.cos(slt1Mid), y1 + lblR * Math.sin(slt1Mid));
+          p.text(`${deg}°`, x2 + lblR * Math.cos(slt2Mid), y2 + lblR * Math.sin(slt2Mid));
+        } else {
+          // Đồng vị (green) — same relative position at both intersections
+          p.noFill(); p.stroke('#10b981'); p.strokeWeight(2.5);
+          p.arc(x1, y1, 55, 55, slt2S, slt2E);
+          p.arc(x2, y2, 55, 55, slt2S, slt2E);
+          const lblR2 = 42;
+          p.noStroke(); p.fill('#10b981'); p.textSize(13); p.textAlign(p.CENTER, p.CENTER);
+          p.text(`${deg}°`, x1 + lblR2 * Math.cos(slt2Mid), y1 + lblR2 * Math.sin(slt2Mid));
+          p.text(`${deg}°`, x2 + lblR2 * Math.cos(slt2Mid), y2 + lblR2 * Math.sin(slt2Mid));
+        }
 
         // Update chips
-        document.getElementById('lbl-z').textContent = `Chữ Z (so le): ${deg}°`;
-        document.getElementById('lbl-f').textContent = `Chữ F (đồng vị): ${deg}°`;
+        document.getElementById('lbl-z').textContent = `So le trong: ${deg}°`;
+        document.getElementById('lbl-f').textContent = `Đồng vị: ${deg}°`;
       };
 
       p.windowResized = () => {
