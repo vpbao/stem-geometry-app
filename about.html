@@ -3,93 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giới thiệu GeoSTEM | 15 Module Tương Tác</title>
-  <meta name="description" content="Khám phá bộ học cụ Hình học tương tác GeoSTEM với tính năng Real-time thao tác động, bao gồm 15 modules bám sát SGK Kết nối tri thức Lớp 6-9." />
+  <title>Khám phá GeoSTEM | Chi tiết Hệ thống Module</title>
+  <meta name="description" content="Chi tiết 15 module hình học tương tác GeoSTEM. Tìm hiểu cách chúng tôi số hoá toán học với công nghệ thao tác thời gian thực." />
   <meta name="theme-color" content="#2563EB" />
   
   <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
     .about-container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 40px auto;
       padding: 30px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      border: 2px solid rgba(255,255,255,0.5);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      border: 2px solid rgba(255,255,255,0.8);
       backdrop-filter: blur(10px);
     }
     .about-header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 2px dashed var(--border);
     }
     .about-header h1 {
       color: var(--primary);
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+      font-size: 2.8rem;
+      margin-bottom: 15px;
       font-weight: 800;
+      line-height: 1.2;
     }
     .about-header p {
       color: var(--text-muted);
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
     }
-    .feature-card {
-      background: white;
-      border-radius: 16px;
-      padding: 25px;
+    
+    .section-title {
+      color: var(--cta);
+      text-transform: uppercase;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      display: block;
+      font-weight: 800;
+    }
+    .section-heading {
+      color: var(--text);
+      font-size: 2rem;
       margin-bottom: 25px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-      border-left: 5px solid var(--accent);
-      transition: transform 0.2s;
+      font-weight: 800;
     }
-    .feature-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-bottom: 50px;
     }
-    .feature-card h2 {
-      color: var(--primary);
+    @media(min-width: 768px) {
+      .feature-grid { grid-template-columns: 1fr 1fr; }
+    }
+    
+    .card-clay {
+      padding: 30px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    .card-clay h3 {
       font-size: 1.4rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .card-clay p { color: #475569; line-height: 1.6; }
+    
+    .module-showcase {
+      margin-top: 60px;
+    }
+    .cluster-box {
+      background: #f8fafc;
+      border: 3px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .cluster-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 6px;
+      border-radius: 20px 0 0 20px;
+    }
+    .cluster-g6::before { background: #8b5cf6; }
+    .cluster-g7::before { background: #10b981; }
+    .cluster-g7adv::before { background: #ef4444; }
+    .cluster-g89::before { background: #f59e0b; }
+    
+    .cluster-title {
+      font-size: 1.5rem;
+      color: var(--text);
       margin-bottom: 15px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .feature-card p {
-      line-height: 1.6;
-      color: #475569;
-      margin-bottom: 15px;
-    }
-    .feature-card ul {
-      margin-left: 20px;
-      color: #475569;
-      line-height: 1.6;
-    }
-    .feature-card li {
-      margin-bottom: 8px;
-    }
-    .highlight-badge {
-      display: inline-block;
-      padding: 6px 12px;
-      background: #eff6ff;
-      color: var(--secondary);
-      border-radius: 12px;
-      font-size: 0.9rem;
+    .cluster-badge {
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      color: white;
       font-weight: 700;
-      margin-right: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #bfdbfe;
     }
+    
+    .module-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    @media(min-width: 640px) {
+      .module-list { grid-template-columns: 1fr 1fr; }
+    }
+    
+    .module-item {
+      background: white;
+      border: 2px solid #e2e8f0;
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      transition: all 0.2s;
+    }
+    .module-item:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+      transform: translateY(-2px);
+    }
+    .m-icon {
+      width: 48px; height: 48px;
+      background: #eff6ff;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+      color: var(--primary);
+      border: 2px solid var(--border);
+    }
+    .m-content h4 {
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+    .m-content p {
+      font-size: 0.85rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    
     .img-showcase {
       width: 100%;
-      border-radius: 12px;
-      margin: 20px 0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      border: 4px solid white;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      border: 5px solid white;
+      margin-top: 20px;
     }
+    
     .back-btn-container {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 2px dashed var(--border);
     }
   </style>
 </head>
@@ -103,71 +192,209 @@
           <polygon points="14,5 24,22 4,22" fill="white" opacity="0.9"/>
           <circle cx="8" cy="16" r="3" fill="#F97316"/>
         </svg>
-        Hình Học STEM
+        Về Trang chủ
       </div>
     </a>
   </nav>
 
   <main class="about-container">
     <div class="about-header">
-      <h1>Chào mừng đến với GeoSTEM 🚀</h1>
-      <p>Giải pháp học cụ số hoá mang Hình học THCS vào đời sống thực tế</p>
+      <h1>Giải Phẫu "Sức Mạnh" Của GeoSTEM</h1>
+      <p>Không chỉ là những hình vẽ trên web, GeoSTEM là một siêu nền tảng mô phỏng toán học giúp học sinh "cầm nắm" trực tiếp vào các định lý trừu tượng.</p>
     </div>
 
-    <div class="feature-card">
-      <h2>💡 GeoSTEM có gì thú vị?</h2>
-      <p>Quên đi những bài toán Hình học với các hình vẽ tĩnh khô khan nằm im trên trang giấy! GeoSTEM mang đến trải nghiệm học tập <strong>"Hybrid" (Lai) độc đáo</strong> kết hợp giữa <strong>Mảnh ghép Vật lý (Nam châm)</strong> và <strong>Công nghệ Tương tác Động (Web-app)</strong>.</p>
-      <p>Hệ thống bao gồm 15 Module trọng điểm bao phủ kiến thức môn Toán (Hình học) từ Lớp 6 đến Lớp 9. Bám sát chương trình Giáo dục Phổ thông 2018 và bộ sách <em>Kết nối tri thức với cuộc sống</em>.</p>
+    <div>
+      <span class="section-title">Tại sao GeoSTEM lại thú vị?</span>
+      <h2 class="section-heading">Thay Đổi Cách Học Toán Truyền Thống</h2>
     </div>
 
-    <div class="feature-card" style="border-left-color: var(--secondary);">
-      <h2>✨ Phép màu của "Tương tác Real-time"</h2>
-      <img src="assets/thales-illustration.png" alt="Mô phỏng Thales" class="img-showcase" style="max-height:300px; object-fit:contain; background:#f8fafc;">
-      <p>Đây không phải là video hoạt hình diễn lại, mà là một không gian <strong>toán học giải tích đang chạy theo thời gian thực (real-time)</strong>.</p>
-      <ul>
-        <li><strong>Bạn là người làm chủ:</strong> Bạn có thể dùng ngón tay trực tiếp kéo thả các đỉnh tam giác đi khắp màn hình.</li>
-        <li><strong>Thuật toán thông minh:</strong> Dù bạn kéo hình biến dạng thế nào, hệ thống máy tính vẫn sẽ vẽ lại chính xác từng khung hình, chia tỉ lệ, tự vẽ nét đứt và cập nhật số đo tức thời.</li>
-        <li><strong>Học qua "Thử và Sai":</strong> Chẳng hạn như bài "Tổng 3 góc tam giác", bạn có thể tạo ra hàng ngàn tam giác khác nhau, nhưng con số hiển thị tổng 3 góc luôn luôn chốt lại ở <strong>180°</strong>. Một sự chứng minh trực quan không thể cãi lạ!</li>
-      </ul>
-    </div>
-
-    <div class="feature-card" style="border-left-color: #10b981;">
-      <h2>📦 Sở hữu 15 Đề tài Khám phá</h2>
-      <p>Click vào từng thẻ ở Trang chủ để mở ra phòng thí nghiệm ảo tương ứng:</p>
-      <div style="margin-top:10px;">
-        <span class="highlight-badge">Lớp 6: Trục đối xứng</span>
-        <span class="highlight-badge">Lớp 6: Điểm nằm giữa</span>
-        <span class="highlight-badge">Lớp 6: Phân loại góc</span>
-        <span class="highlight-badge">Lớp 6: Lục giác đều</span>
+    <div class="feature-grid">
+      <div class="card-clay">
+        <div class="card-icon">⚡️</div>
+        <h3>Mô Phỏng "Thời Gian Thực" (Real-time)</h3>
+        <p>Đây không phải là video hoạt hình diễn lại! GeoSTEM là một không gian hình học giải tích đích thực. Khi bạn dùng tay kéo một đỉnh tam giác đi khắp màn hình, thuật toán sẽ liên tục vẽ lại hình học, tính toán góc, đo độ dài cạnh và cập nhật tự động các vạch ký hiệu một cách mượt mà ở 60 khung hình/giây.</p>
       </div>
-      <div style="margin-top:5px;">
-        <span class="highlight-badge">Lớp 7: Góc đối đỉnh</span>
-        <span class="highlight-badge">Lớp 7: Đường song song</span>
-        <span class="highlight-badge">Lớp 7: Tổng 3 góc = 180°</span>
-        <span class="highlight-badge">Lớp 7: Tam giác bằng nhau</span>
-        <span class="highlight-badge">Lớp 7: Sự đồng quy (4 Module)</span>
+      <div class="card-clay" style="border-color: #f97316;">
+        <div class="card-icon">🧩</div>
+        <h3>Sự Kết Hợp "Hybrid" Tuyệt Vời</h3>
+        <p>Hệ thống không bỏ rơi trải nghiệm vật lý tay chạm. Trong lớp học, giáo viên dùng các mảnh ghép bìa cứng quét nam châm (Cardboard + Magnet) dán lên bảng phụ. Học sinh dùng điện thoại chỉ việc quét mã QR in trên mảnh ghép đó để ngay lập tức "bay" thẳng vào phòng thí nghiệm ảo tương ứng.</p>
       </div>
-      <div style="margin-top:5px;">
-        <span class="highlight-badge">Lớp 8: Định lý Thales</span>
-        <span class="highlight-badge">Lớp 8: Đường trung bình</span>
-        <span class="highlight-badge">Lớp 9: Tỉ số Lượng giác</span>
+      <div class="card-clay" style="border-color: #10b981;">
+        <div class="card-icon">🎯</div>
+        <h3>Tự Khám Phá Qua "Thử Và Sai"</h3>
+        <p>Thay vì nghe giảng "Tổng 3 góc tam giác là 180 độ", học sinh tự tay kéo đỉnh để tạo ra hàng ngàn hình tam giác méo mó khác nhau. Máy tính sẽ cộng 3 góc đó cho các em xem, con số kết quả lúc nào cũng chốt lại tại 180°. Mọi sự hoài nghi Toán học được giải quyết tận gốc!</p>
+      </div>
+      <div class="card-clay" style="border-color: #8b5cf6;">
+        <div class="card-icon">🧠</div>
+        <h3>Kiểm Định Kiến Thức Bằng Mini-Quiz</h3>
+        <p>Cuối mỗi màn mô phỏng luôn có phần "Mini-Quiz" 2 câu hỏi trắc nghiệm cực nhanh hiện lên. Hệ thống sẽ báo Đúng/Sai bằng màu Xanh/Đỏ rực rỡ và kèm theo lời giải thích ngắn gọn, củng cố lý thuyết tức thời.</p>
       </div>
     </div>
 
-    <div class="feature-card" style="border-left-color: #8b5cf6;">
-      <h2>🎯 Tự kiểm tra với Mini-Quiz thông minh</h2>
-      <p>Không chỉ có thực hành, mỗi Module còn đi kèm 2 câu hỏi trắc nghiệm nhanh "Mini-quiz" để bạn tự thách thức kiến thức bản thân. Giao diện thân thiện, báo đúng/sai và giải thích liền tay!</p>
+    <img src="assets/og-cover.png" alt="Giao diện GeoSTEM" class="img-showcase">
+
+    <div class="module-showcase">
+      <span class="section-title">Nội dung chi tiết</span>
+      <h2 class="section-heading">Khám Phá 15 Thử Thách Hình Học</h2>
+      <p style="margin-bottom: 30px; font-size: 1.1rem; color: #475569;">Hệ thống bao phủ trọn vẹn mạch kiến thức Hình học từ Lớp 6 đến Lớp 9 của bộ sách <strong>Kết nối tri thức với cuộc sống</strong>. Được chia làm 4 Cụm nội dung chính:</p>
+
+      <!-- Grade 6 -->
+      <div class="cluster-box cluster-g6">
+        <h3 class="cluster-title">
+          <span class="cluster-badge" style="background:#8b5cf6;">Cụm 1</span>
+          Nền Tảng Hình Học (Lớp 6)
+        </h3>
+        <div class="module-list">
+          <div class="module-item">
+            <div class="m-icon">🦋</div>
+            <div class="m-content">
+              <h4>M1. Trục đối xứng</h4>
+              <p>Ghép 2 nửa hình cánh bướm hoán đổi để hiểu về phép phản xạ trục dọc.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">📏</div>
+            <div class="m-content">
+              <h4>M2. Điểm nằm giữa</h4>
+              <p>Mô phỏng phép tính tổng độ dài AM + MB = AB sống động trên đoạn thẳng dẻo.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">📐</div>
+            <div class="m-content">
+              <h4>M3. Phân loại góc</h4>
+              <p>Tự kéo thước xoay để chuyển đổi giữa Góc Nhọn, Góc Vuông, Góc Tù, Góc Bẹt.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">⬡</div>
+            <div class="m-content">
+              <h4>M11. Lục giác đều</h4>
+              <p>Bóc tách 1 khối lục giác thành 6 mảnh tam giác đều và đo góc đa giác.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade 7 Basic -->
+      <div class="cluster-box cluster-g7">
+        <h3 class="cluster-title">
+          <span class="cluster-badge" style="background:#10b981;">Cụm 2</span>
+          Giải Mã Định Lý (Lớp 7)
+        </h3>
+        <div class="module-list">
+          <div class="module-item">
+            <div class="m-icon">✕</div>
+            <div class="m-content">
+              <h4>M4. Góc đối đỉnh</h4>
+              <p>Xoay trượt 2 đường thẳng chéo nhau và quan sát số đo của 2 góc đổi màu giống hệt nhau.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">〓</div>
+            <div class="m-content">
+              <h4>M5. Đường ranh song song</h4>
+              <p>Giải cứu mê cung góc so le trong và góc đồng vị bằng mắt thường.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">△</div>
+            <div class="m-content">
+              <h4>M6. Tổng 3 Góc Tam Giác</h4>
+              <p>Không ngừng biến dạng tam giác để chứng minh tổng số đo luôn khóa chặt tại 180°.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">≅</div>
+            <div class="m-content">
+              <h4>M7. Tam giác bằng nhau</h4>
+              <p>Trải nghiệm máy scan Cạnh-Cạnh-Cạnh xem 2 tam giác có đè khít lên nhau hay không.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade 7 Advanced -->
+      <div class="cluster-box cluster-g7adv">
+        <h3 class="cluster-title">
+          <span class="cluster-badge" style="background:#ef4444;">Cụm 3</span>
+          Sự Đồng Quy Kỳ Diệu (Lớp 7 Nâng Cao)
+        </h3>
+        <p style="margin-bottom:15px; font-size:0.9rem; color:#64748b;">Đây là cụm hình vẽ phức tạp nhất Sách Giáo Khoa, nay được thuật toán p5.js tự động hoá nét đứt và kỹ hiệu vuông góc chuẩn xác!</p>
+        <div class="module-list">
+          <div class="module-item">
+            <div class="m-icon">🎯</div>
+            <div class="m-content">
+              <h4>M12. Trọng Tâm</h4>
+              <p>Kéo 3 điểm tự do, 3 đường trung tuyến luôn chéo nhau tại 1 điểm Trọng Tâm duy nhất.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">⭕️</div>
+            <div class="m-content">
+              <h4>M13. Tâm Ngoại Tiếp</h4>
+              <p>Điểm đồng quy của 3 đường trung trực xuất hiện như phép màu tạo đường tròn bao quanh tam giác.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">◎</div>
+            <div class="m-content">
+              <h4>M14. Tâm Nội Tiếp</h4>
+              <p>Mô phỏng 3 đường phân giác với các vạch đánh dấu góc y chang nhau luôn đuổi theo thao tác tay.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">🏗</div>
+            <div class="m-content">
+              <h4>M15. Trực Tâm</h4>
+              <p>Hé lộ cách 3 đường cao bay ra ngoài khi tam giác có góc tù.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grade 8-9 -->
+      <div class="cluster-box cluster-g89">
+        <h3 class="cluster-title">
+          <span class="cluster-badge" style="background:#f59e0b;">Cụm 4</span>
+          Tỷ Lệ Tiên Tiến (Lớp 8 & Lớp 9)
+        </h3>
+        <div class="module-list">
+          <div class="module-item">
+            <div class="m-icon">⊿</div>
+            <div class="m-content">
+              <h4>M8. Định lý Thales</h4>
+              <p>Phóng to, thu nhỏ cạnh song song để máy tính xác nhận tỷ số phân số vẫn bất biến.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">✂️</div>
+            <div class="m-content">
+              <h4>M9. Đường trung bình</h4>
+              <p>Thực nghiệm chứng minh đường cắt ngang đoạn giữa 2 cạnh bên luôn bằng một nửa cạnh đáy.</p>
+            </div>
+          </div>
+          <div class="module-item">
+            <div class="m-icon">Sin</div>
+            <div class="m-content">
+              <h4>M10. Tỉ số Lượng Giác</h4>
+              <p>Ứng dụng Lớp 9, mô tả chân thực cách các cạnh Góc Vuông đối, kề sản sinh ra thông số Sin, Cos, Tan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="back-btn-container">
-      <a href="index.html" class="btn-clay btn-cta">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-        Trở về Giao diện Chính & Khám phá
+      <h3 style="margin-bottom:20px; color:var(--text); font-family: 'Baloo 2'; font-size:1.5rem;">Sẵn sàng khám phá chưa?</h3>
+      <a href="index.html" class="btn-clay btn-cta" style="padding: 16px 32px; font-size:1.2rem;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
+        BẮT ĐẦU TRẢI NGHIỆM TẠI TRANG CHỦ
       </a>
     </div>
   </main>
   
-  <footer style="text-align:center;padding:20px 20px 40px;font-size:0.78rem;color:var(--text-muted);">
+  <footer style="text-align:center;padding:20px 20px 40px;font-size:0.85rem;color:var(--text-muted);">
     <p>© 2026 THCS Trần Đại Nghĩa, Đà Nẵng &nbsp;|&nbsp; Bộ học cụ STEM Hình Học Tương Tác</p>
   </footer>
 </body>

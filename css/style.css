@@ -178,6 +178,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background-image: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 40%),
                     radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 35%);
 }
