@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Khách GeoSTEM - Nhận Diện Chuẩn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&family=Baloo+2:wght@600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Screen controls */
+        .controls {
+            text-align: center;
+            padding: 30px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-bottom: 3px solid #e2e8f0;
+        }
+
+        .btn-print {
+            background: #f97316; /* Cam GeoSTEM */
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 18px;
+            font-weight: 800;
+            border-radius: 99px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
+            transition: all 0.3s;
+        }
+
+        /* A4 Page Layout */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            background: white;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(4, 1fr);
+            gap: 0;
+            padding: 5mm; 
+            page-break-after: always;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30mm;
+        }
+
+        /* Card Layout Layout */
+        .card {
+            border: 1px dashed #bfdbfe; /* Viền cắt */
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            margin: 2mm;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); /* XANH HOÀNG GIA CHỦ ĐẠO */
+            color: white;
+            box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.15); /* Viền sáng nôi */
+        }
+
+        /* Header Card */
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-icon {
+            font-size: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card-title-wrap {
+            flex-grow: 1;
+        }
+
+        .card-module-tag {
+            font-size: 11px;
+            font-weight: 800;
+            color: white;
+            background: #f97316; /* MÀU CAM NHẤN MẠNH */
+            padding: 2px 8px;
+            border-radius: 99px;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .card-title {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Body Card */
+        .card-body {
+            flex-grow: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e0e7ff; /* Xanh nhạt siêu sáng */
+            line-height: 1.4;
+            text-align: justify;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Footer Card (QR & CTA) */
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.15); /* Sáng bong */
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .qr-placeholder {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 6px;
+            padding: 2px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+        
+        .qr-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .cta-text {
+            font-size: 11px;
+            font-weight: 800;
+            color: white;
+            text-align: right;
+            text-transform: uppercase;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            line-height: 1.4;
+        }
+
+        /* Decors */
+        .decor-circle {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Print Settings */
+        @media print {
+            * { box-shadow: none !important; }
+            body { background: white !important; }
+            .controls { display: none !important; }
+            .page { 
+                margin: 0 !important; 
+                padding: 5mm !important;
+                border: none;
+                width: 100%;
+                height: 100vh;
+                box-shadow: none !important;
+            }
+            .card {
+                margin: 1mm !important; /* Lấp khoảng hở để dễ cắt */
+            }
+            /* Xoá bóng trắng khung card lúc in để đen mực cho sâu */
+            .card-front {
+                 box-shadow: none !important;
+            }
+            @page { size: A4 portrait; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h1 class="text-4xl font-black text-blue-900 mb-2 font-['Baloo_2'] uppercase tracking-widest">Bộ Card Sinh Động GeoSTEM</h1>
+        <p class="text-slate-500 mb-6 font-semibold">Chuẩn mực Nhận Diện Thương Hiệu: Nền Xanh Hoàng Gia, Nhấn Cam Rực Rỡ. 1 Mặt, In A4 8 Thẻ Giới Thiệu.</p>
+        <button class="btn-print" onclick="window.print()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline; vertical-align:middle; margin-right:8px;"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+            XUẤT IN PDF (1 MẶT)
+        </button>
+    </div>
+
+    <!-- ================= PAGE 1 ================= -->
+    <div class="page">
+        <!-- Row 1 -->
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">🦋</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 1</div>
+                    <div class="card-title">Trục Đối Xứng</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Trực quan hoá phép đối xứng trục toán học thông qua thao tác bẻ gập chắp mảnh ghép điện tử để khám phá hai nửa hình cánh bướm hoán đổi.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">📏</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 2</div>
+                    <div class="card-title">Cọng Thun Đoạn Theo</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Khám phá tính chất toán học của điểm nằm giữa với cọng thun ảo kéo giãn linh hoạt. Tích hợp thanh thước đo độ dài tự động xử lý AM + MB = AB.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">📐</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 3</div>
+                    <div class="card-title">Phân Loại Góc</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Làm quen cực kỳ trực quan với việc phân loại Góc Nhọn, Góc Vuông, Khoảng Tù, Góc Bẹt bằng một chiếc thước điện tử báo số nhạy bén nhất.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">✕</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 4</div>
+                    <div class="card-title">Góc Đối Đỉnh</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Phép thử nghiệm kéo cắt sinh động chứng minh cho người dùng thấy: Hai góc đối đỉnh luôn luôn mang số đo bằng nhau tuyệt đối ở mọi góc độ kéo chéo.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">〓</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 5</div>
+                    <div class="card-title">So Le & Đồng Vị</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Xoắn nắn 2 đường thẳng đa hệ và quan sát sự bùng nổ đồng bộ màu sắc cảnh báo của bộ các cặp góc chéo khi chúng đạt đến mức độ song song.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">△</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 6</div>
+                    <div class="card-title">Tổng 3 Góc Tam Giác</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Chọc tự do vào 3 đỉnh kéo méo tam giác trên không gian 2D để trải nghiệm điều bất biến hiển nhiên: Tổng số đo của 3 rốn góc luôn bị khóa ở 180°.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">≅</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 7</div>
+                    <div class="card-title">Tam Giác Bằng Nhau</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Trải nghiệm luật chơi bằng nhau qua siêu thao tác mô phỏng "Máy Quét Lazer" chụp ảnh chập dính 2 tam giác để chứng minh đè khít tuyệt đối 100%.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">⊿</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 8</div>
+                    <div class="card-title">Định Lý Thales</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Phép lạ chia cắt lớp màng song song với đáy tam giác tạo ra các ma trận tỷ số vàng. Phân số sinh tự động làm cho Toán 8 rực rỡ và dễ thở hơn mong đợi.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 2 ================= -->
+    <div class="page">
+        <!-- Row 1 -->
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">✂️</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 9</div>
+                    <div class="card-title">Đường Trung Bình</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Ánh mắt thước đo điện tử tự khai mở chứng minh đường trung bình tam giác đã sinh ra là luôn luôn song song và bằng đúng kích thước phân nửa 1/2 cạnh đáy.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">Sin</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 10</div>
+                    <div class="card-title">Lượng Giác Động</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Hệ thống đo đạc siêu thực xuất thần tính toán tự động ra thông số tỷ lệ nguyên thủy Sin/Cos biến thiên chính xác thời gian thực mỗi lật đổi góc chiếu sáng.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">⬡</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 11</div>
+                    <div class="card-title">Lục Giác Đều</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Lao vào thao trường bóc tách siêu cấu trúc khổng lồ Lục giác đều để đếm ra chính xác 6 mảnh lượng tam giác đều chụm tụ lại hoàn hảo vào lõi cái móng ngựa.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">🎯</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 12</div>
+                    <div class="card-title">Trọng Tâm</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Sửng sốt ảo ảnh cân bằng vật lý: Phác chân tay vẽ 3 đường trung tuyến và triệu hồi thành công rốn điểm G bất bại giữ thăng bằng tuyệt đối cho nắp mảnh hộp bìa.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">⭕️</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 13</div>
+                    <div class="card-title">Tâm Ngoại Tiếp</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Module tự thân đan sinh ra 3 nhát chéo đường trung trực để người tập ngỡ ngàng xác định đỉnh cao Tâm rốn của một vòng tròn khổng lồ lót bên ngoài bao quanh.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">◎</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 14</div>
+                    <div class="card-title">Tâm Nội Tiếp</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Truyền luồng tia điện laser tia phân giác từ mọi góc độ để truy vết tìm rốn "Tâm Nguồn" duy nhất, của đường tròn rụt rè lọt kín bưng trọn vẹn bên trong lòng tam giác.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="card">
+            <div class="decor-circle"></div>
+            <div class="card-header">
+                <div class="card-icon">🏗</div>
+                <div class="card-title-wrap">
+                    <div class="card-module-tag">Module 15</div>
+                    <div class="card-title">Trực Tâm</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="card-desc">Bấm dừng nhịp thở theo dõi đường bay của sự giao cắt Trực Tâm bất hủ. Trực Tâm có thể nhảy vọt bay lọt văng tung tóe ra khỏi toàn bộ tam giác là khu vực có Góc Tù u ám.</p>
+            </div>
+            <div class="card-footer">
+                <div class="cta-text">Quét mã QR<br>Trải nghiệm ngay 👉</div>
+                <div class="qr-placeholder"><img src="assets/qr/homepage.png" alt="QR"></div>
+            </div>
+        </div>
+
+        <div class="card" style="background:white; justify-content:center; align-items:center; color:#1e3a8a; box-shadow:none;">
+            <svg width="60" height="60" viewBox="0 0 28 28" fill="none" style="margin:0 auto 10px;">
+                <rect width="28" height="28" rx="8" fill="#2563EB"/>
+                <polygon points="14,5 24,22 4,22" fill="white" opacity="0.9"/>
+                <circle cx="8" cy="16" r="3" fill="#F97316"/>
+            </svg>
+            <div style="font-family:'Baloo 2', sans-serif; font-size:18px; color:#1e3a8a; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">GeoSTEM EduKit</div>
+            <div style="color:#2563eb; font-size:13px; font-weight:700;">Học Cụ Hình Học Chuyển Đổi Số</div>
+            <div style="font-size:11px; color:#64748b; margin-top:15px; font-weight:bold;">Sản Phẩm Của: TRƯỜNG THCS TRẦN ĐẠI NGHĨA</div>
+        </div>
+    </div>
+
+</body>
+</html>
