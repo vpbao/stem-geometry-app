@@ -32,7 +32,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       Quay lại
     </button>
-    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><circle cx="14" cy="17.6" r="2" fill="currentColor" stroke="none"/></svg> Module 12</div>
+    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><circle cx="14" cy="17.6" r="2" fill="currentColor" stroke="none"/></svg> Module 9</div>
   </nav>
   <header class="module-header">
     <div class="module-header-icon" style="background:linear-gradient(135deg,#dc2626,#f87171);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><line x1="2" y1="25" x2="20" y2="14"/><line x1="26" y1="25" x2="8" y2="14"/><circle cx="14" cy="17.6" r="2.5" fill="white" stroke="none"/></svg></div>
@@ -112,13 +112,15 @@
         p.line(B.x,B.y,mAC.x,mAC.y);
         p.stroke('#059669');
         p.line(C.x,C.y,mAB.x,mAB.y);
-        // Tick marks on equal halves created by midpoints
-        GeoMarks.drawTickMark(p, A.x, A.y, mBC.x, mBC.y, 1, '#dc2626');
-        GeoMarks.drawTickMark(p, B.x, B.y, mAC.x, mAC.y, 1, '#e67700');
-        GeoMarks.drawTickMark(p, C.x, C.y, mAB.x, mAB.y, 1, '#059669');
-        // Midpoints
-        p.noStroke();
-        [[mBC,'#dc2626'],[mAC,'#e67700'],[mAB,'#059669']].forEach(([m,c])=>{p.fill(c);p.circle(m.x,m.y,10);});
+        // Midpoints & Labels
+        p.noStroke(); p.textFont('Baloo 2'); p.textSize(14); p.textAlign(p.CENTER, p.CENTER);
+        [[mBC,'#dc2626','M'],[mAC,'#e67700','N'],[mAB,'#059669','P']].forEach(([m,c,lbl])=>{
+          p.fill(c); p.circle(m.x,m.y,10);
+          p.fill('#1e293b');
+          const offX = m.x - G.x, offY = m.y - G.y;
+          const offL = Math.sqrt(offX*offX + offY*offY) || 1;
+          p.text(lbl, m.x + (offX/offL)*14, m.y + (offY/offL)*14);
+        });
         // Equal segment marks: BM=MC, AM'=M'C, AN=NB
         GeoMarks.drawTickMark(p, B.x, B.y, mBC.x, mBC.y, 1, '#2563EB');
         GeoMarks.drawTickMark(p, mBC.x, mBC.y, C.x, C.y, 1, '#2563EB');

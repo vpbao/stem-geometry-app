@@ -32,7 +32,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       Quay lại
     </button>
-    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><circle cx="14" cy="20" r="2" fill="currentColor" stroke="none"/></svg> Module 15</div>
+    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><circle cx="14" cy="20" r="2" fill="currentColor" stroke="none"/></svg> Module 12</div>
   </nav>
   <header class="module-header">
     <div class="module-header-icon" style="background:linear-gradient(135deg,#b45309,#f59e0b);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="14,3 2,25 26,25"/><line x1="14" y1="3" x2="14" y2="25"/><line x1="2" y1="25" x2="22" y2="11" stroke-dasharray="3 2"/><circle cx="14" cy="20" r="2.5" fill="white" stroke="none"/></svg></div>
@@ -86,7 +86,9 @@
       };
       function resetPts() {
         const w = p.width, h = p.height;
-        pts = [{ x: w/2, y: h*0.08 }, { x: w*0.12, y: h*0.85 }, { x: w*0.82, y: h*0.85 }];
+        // Dùng cạnh ngắn nhất làm đơn vị đo để chốt cứng tỷ lệ góc Nhọn (A hẹp) trên mọi loại màn hình, tránh việc màn hình ngang làm tam giác bị bè ra thành góc Tù
+        const d = Math.min(w, h) * 0.25;
+        pts = [{ x: w/2, y: h*0.2 }, { x: w/2 - d, y: h*0.75 }, { x: w/2 + d, y: h*0.75 }];
       }
       function footOfAlt(v, p1, p2) {
         const dx=p2.x-p1.x, dy=p2.y-p1.y;
@@ -110,31 +112,60 @@
       p.draw = () => {
         p.background(252,252,255);
         const [A,B,C] = pts;
+        
         // Feet of altitudes
         const fA = footOfAlt(A,B,C);
         const fB = footOfAlt(B,A,C);
         const fC = footOfAlt(C,A,B);
+        
         // Orthocenter
         const H = lineIntersect(A.x,A.y,fA.x,fA.y,B.x,B.y,fB.x,fB.y);
+        
         // Triangle
         p.fill(180,83,9,20); p.stroke('#b45309'); p.strokeWeight(2.5);
         p.triangle(A.x,A.y,B.x,B.y,C.x,C.y);
+        
         // Altitudes
         const altColors = ['#b45309','#f97316','#10b981'];
-        [[A,fA],[B,fB],[C,fC]].forEach(([v,f],i)=>{
+        [[A,fA,B,C],[B,fB,A,C],[C,fC,A,B]].forEach(([v,f,p1,p2],i)=>{
+          
+          // 1. Phóng cạnh tam giác (nét đứt) nếu chân đường cao rớt ra ngoài
+          const Pdx = p2.x - p1.x, Pdy = p2.y - p1.y;
+          const lenSq = Pdx*Pdx + Pdy*Pdy || 1;
+          const t = ((f.x - p1.x)*Pdx + (f.y - p1.y)*Pdy) / lenSq;
+          
+          if (t < -0.01 || t > 1.01) {
+            p.stroke('#b45309'); p.strokeWeight(1.5); 
+            p.drawingContext.setLineDash([5,5]);
+            if (t < 0) p.line(f.x, f.y, p1.x, p1.y);
+            else p.line(f.x, f.y, p2.x, p2.y);
+            p.drawingContext.setLineDash([]);
+          }
+
+          // 2. Kẻ đường cao dài vô tận đâm xuyên v, f và H
+          const dx = f.x - v.x, dy = f.y - v.y;
+          const dlen = Math.sqrt(dx*dx + dy*dy) || 1;
+          const ux = dx/dlen, uy = dy/dlen;
+          
+          let hDist = 0;
+          if (H) {
+             hDist = ((H.x - v.x)*ux + (H.y - v.y)*uy);
+          }
+          const startD = Math.min(0, dlen, hDist) - 20;
+          const endD = Math.max(0, dlen, hDist) + 20;
+          
           p.stroke(altColors[i]); p.strokeWeight(2);
-          // Extend the line beyond
-          const dx=f.x-v.x, dy=f.y-v.y;
-          const len=Math.sqrt(dx*dx+dy*dy)||1;
-          p.line(v.x-dx/len*20, v.y-dy/len*20, f.x+dx/len*40, f.y+dy/len*40);
+          p.line(v.x + ux*startD, v.y + uy*startD, v.x + ux*endD, v.y + uy*endD);
+          
           // Right angle marker at foot
-          const sz=10;
-          const ux2=dx/len, uy2=dy/len;
-          const nx2=-uy2, ny2=ux2;
-          GeoMarks.drawRightAngle(p, f.x, f.y, nx2, ny2, -ux2, -uy2, sz, altColors[i]);
+          const sz=12;
+          const nx2=-uy, ny2=ux;
+          GeoMarks.drawRightAngle(p, f.x, f.y, nx2, ny2, -ux, -uy, sz, altColors[i]);
+          
           // Foot dot
           p.noStroke(); p.fill(altColors[i]); p.circle(f.x,f.y,8);
         });
+        
         // H point
         if(H){
           p.fill('#b45309'); p.stroke('white'); p.strokeWeight(3); p.circle(H.x,H.y,20);

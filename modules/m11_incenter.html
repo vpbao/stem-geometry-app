@@ -32,7 +32,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       Quay lại
     </button>
-    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><circle cx="14" cy="19" r="6" stroke-dasharray="3 2"/></svg> Module 14</div>
+    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,3 2,25 26,25"/><circle cx="14" cy="19" r="6" stroke-dasharray="3 2"/></svg> Module 11</div>
   </nav>
   <header class="module-header">
     <div class="module-header-icon" style="background:linear-gradient(135deg,#c026d3,#e879f9);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="14,3 2,25 26,25"/><circle cx="14" cy="19" r="6" stroke-dasharray="3 2"/><circle cx="14" cy="19" r="2" fill="white" stroke="none"/></svg></div>
@@ -89,7 +89,8 @@
       };
       function resetPts() {
         const w = p.width, h = p.height;
-        pts = [{ x: w/2, y: h*0.08 }, { x: w*0.1, y: h*0.88 }, { x: w*0.9, y: h*0.88 }];
+        // Bóp chiều cao (góc A tù) và kéo giãn đáy BC để Đường tròn nội tiếp phình to ra giữa màn hình
+        pts = [{ x: w/2, y: h*0.25 }, { x: w*0.15, y: h*0.75 }, { x: w*0.85, y: h*0.75 }];
       }
       function sideLen(a,b) { return p.dist(a.x,a.y,b.x,b.y); }
       function distPtLine(px,py,x1,y1,x2,y2) {
@@ -109,10 +110,12 @@
         const a=sideLen(B,C), b=sideLen(A,C), c=sideLen(A,B);
         const I = { x: (a*A.x+b*B.x+c*C.x)/(a+b+c), y: (a*A.y+b*B.y+c*C.y)/(a+b+c) };
         const inR = distPtLine(I.x,I.y,A.x,A.y,B.x,B.y);
+        
         // Triangle
         p.fill(192,38,211,20); p.stroke('#c026d3'); p.strokeWeight(2.5);
         p.triangle(A.x,A.y,B.x,B.y,C.x,C.y);
-        // Angle bisectors
+        
+        // Angle bisectors with equal angle mark arcs
         const bisColors = ['#c026d3','#f97316','#10b981'];
         [[A,B,C],[B,A,C],[C,A,B]].forEach(([v,p1,p2],i)=>{
           const d1=sideLen(v,p1), d2=sideLen(v,p2);
@@ -120,13 +123,27 @@
           const n2={x:(p2.x-v.x)/d2, y:(p2.y-v.y)/d2};
           const bx=n1.x+n2.x, by=n1.y+n2.y;
           const bl=Math.sqrt(bx*bx+by*by)||1;
+          
           p.stroke(bisColors[i]); p.strokeWeight(1.5);
           p.line(v.x,v.y, v.x+(bx/bl)*2500, v.y+(by/bl)*2500);
+          
+          // Draw equal angle arcs
+          let a1 = Math.atan2(n1.y, n1.x); let a2 = Math.atan2(n2.y, n2.x);
+          if (a1 < 0) a1 += p.TWO_PI; if (a2 < 0) a2 += p.TWO_PI;
+          if (a1 > a2) { let temp = a1; a1 = a2; a2 = temp; }
+          let sa = a1, ea = a2;
+          if (ea - sa > p.PI) { sa = a2; ea = a1 + p.TWO_PI; }
+          const midA = (sa + ea) / 2;
+          const arcR = 30 + (i * 5); // Tăng bán kính xíu cho góc B, C khỏi rối
+          GeoMarks.drawAngleArcMark(p, v.x, v.y, sa, midA, arcR, i+1, bisColors[i]);
+          GeoMarks.drawAngleArcMark(p, v.x, v.y, midA, ea, arcR, i+1, bisColors[i]);
         });
+        
         // Inscribed circle
         p.noFill(); p.stroke('#e879f9'); p.strokeWeight(2);
         p.drawingContext.setLineDash([5,3]); p.circle(I.x,I.y,inR*2); p.drawingContext.setLineDash([]);
-        // Perpendicular feet from I to each side — with equal tick marks
+        
+        // Perpendicular feet from I to each side
         function footPt(px,py,ax,ay,bx,by) {
           const dx=bx-ax, dy=by-ay;
           const t=((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy);
@@ -135,15 +152,20 @@
         const fAB = footPt(I.x,I.y,A.x,A.y,B.x,B.y);
         const fBC = footPt(I.x,I.y,B.x,B.y,C.x,C.y);
         const fCA = footPt(I.x,I.y,C.x,C.y,A.x,A.y);
+        const feet = [[fAB,A,B],[fBC,B,C],[fCA,C,A]];
+        
         // Dashed lines from I to feet
         p.stroke('#e879f9'); p.strokeWeight(1.5);
         p.drawingContext.setLineDash([4,3]);
-        p.line(I.x,I.y,fAB.x,fAB.y); p.line(I.x,I.y,fBC.x,fBC.y); p.line(I.x,I.y,fCA.x,fCA.y);
+        feet.forEach(([f]) => p.line(I.x,I.y,f.x,f.y));
         p.drawingContext.setLineDash([]);
+        
         // Equal tick marks on distances I→foot
-        GeoMarks.drawTickMark(p, I.x, I.y, fAB.x, fAB.y, 1, '#c026d3');
-        GeoMarks.drawTickMark(p, I.x, I.y, fBC.x, fBC.y, 1, '#c026d3');
-        GeoMarks.drawTickMark(p, I.x, I.y, fCA.x, fCA.y, 1, '#c026d3');
+        feet.forEach(([f]) => GeoMarks.drawTickMark(p, I.x, I.y, f.x, f.y, 1, '#c026d3'));
+        
+        // Solid dots at feet
+        p.noStroke(); p.fill('#c026d3');
+        feet.forEach(([f]) => p.circle(f.x, f.y, 8));
         // Right angle marks at feet
         [[fAB,A,B],[fBC,B,C],[fCA,C,A]].forEach(([f,s1,s2])=>{
           const sdx=s2.x-s1.x, sdy=s2.y-s1.y;

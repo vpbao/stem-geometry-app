@@ -32,7 +32,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       Quay lại
     </button>
-    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,4 3,23 25,23"/><circle cx="14" cy="15" r="10" stroke-dasharray="3 2"/></svg> Module 13</div>
+    <div class="nav-brand"><svg width="18" height="18" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;"><polygon points="14,4 3,23 25,23"/><circle cx="14" cy="15" r="10" stroke-dasharray="3 2"/></svg> Module 10</div>
   </nav>
   <header class="module-header">
     <div class="module-header-icon" style="background:linear-gradient(135deg,#0284c7,#38bdf8);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="14,4 3,23 25,23"/><circle cx="14" cy="15" r="11" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="2.5" fill="white" stroke="none"/></svg></div>
@@ -89,7 +89,18 @@
       };
       function resetPts() {
         const w = p.width, h = p.height;
-        pts = [{ x: w/2, y: h*0.1 }, { x: w*0.12, y: h*0.85 }, { x: w*0.85, y: h*0.78 }];
+        const cx = w / 2, cy = h / 2;
+        // Bán kính đường tròn ngoại tiếp bằng 38% cạnh nhỏ nhất của màn hình (padding an toàn)
+        const rad = Math.min(w, h) * 0.38;
+        
+        // A ở đỉnh trên cùng (góc -90 độ hay 270 độ)
+        // B ở góc dưới bên trái (góc 150 độ)
+        // C ở góc dưới bên phải (góc 30 độ)
+        pts = [
+          { x: cx, y: cy - rad },
+          { x: cx + rad * Math.cos(p.radians(150)), y: cy + rad * Math.sin(p.radians(150)) },
+          { x: cx + rad * Math.cos(p.radians(30)), y: cy + rad * Math.sin(p.radians(30)) }
+        ];
       }
       function circumcenter(A,B,C) {
         const D = 2*(A.x*(B.y-C.y)+B.x*(C.y-A.y)+C.x*(A.y-B.y));
@@ -119,6 +130,7 @@
           p.noFill(); p.stroke('#38bdf8'); p.strokeWeight(2);
           p.drawingContext.setLineDash([6,4]); p.circle(O.x,O.y,radius*2); p.drawingContext.setLineDash([]);
           // Perpendicular bisectors
+          const edges = [[B,C], [A,C], [A,B]];
           const mids = [mid(B,C),mid(A,C),mid(A,B)];
           const perpColors = ['#0284c7','#f97316','#10b981'];
           mids.forEach((m,i) => {
@@ -127,13 +139,29 @@
             const len = Math.sqrt(dx*dx+dy*dy) || 1;
             const ex = 500/len;
             p.line(O.x - dx*ex, O.y - dy*ex, O.x + dx*ex, O.y + dy*ex);
+            
+            // Draw Right Angle
+            const e1 = edges[i][0], e2 = edges[i][1];
+            const elen = p.dist(e1.x, e1.y, e2.x, e2.y) || 1;
+            const ux = (e2.x - e1.x)/elen, uy = (e2.y - e1.y)/elen;
+            const vx = dx/len, vy = dy/len; // outward from edge
+            GeoMarks.drawRightAngle(p, m.x, m.y, ux, uy, vx, vy, 12, perpColors[i]);
+            
+            // Midpoint edge ticks
+            GeoMarks.drawTickMark(p, e1.x, e1.y, m.x, m.y, i+1, perpColors[i]);
+            GeoMarks.drawTickMark(p, m.x, m.y, e2.x, e2.y, i+1, perpColors[i]);
+            
             // Midpoint dot
             p.noStroke(); p.fill(perpColors[i]); p.circle(m.x,m.y,8);
           });
-          // Equal radius tick marks: OA = OB = OC
-          GeoMarks.drawTickMark(p, O.x, O.y, A.x, A.y, 1, '#0284c7');
-          GeoMarks.drawTickMark(p, O.x, O.y, B.x, B.y, 1, '#0284c7');
-          GeoMarks.drawTickMark(p, O.x, O.y, C.x, C.y, 1, '#0284c7');
+          
+          // Draw dashed lines for OA, OB, OC
+          p.drawingContext.setLineDash([6, 4]);
+          p.stroke('#0ea5e9'); p.strokeWeight(2.5); p.noFill();
+          p.line(O.x, O.y, A.x, A.y);
+          p.line(O.x, O.y, B.x, B.y);
+          p.line(O.x, O.y, C.x, C.y);
+          p.drawingContext.setLineDash([]);
           // O point
           p.fill('#0284c7'); p.stroke('white'); p.strokeWeight(3); p.circle(O.x,O.y,18);
           p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(10); p.textAlign(p.CENTER,p.CENTER); p.text('O',O.x,O.y);
