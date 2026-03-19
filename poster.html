@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poster STEM - Bộ Học Cụ Hình Học Tích Hợp Số</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Lệnh quan trọng để giữ màu khi in cho toàn bộ phần tử */
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e0eaff 100%) !important;
+            color: #2d3748;
+        }
+        .clay-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 40px;
+            box-shadow: 
+                20px 20px 40px rgba(0, 0, 0, 0.05),
+                inset -10px -10px 20px rgba(0, 0, 0, 0.05),
+                inset 10px 10px 20px rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .header-gradient {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .qr-container {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border: 3px solid #dbeafe;
+        }
+        .qr-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        /* Print Settings - Đã sửa lỗi mất màu nền */
+        @media print {
+            * {
+                /* Sửa lỗi đổ bóng (shadow) bị biến thành các cục gạch mờ màu xám vuông vức khi in */
+                box-shadow: none !important;
+            }
+            @page {
+                size: A0;
+                margin: 0;
+            }
+            body {
+                background: #f0f7ff !important;
+                padding: 1.5cm !important;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .clay-card {
+                /* Ép nền trắng đặc, bỏ trong suốt để không bị xỉn màu xám khi in */
+                background: #ffffff !important;
+            }
+            /* Giữ lại gradient cho cột Hiệu quả */
+            .bg-gradient-to-br {
+                background: linear-gradient(to bottom right, #1e3a8a, #2563eb) !important;
+            }
+            .header-gradient {
+                /* Sửa lỗi hiển thị khối xanh lè chìm chữ: gỡ background gradient đi */
+                background: none !important;
+                -webkit-text-fill-color: #1e40af !important;
+                color: #1e40af !important;
+            }
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: #2563eb;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 99px;
+            font-weight: 800;
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
+            cursor: pointer;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: none;
+            font-size: 1.2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .print-btn:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: #1d4ed8;
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.5);
+        }
+    </style>
+</head>
+<body class="p-8 md:p-16 min-h-screen">
+
+    <button class="print-btn no-print" onclick="window.print()">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+        </svg>
+        XUẤT FILE PDF ĐỂ IN (GIỮ MÀU)
+    </button>
+
+    <!-- Header Section -->
+    <header class="text-center mb-16">
+        <p class="text-2xl font-bold uppercase tracking-[0.4em] text-blue-600 mb-4 opacity-90">Đề tài STEM - Lĩnh vực Toán học & Tin học</p>
+        <h1 class="text-6xl md:text-8xl font-black header-gradient mb-8 uppercase tracking-tighter leading-tight">Bộ học cụ Hình học<br>tích hợp số</h1>
+        <div class="flex justify-center items-center gap-10 text-3xl">
+            <span class="font-extrabold text-blue-900 bg-white/60 px-8 py-3 rounded-3xl shadow-sm border border-blue-100">GV: Nguyễn Thị Hạ Quyên</span>
+            <span class="text-gray-300 font-light">|</span>
+            <span class="text-gray-700 font-bold uppercase tracking-widest">Trường THCS Trần Đại Nghĩa</span>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 max-w-[1600px] mx-auto pb-20">
+        
+        <!-- Column 1 -->
+        <div class="md:col-span-4 flex flex-col gap-12">
+            <section class="clay-card p-12 border-t-[15px] border-red-500">
+                <h2 class="text-4xl font-black mb-8 flex items-center gap-5 text-red-600">
+                    <span class="bg-red-100 p-4 rounded-3xl text-4xl">💡</span> Vấn đề
+                </h2>
+                <ul class="space-y-8 text-2xl leading-relaxed font-medium">
+                    <li class="flex gap-5">
+                        <span class="text-red-500 font-black">●</span> 
+                        <span>Hình vẽ tĩnh trong SGK <b>khó hình dung</b> và thiếu tương tác.</span>
+                    </li>
+                    <li class="flex gap-5">
+                        <span class="text-red-500 font-black">●</span> 
+                        <span>Học sinh thiếu công cụ để <b>trực tiếp khám phá</b> các định lý.</span>
+                    </li>
+                    <li class="flex gap-5">
+                        <span class="text-red-500 font-black">●</span> 
+                        <span>Nhu cầu <b>số hóa học liệu</b> với chi phí thấp trong GDPT 2018.</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="clay-card p-12 bg-blue-50/50 border-t-[15px] border-blue-600">
+                <h2 class="text-4xl font-black mb-8 flex items-center gap-5 text-blue-800">
+                    <span class="bg-blue-100 p-4 rounded-3xl text-4xl">🚀</span> Giải pháp
+                </h2>
+                <div class="space-y-6">
+                    <div class="p-8 bg-white rounded-[45px] shadow-sm border-2 border-blue-100">
+                        <p class="font-black text-blue-700 mb-2 text-3xl">VẬT LÝ</p>
+                        <p class="text-gray-600 text-xl font-bold">Mảnh ghép nam châm carton</p>
+                    </div>
+                    <div class="p-8 bg-white rounded-[45px] shadow-sm border-2 border-orange-200">
+                        <p class="font-black text-orange-600 mb-2 text-3xl">SỐ HÓA</p>
+                        <p class="text-gray-600 text-xl font-bold">Web tương tác đa nền tảng</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="md:col-span-5 flex flex-col gap-12">
+            <section class="clay-card p-12 h-full border-t-[15px] border-blue-900">
+                <h2 class="text-4xl font-black mb-10 text-center text-blue-950 uppercase tracking-tighter">Cấu tạo & Vận hành</h2>
+                
+                <div class="bg-white p-10 rounded-[60px] shadow-inner border border-blue-50 mb-12">
+                    <p class="text-center font-black text-gray-400 mb-10 uppercase text-sm tracking-[0.5em]">Hệ thống 15 Module tương tác</p>
+                    <div class="grid grid-cols-3 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-3xl flex flex-col items-center border border-gray-100 shadow-sm">
+                            <span class="text-5xl mb-4">🦋</span>
+                            <span class="text-base font-black text-gray-700">Đối xứng</span>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-3xl flex flex-col items-center border border-blue-100 shadow-sm">
+                            <span class="text-5xl mb-4">📐</span>
+                            <span class="text-base font-black text-blue-800">Góc</span>
+                        </div>
+                        <div class="bg-orange-50 p-6 rounded-3xl flex flex-col items-center border border-orange-100 shadow-sm">
+                            <span class="text-5xl mb-4">△</span>
+                            <span class="text-base font-black text-orange-800">Tam giác</span>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-3xl flex flex-col items-center border border-green-100 shadow-sm">
+                            <span class="text-5xl mb-4">📏</span>
+                            <span class="text-base font-black text-green-800">Thales</span>
+                        </div>
+                        <div class="bg-purple-50 p-6 rounded-3xl flex flex-col items-center border border-purple-100 shadow-sm">
+                            <span class="text-5xl mb-4">⚖️</span>
+                            <span class="text-base font-black text-purple-800">Đồng quy</span>
+                        </div>
+                        <div class="bg-pink-50 p-6 rounded-3xl flex flex-col items-center border border-pink-100 shadow-sm">
+                            <span class="text-5xl mb-4">🎯</span>
+                            <span class="text-base font-black text-pink-800">Lượng giác</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-12 px-6">
+                    <div class="flex items-start gap-10">
+                        <div class="bg-blue-900 text-white w-20 h-20 rounded-[30px] flex items-center justify-center font-black shrink-0 shadow-2xl text-4xl">1</div>
+                        <div>
+                            <p class="font-black text-3xl text-blue-950 mb-3 underline decoration-blue-200 decoration-4">Sản phẩm vật lý</p>
+                            <p class="text-gray-600 leading-relaxed text-2xl font-bold">Thao tác trực tiếp trên bảng từ tính, giúp học sinh vận động tay mắt.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-10">
+                        <div class="bg-orange-600 text-white w-20 h-20 rounded-[30px] flex items-center justify-center font-black shrink-0 shadow-2xl text-4xl">2</div>
+                        <div>
+                            <p class="font-black text-3xl text-orange-900 mb-3 underline decoration-orange-200 decoration-4">Công nghệ AI & Web</p>
+                            <p class="text-gray-600 leading-relaxed text-2xl font-bold">Cung cấp mô phỏng động, kết quả đo đạc chính xác tuyệt đối.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Column 3 -->
+        <div class="md:col-span-3 flex flex-col gap-12">
+            <section class="clay-card p-12 bg-gradient-to-br from-blue-900 to-blue-600 text-white shadow-2xl border-none">
+                <h2 class="text-4xl font-black mb-10 flex items-center gap-4 italic uppercase">Hiệu quả</h2>
+                <div class="space-y-10">
+                    <div class="flex gap-6 items-start">
+                        <span class="bg-white/20 p-4 rounded-2xl text-3xl">✨</span>
+                        <p class="text-lg font-black leading-snug tracking-tight">Cụ thể hóa các kiến thức trừu tượng, tăng hứng thú học tập.</p>
+                    </div>
+                    <div class="flex gap-6 items-start">
+                        <span class="bg-white/20 p-4 rounded-2xl text-3xl">📱</span>
+                        <p class="text-lg font-black leading-snug tracking-tight">Rèn luyện kỹ năng số và ứng dụng CNTT cho học sinh.</p>
+                    </div>
+                    <div class="flex gap-6 items-start">
+                        <span class="bg-white/20 p-4 rounded-2xl text-3xl">💰</span>
+                        <p class="text-lg font-black leading-snug tracking-tight">Chi phí &lt;100k, dễ dàng tự làm và áp dụng rộng rãi.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="clay-card p-12 text-center flex flex-col items-center bg-white border-b-[20px] border-blue-600 shadow-xl">
+                <h2 class="text-base font-black mb-6 uppercase text-blue-600 tracking-[0.4em]">TRẢI NGHIỆM QR</h2>
+                <div class="qr-container mb-8 scale-125">
+                    <img src="assets/qr/homepage.png" alt="Mã QR" class="qr-image">
+                </div>
+                <div class="text-sm font-black text-blue-600 bg-blue-50 px-8 py-4 rounded-3xl border-2 border-blue-100 shadow-inner">
+                    vpbao.github.io/stem-geometry-app
+                </div>
+            </section>
+
+            <div class="mt-auto pt-10 flex justify-between items-end px-4">
+                <div class="text-lg text-gray-400 font-black leading-none tracking-widest uppercase">
+                    THCS<br>TRẦN ĐẠI NGHĨA
+                </div>
+                <p class="text-xl text-right text-blue-700 italic font-black leading-tight">"Số hóa giáo cụ -<br>Chạm đỉnh tri thức"</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
