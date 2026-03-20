@@ -95,7 +95,7 @@
         const el = document.getElementById('canvas-container');
         p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
         p.pixelDensity(Math.min(window.devicePixelRatio, 2));
-        ox = p.width * 0.15; oy = p.height * 0.82; R = Math.min(p.width, p.height) * 0.5;
+        R = Math.min(p.width, p.height) * 0.5;
       };
 
       const tryDrag = (mx, my) => {
@@ -115,7 +115,10 @@
         const rad = p.radians(angle);
         const hyp = R;
         const adj = hyp * Math.cos(rad); // adjacent
-        const opp = hyp * Math.sin(rad); // oppoiste
+        const opp = hyp * Math.sin(rad); // opposite
+        // Tâm ngang: đặt ox sao cho tam giác (từ ox đến ox+adj) nằm giữa canvas
+        ox = (p.width - adj) / 2;
+        oy = p.height * 0.85;
         // C = far corner of hyp
         const Cx = ox + adj, Cy = oy - opp;
         // B = base corner
@@ -194,7 +197,7 @@
       p.windowResized = () => {
         const el = document.getElementById('canvas-container');
         p.resizeCanvas(el.offsetWidth, el.offsetHeight);
-        ox = p.width * 0.15; oy = p.height * 0.82; R = Math.min(p.width, p.height) * 0.5;
+        R = Math.min(p.width, p.height) * 0.5;
       };
     });
   </script>

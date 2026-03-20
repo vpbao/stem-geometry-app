@@ -44,7 +44,7 @@
     <div class="module-header-icon" style="background:linear-gradient(135deg,#0891b2,#06b6d4);"><svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="14,4 3,24 25,24"/><line x1="8.5" y1="14" x2="19.5" y2="14" stroke-dasharray="3 2"/></svg></div>
     <div>
       <h1>Đường Trung Bình Của Tam Giác</h1>
-      <p>Toán 8 — Kéo đỉnh C và kiểm tra đường trung bình bằng ½ đáy</p>
+      <p>Toán 8 — Kéo 3 đỉnh A, B, C và kiểm tra đường trung bình bằng ½ đáy</p>
     </div>
   </header>
 
@@ -54,7 +54,6 @@
     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
       <span class="readout-chip" id="lbl-mn" aria-live="polite" aria-atomic="true" style="background:#ef4444;border-color:#dc2626;box-shadow:3px 3px 0 #dc2626;">MN = ?</span>
       <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">=</span>
-      <span class="readout-chip" style="background:#64748b;border-color:#475569;box-shadow:3px 3px 0 #475569;">½ ×</span>
       <span class="readout-chip chip-sum" id="lbl-bc" aria-live="polite" aria-atomic="true">AB = ?</span>
     </div>
     <div class="theorem-box">
@@ -78,39 +77,51 @@
   </script>
   <script src="../js/quiz.js"></script>
 
+  <script src="../js/geo-marks.js"></script>
   <script src="../js/p5.min.js"></script>
   <script>
     new p5((p) => {
-      let C, drag = false;
+      let pts, drag = -1;
       const R = 14;
+
+      function resetPts() {
+        const w = p.width, h = p.height;
+        const d = Math.min(w, h) * 0.3;
+        pts = [
+          { x: w * 0.12, y: h * 0.85 },   // A
+          { x: w * 0.88, y: h * 0.85 },   // B
+          { x: w / 2,    y: h * 0.1  }    // C
+        ];
+      }
 
       p.setup = () => {
         const el = document.getElementById('canvas-container');
         p.createCanvas(el.offsetWidth, el.offsetHeight).parent('canvas-container');
         p.pixelDensity(Math.min(window.devicePixelRatio, 2));
-        C = { x: p.width/2, y: p.height*0.1 };
+        resetPts();
       };
 
-      const A = () => ({ x: p.width*0.12, y: p.height*0.85 });
-      const B = () => ({ x: p.width*0.88, y: p.height*0.85 });
-
-      p.mousePressed = () => { if(p.dist(p.mouseX,p.mouseY,C.x,C.y)<R+14) drag=true; };
-      p.mouseReleased = () => { drag=false; };
-      p.mouseDragged = () => { if(drag){ C.x=p.constrain(p.mouseX,4,p.width-4); C.y=p.constrain(p.mouseY,4,p.height*0.78); } };
-      p.touchStarted = () => { if(p.touches[0]&&p.dist(p.touches[0].x,p.touches[0].y,C.x,C.y)<R+20) drag=true;  };
-      p.touchEnded = () => { drag=false;  };
-      p.touchMoved = () => { if(drag&&p.touches[0]){ C.x=p.constrain(p.touches[0].x,4,p.width-4); C.y=p.constrain(p.touches[0].y,4,p.height*0.78); }  };
+      function getNearestPt(x, y) {
+        for (let i = 0; i < 3; i++) if (p.dist(x, y, pts[i].x, pts[i].y) < R + 14) return i;
+        return -1;
+      }
+      p.mousePressed = () => { drag = getNearestPt(p.mouseX, p.mouseY); };
+      p.mouseReleased = () => { drag = -1; };
+      p.mouseDragged = () => { if (drag >= 0) { pts[drag].x = p.constrain(p.mouseX, R, p.width - R); pts[drag].y = p.constrain(p.mouseY, R, p.height - R); } };
+      p.touchStarted = () => { if (p.touches[0]) drag = getNearestPt(p.touches[0].x, p.touches[0].y); };
+      p.touchEnded = () => { drag = -1; };
+      p.touchMoved = () => { if (drag >= 0 && p.touches[0]) { pts[drag].x = p.constrain(p.touches[0].x, R, p.width - R); pts[drag].y = p.constrain(p.touches[0].y, R, p.height - R); } };
 
       p.draw = () => {
         p.background(252, 252, 255);
-        const Ap = A(), Bp = B();
+        const [Ap, Bp, Cp] = pts;
         // Midpoints
-        const M = { x: (Ap.x + C.x)/2, y: (Ap.y + C.y)/2 };
-        const N = { x: (Bp.x + C.x)/2, y: (Bp.y + C.y)/2 };
+        const M = { x: (Ap.x + Cp.x) / 2, y: (Ap.y + Cp.y) / 2 };
+        const N = { x: (Bp.x + Cp.x) / 2, y: (Bp.y + Cp.y) / 2 };
 
         // Triangle
         p.fill(8, 145, 178, 20); p.stroke('#0891b2'); p.strokeWeight(3);
-        p.triangle(Ap.x, Ap.y, Bp.x, Bp.y, C.x, C.y);
+        p.triangle(Ap.x, Ap.y, Bp.x, Bp.y, Cp.x, Cp.y);
 
         // Midsegment
         p.stroke('#ef4444'); p.strokeWeight(5);
@@ -123,18 +134,20 @@
         p.line(0, M.y, p.width, M.y);
         p.drawingContext.setLineDash([]);
 
-        // Tick marks on halves
-        drawTick(M, Ap, '#0891b2');
-        drawTick(M, C, '#0891b2');
-        drawTick(N, Bp, '#0891b2');
-        drawTick(N, C, '#0891b2');
+        // Tick marks — cặp AM=MC dùng 1 gạch, cặp BN=NC dùng 2 gạch
+        GeoMarks.drawTickMark(p, Ap.x, Ap.y, M.x, M.y, 1, '#0891b2');
+        GeoMarks.drawTickMark(p, M.x, M.y, Cp.x, Cp.y, 1, '#0891b2');
+        GeoMarks.drawTickMark(p, Bp.x, Bp.y, N.x, N.y, 2, '#0891b2');
+        GeoMarks.drawTickMark(p, N.x, N.y, Cp.x, Cp.y, 2, '#0891b2');
 
         // Points
-        const allPts = [{ p: Ap, l:'A', c:'#0891b2' }, { p: Bp, l:'B', c:'#0891b2' },
-                        { p: C,  l:'C', c:'#f97316' }, { p: M, l:'M', c:'#ef4444' }, { p: N, l:'N', c:'#ef4444' }];
-        allPts.forEach(({ p: pt, l, c }) => {
+        const allPts = [
+          { pt: Ap, l: 'A', c: '#0891b2' }, { pt: Bp, l: 'B', c: '#0891b2' },
+          { pt: Cp, l: 'C', c: '#f97316' }, { pt: M,  l: 'M', c: '#ef4444' }, { pt: N, l: 'N', c: '#ef4444' }
+        ];
+        allPts.forEach(({ pt, l, c }) => {
           p.fill(c); p.stroke('white'); p.strokeWeight(2.5);
-          p.circle(pt.x, pt.y, R*2);
+          p.circle(pt.x, pt.y, R * 2);
           p.noStroke(); p.fill('white'); p.textFont('Baloo 2'); p.textSize(10);
           p.textAlign(p.CENTER, p.CENTER); p.text(l, pt.x, pt.y);
         });
@@ -142,22 +155,14 @@
         const mn = p.dist(M.x, M.y, N.x, N.y).toFixed(1);
         const ab = p.dist(Ap.x, Ap.y, Bp.x, Bp.y).toFixed(1);
         const halfAB = (ab / 2).toFixed(1);
-        document.getElementById('lbl-mn').textContent = `MN = ${mn}px`;
-        document.getElementById('lbl-bc').textContent = `½ × AB = ${halfAB}px`;
-
-        function drawTick(p1, p2, col) {
-          const mx = (p1.x+p2.x)/2, my = (p1.y+p2.y)/2;
-          const dx = p2.x-p1.x, dy = p2.y-p1.y, len = Math.sqrt(dx*dx+dy*dy);
-          const nx = -dy/len*7, ny = dx/len*7;
-          p.stroke(col); p.strokeWeight(2);
-          p.line(mx+nx, my+ny, mx-nx, my-ny);
-        }
+        document.getElementById('lbl-mn').textContent = `MN = ${mn}`;
+        document.getElementById('lbl-bc').textContent = `½ × AB = ${halfAB}`;
       };
 
       p.windowResized = () => {
         const el = document.getElementById('canvas-container');
         p.resizeCanvas(el.offsetWidth, el.offsetHeight);
-        C = { x: p.width/2, y: p.height*0.1 };
+        resetPts();
       };
     });
   </script>

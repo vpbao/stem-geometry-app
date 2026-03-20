@@ -96,10 +96,12 @@
 
       function resetPts() {
         const w = p.width, h = p.height;
+        // Dùng cạnh ngắn nhất để chốt tỷ lệ, tránh tam giác bẹt trên màn hình rộng
+        const d = Math.min(w, h) * 0.3;
         pts = [
-          { x: w/2, y: h*0.12 },
-          { x: w*0.15, y: h*0.85 },
-          { x: w*0.85, y: h*0.85 }
+          { x: w/2, y: h/2 - d*0.8 },
+          { x: w/2 - d, y: h/2 + d*0.5 },
+          { x: w/2 + d, y: h/2 + d*0.5 }
         ];
       }
 
@@ -126,15 +128,13 @@
       };
       p.touchStarted = () => {
         if (p.touches[0]) drag = getNearestPt(p.touches[0].x, p.touches[0].y);
-        
       };
-      p.touchEnded = () => { drag = -1;  };
+      p.touchEnded = () => { drag = -1; };
       p.touchMoved = () => {
         if (drag >= 0 && p.touches[0]) {
           pts[drag].x = p.constrain(p.touches[0].x, R+2, p.width-R-2);
           pts[drag].y = p.constrain(p.touches[0].y, R+2, p.height-R-2);
         }
-        
       };
 
       p.draw = () => {
@@ -142,24 +142,35 @@
         const [A, B, C] = pts;
         const angA = angleBetween(A, B, C);
         const angB = angleBetween(B, A, C);
-        const angC = Math.round(180 - angA - angB);
-        const angAr = Math.round(angA), angBr = Math.round(angB);
+        // Hiện 1 chữ số thập phân — làm tròn A, B trước, suy ra C để tổng luôn = 180.0
+        const angAf = parseFloat(angA.toFixed(1));
+        const angBf = parseFloat(angB.toFixed(1));
+        const angCf = parseFloat((180 - angAf - angBf).toFixed(1));
+        const sA = angAf.toFixed(1), sB = angBf.toFixed(1), sC = angCf.toFixed(1);
 
         // Filled triangle
         p.fill(37, 99, 235, 20); p.stroke('#2563EB'); p.strokeWeight(3);
         p.triangle(A.x, A.y, B.x, B.y, C.x, C.y);
 
-        // Arcs at each vertex
+        // Trọng tâm tam giác (dùng để xác định hướng "trong" cho label)
+        const cx = (A.x+B.x+C.x)/3, cy = (A.y+B.y+C.y)/3;
+
+        // Arcs at each vertex — dùng cross product để luôn quét đúng cung góc trong
         [[A,B,C,'#2563EB'], [B,A,C,'#f97316'], [C,A,B,'#10b981']].forEach(([v,p1,p2,col]) => {
           const a1 = Math.atan2(p1.y-v.y, p1.x-v.x);
           const a2 = Math.atan2(p2.y-v.y, p2.x-v.x);
+          const cross = (p1.x-v.x)*(p2.y-v.y) - (p1.y-v.y)*(p2.x-v.x);
+          let startA, endA;
+          if (cross > 0) { startA = a1; endA = a2; }
+          else            { startA = a2; endA = a1; }
+          if (endA < startA) endA += Math.PI * 2;
           p.fill(p.color(col)); p.noStroke();
-          p.arc(v.x, v.y, ARC_R*2, ARC_R*2, Math.min(a1,a2), Math.max(a1,a2), p.PIE);
+          p.arc(v.x, v.y, ARC_R*2, ARC_R*2, startA, endA, p.PIE);
         });
 
-        // Vertex dots
+        // Vertex dots & angle labels
         const labels = ['A','B','C'];
-        const angles = [angAr, angBr, angC];
+        const angleTxts = [sA, sB, sC];
         pts.forEach((pt, i) => {
           p.fill(COLORS[i]); p.stroke('white'); p.strokeWeight(3);
           p.circle(pt.x, pt.y, R*2);
@@ -167,23 +178,23 @@
           p.textAlign(p.CENTER, p.CENTER); p.text(labels[i], pt.x, pt.y);
         });
 
-        // Angle labels near arcs
+        // Angle labels — đặt phía đối diện trọng tâm (hướng ra ngoài)
         pts.forEach((pt, i) => {
           p.noStroke(); p.fill(COLORS[i]); p.textSize(13);
           p.textAlign(p.CENTER, p.CENTER);
-          const ox = i===0 ? 0 : (i===1 ? 22 : -22);
-          const oy = i===0 ? -30 : 22;
-          p.text(`${angles[i]}°`, pt.x + ox, pt.y + oy);
+          const dx = pt.x - cx, dy = pt.y - cy;
+          const dl = Math.sqrt(dx*dx+dy*dy) || 1;
+          p.text(`${angleTxts[i]}°`, pt.x + dx/dl*30, pt.y + dy/dl*30);
         });
 
         // Update chips
-        document.getElementById('lbl-a').textContent = `A = ${angAr}°`;
-        document.getElementById('lbl-b').textContent = `B = ${angBr}°`;
-        document.getElementById('lbl-c').textContent = `C = ${angC}°`;
-        const sum = angAr + angBr + angC;
+        document.getElementById('lbl-a').textContent = `A = ${sA}°`;
+        document.getElementById('lbl-b').textContent = `B = ${sB}°`;
+        document.getElementById('lbl-c').textContent = `C = ${sC}°`;
+        const sum = angAf + angBf + angCf;
         const sumChip = document.getElementById('lbl-sum');
-        sumChip.textContent = `= ${sum}°`;
-        sumChip.className = 'readout-chip ' + (sum === 180 ? 'chip-sum' : 'chip-warn');
+        sumChip.textContent = `= ${sum.toFixed(1)}°`;
+        sumChip.className = 'readout-chip ' + (Math.abs(sum - 180) < 0.2 ? 'chip-sum' : 'chip-warn');
       };
 
       p.windowResized = () => {

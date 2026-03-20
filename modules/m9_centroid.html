@@ -87,7 +87,12 @@
       };
       function resetPts() {
         const w = p.width, h = p.height;
-        pts = [{ x: w/2, y: h*0.1 }, { x: w*0.12, y: h*0.88 }, { x: w*0.88, y: h*0.88 }];
+        const d = Math.min(w, h) * 0.3;
+        pts = [
+          { x: w/2, y: h/2 - d*0.8 },
+          { x: w/2 - d, y: h/2 + d*0.5 },
+          { x: w/2 + d, y: h/2 + d*0.5 }
+        ];
       }
       function mid(a, b) { return { x: (a.x+b.x)/2, y: (a.y+b.y)/2 }; }
       function getNearestPt(x, y) { for (let i=0;i<3;i++) if (p.dist(x,y,pts[i].x,pts[i].y)<R+14) return i; return -1; }
@@ -112,14 +117,12 @@
         p.line(B.x,B.y,mAC.x,mAC.y);
         p.stroke('#059669');
         p.line(C.x,C.y,mAB.x,mAB.y);
-        // Midpoints & Labels
-        p.noStroke(); p.textFont('Baloo 2'); p.textSize(14); p.textAlign(p.CENTER, p.CENTER);
+        // Midpoints M, N, P — vẽ tròn viền trắng + chữ bên trong giống đỉnh
+        const MID_R = 12;
+        p.textFont('Baloo 2'); p.textAlign(p.CENTER, p.CENTER);
         [[mBC,'#dc2626','M'],[mAC,'#e67700','N'],[mAB,'#059669','P']].forEach(([m,c,lbl])=>{
-          p.fill(c); p.circle(m.x,m.y,10);
-          p.fill('#1e293b');
-          const offX = m.x - G.x, offY = m.y - G.y;
-          const offL = Math.sqrt(offX*offX + offY*offY) || 1;
-          p.text(lbl, m.x + (offX/offL)*14, m.y + (offY/offL)*14);
+          p.fill(c); p.stroke('white'); p.strokeWeight(2.5); p.circle(m.x, m.y, MID_R*2);
+          p.noStroke(); p.fill('white'); p.textSize(10); p.text(lbl, m.x, m.y);
         });
         // Equal segment marks: BM=MC, AM'=M'C, AN=NB
         GeoMarks.drawTickMark(p, B.x, B.y, mBC.x, mBC.y, 1, '#2563EB');

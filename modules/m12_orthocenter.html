@@ -125,6 +125,9 @@
         p.fill(180,83,9,20); p.stroke('#b45309'); p.strokeWeight(2.5);
         p.triangle(A.x,A.y,B.x,B.y,C.x,C.y);
         
+        // Trọng tâm — dùng để xác định "bên trong" tam giác
+        const centX = (A.x+B.x+C.x)/3, centY = (A.y+B.y+C.y)/3;
+
         // Altitudes
         const altColors = ['#b45309','#f97316','#10b981'];
         [[A,fA,B,C],[B,fB,A,C],[C,fC,A,B]].forEach(([v,f,p1,p2],i)=>{
@@ -157,10 +160,17 @@
           p.stroke(altColors[i]); p.strokeWeight(2);
           p.line(v.x + ux*startD, v.y + uy*startD, v.x + ux*endD, v.y + uy*endD);
           
-          // Right angle marker at foot
+          // Right angle marker at foot — hướng vào bên trong tam giác
           const sz=12;
-          const nx2=-uy, ny2=ux;
-          GeoMarks.drawRightAngle(p, f.x, f.y, nx2, ny2, -ux, -uy, sz, altColors[i]);
+          // Vector vuông góc dọc theo cạnh: 2 hướng, chọn hướng về phía trọng tâm
+          let nx2=-uy, ny2=ux;
+          const dot1 = nx2*(centX-f.x) + ny2*(centY-f.y);
+          if (dot1 < 0) { nx2 = -nx2; ny2 = -ny2; }
+          // Vector dọc đường cao: chọn hướng về phía trọng tâm
+          let vx2 = -ux, vy2 = -uy;
+          const dot2 = vx2*(centX-f.x) + vy2*(centY-f.y);
+          if (dot2 < 0) { vx2 = -vx2; vy2 = -vy2; }
+          GeoMarks.drawRightAngle(p, f.x, f.y, nx2, ny2, vx2, vy2, sz, altColors[i]);
           
           // Foot dot
           p.noStroke(); p.fill(altColors[i]); p.circle(f.x,f.y,8);
